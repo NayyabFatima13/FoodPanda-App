@@ -9,7 +9,7 @@ import {
   clearCart
 } from "../redux/slices/cartSlice";
 
-import Checkout from "../components/checkout";
+import Checkout from "../Components/checkout";
 
 
 function Cart() {
