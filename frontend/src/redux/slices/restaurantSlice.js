@@ -6,7 +6,7 @@ export const fetchRestaurants = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/restaurants"
+        `${import.meta.env.VITE_API_URL}/api/restaurants`
       );
 
       return response.data.data;
