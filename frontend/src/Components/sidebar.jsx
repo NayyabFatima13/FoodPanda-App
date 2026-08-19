@@ -9,6 +9,7 @@ import {
 function Sidebar({ filters, setFilters }) {
 
     const [showMore, setShowMore] = useState(false);
+    const [cuisineSearch, setCuisineSearch] = useState("");
 
     const cuisines = [
         "American",
@@ -25,6 +26,14 @@ function Sidebar({ filters, setFilters }) {
         "Italian"
     ];
 
+    // Search cuisines
+    const filteredCuisines = cuisines.filter((cuisine) =>
+        cuisine
+            .toLowerCase()
+            .includes(cuisineSearch.toLowerCase())
+    );
+
+    // Handle cuisine checkbox
     const handleCuisineChange = (cuisine) => {
 
         setFilters((previousFilters) => {
@@ -59,7 +68,7 @@ function Sidebar({ filters, setFilters }) {
 
     };
 
-
+    // Reset all filters
     const resetFilters = () => {
 
         setFilters({
@@ -68,11 +77,16 @@ function Sidebar({ filters, setFilters }) {
             cuisines: []
         });
 
+        // Also clear cuisine search
+        setCuisineSearch("");
+        setShowMore(false);
     };
 
-
     return (
+
         <aside className="sidebar">
+
+            {/* FILTER HEADING */}
 
             <div className="filter-heading">
 
@@ -202,6 +216,9 @@ function Sidebar({ filters, setFilters }) {
 
                 <h4>Cuisines</h4>
 
+
+                {/* CUISINE SEARCH */}
+
                 <div className="cuisine-search">
 
                     <Search size={18} />
@@ -209,14 +226,22 @@ function Sidebar({ filters, setFilters }) {
                     <input
                         type="text"
                         placeholder="Search for cuisine"
+                        value={cuisineSearch}
+                        onChange={(event) =>
+                            setCuisineSearch(event.target.value)
+                        }
                     />
 
                 </div>
 
 
-                {(showMore
-                    ? cuisines
-                    : cuisines.slice(0, 7)
+                {/* CUISINE OPTIONS */}
+
+                {(cuisineSearch
+                    ? filteredCuisines
+                    : showMore
+                        ? cuisines
+                        : cuisines.slice(0, 7)
                 ).map((cuisine) => (
 
                     <label
@@ -239,21 +264,42 @@ function Sidebar({ filters, setFilters }) {
                 ))}
 
 
-                <button
-                    className="show-more"
-                    onClick={() =>
-                        setShowMore(!showMore)
-                    }
-                >
+                {/* NO RESULTS */}
 
-                    {showMore ? "Show less" : "Show more"}
+                {cuisineSearch &&
+                    filteredCuisines.length === 0 && (
 
-                    {showMore
-                        ? <ChevronUp size={16} />
-                        : <ChevronDown size={16} />
-                    }
+                        <p className="no-cuisine-results">
+                            No cuisine found
+                        </p>
 
-                </button>
+                    )}
+
+
+                {/* SHOW MORE / LESS */}
+
+                {!cuisineSearch && (
+
+                    <button
+                        className="show-more"
+                        onClick={() =>
+                            setShowMore(!showMore)
+                        }
+                    >
+
+                        {showMore
+                            ? "Show less"
+                            : "Show more"
+                        }
+
+                        {showMore
+                            ? <ChevronUp size={16} />
+                            : <ChevronDown size={16} />
+                        }
+
+                    </button>
+
+                )}
 
             </div>
 
@@ -266,16 +312,20 @@ function Sidebar({ filters, setFilters }) {
 
                 <div className="price-buttons">
 
-                    <button>$</button>
-                    <button>$$</button>
-                    <button>$$$</button>
+                    <button>Rs. 1000</button>
+
+                    <button>Rs. 1200</button>
+
+                    <button>Rs. 2000</button>
 
                 </div>
 
             </div>
 
         </aside>
+
     );
+
 }
 
 export default Sidebar;

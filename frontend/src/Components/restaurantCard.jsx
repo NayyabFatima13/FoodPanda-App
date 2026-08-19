@@ -99,13 +99,11 @@ function RestaurantCard({
 
 
         <p className="restaurant-meta">
-
           From {restaurant.deliveryTime}
           {" · "}
-          {restaurant.price}
+          Rs. {restaurant.price}
           {" · "}
           {restaurant.cuisine}
-
         </p>
 
 
@@ -132,9 +130,8 @@ function RestaurantCard({
 
 
         <button
-          className={`cart-action-btn ${
-            isInCart ? "remove-cart-btn" : ""
-          }`}
+          className={`cart-action-btn ${isInCart ? "remove-cart-btn" : ""
+            }`}
 
           onClick={(e) => {
 

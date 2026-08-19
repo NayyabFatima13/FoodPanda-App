@@ -1,6 +1,6 @@
 import "./../App.css";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Header from "../Components/header";
 import Sidebar from "../Components/sidebar";
@@ -17,48 +17,41 @@ import useDebounce from "../Hooks/useDebounce";
 
 function Home() {
 
+  // ==========================================
   // FETCH RESTAURANTS
-  const { data, loading, error, setError
+  // ==========================================
+
+  const {
+    data,
+    loading,
+    error
   } = useFetch("/restaurants.json");
-  console.log("Restaurant API data:", data);
-  console.log("Is array?", Array.isArray(data));
 
-  useEffect(() => {
-    fetch("/restaurants.json")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
 
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Fetched data:", data);
-
-        setData(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log("Fetch error:", error);
-
-        // setError(error);
-        //setLoading(false);
-      });
-  }, ["/restaurants.json"]);
-
+  // ==========================================
   // SEARCH
+  // ==========================================
+
   const [searchText, setSearchText] = useState("");
 
   const debouncedSearch =
     useDebounce(searchText, 500);
 
 
+  // ==========================================
   // FILTERS
+  // ==========================================
+
   const [filters, setFilters] = useState({
     sort: "Relevance",
     rating4Plus: false,
     cuisines: []
   });
+
+
+  // ==========================================
+  // CUISINE SELECT FROM CUISINE SECTION
+  // ==========================================
 
   const handleCuisineSelect = (cuisine) => {
 
@@ -66,7 +59,6 @@ function Home() {
 
       const alreadySelected =
         previousFilters.cuisines.includes(cuisine);
-
 
       return {
         ...previousFilters,
@@ -81,20 +73,31 @@ function Home() {
   };
 
 
+  // ==========================================
   // RESTAURANTS
+  // ==========================================
+
   const [restaurants, setRestaurants] = useState([]);
 
 
   useEffect(() => {
+
     if (data) {
+
       setRestaurants(data.restaurants);
+
     }
+
   }, [data]);
 
 
+  // ==========================================
   // FAVORITES
+  // ==========================================
+
   const [favorites, setFavorites] =
     useLocalStorage("favorites", []);
+
 
   const handleFavorite = (id) => {
 
@@ -114,33 +117,59 @@ function Home() {
       ];
 
     });
+
   };
 
+
+  // ==========================================
   // SEARCH + FILTER
+  // ==========================================
+
   let filteredRestaurants = restaurants.filter(
     (restaurant) => {
 
       const search =
         debouncedSearch.toLowerCase();
 
-      const matchesSearch =
-        restaurant.name
-          .toLowerCase()
-          .includes(search) ||
+      const restaurantName =
+        String(
+          restaurant.name || ""
+        ).toLowerCase();
 
-        restaurant.cuisine
-          .toLowerCase()
-          .includes(search);
+      const restaurantCuisine =
+        Array.isArray(restaurant.cuisine)
+          ? restaurant.cuisine
+              .join(" ")
+              .toLowerCase()
+          : String(
+              restaurant.cuisine || ""
+            ).toLowerCase();
+
+
+      // SEARCH
+
+      const matchesSearch =
+        restaurantName.includes(search) ||
+        restaurantCuisine.includes(search);
+
+
+      // RATING
 
       const matchesRating =
         !filters.rating4Plus ||
         parseFloat(restaurant.rating) >= 4;
 
+
+      // CUISINE
+
       const matchesCuisine =
         filters.cuisines.length === 0 ||
-        filters.cuisines.includes(
-          restaurant.cuisine
+        filters.cuisines.some((selectedCuisine) =>
+          Array.isArray(restaurant.cuisine)
+            ? restaurant.cuisine.includes(selectedCuisine)
+            : restaurant.cuisine === selectedCuisine
         );
+
 
       return (
         matchesSearch &&
@@ -151,16 +180,21 @@ function Home() {
     }
   );
 
+
+  // ==========================================
   // SORTING
+  // ==========================================
 
   if (filters.sort === "Fastest") {
 
     filteredRestaurants.sort(
       (a, b) =>
-        a.deliveryTime - b.deliveryTime
+        Number(a.deliveryTime) -
+        Number(b.deliveryTime)
     );
 
   }
+
 
   if (filters.sort === "Top rated") {
 
@@ -172,26 +206,89 @@ function Home() {
 
   }
 
+
+  // ==========================================
+  // RESTAURANT RESULTS REF
+  // ==========================================
+
+  const restaurantResultsRef =
+    useRef(null);
+
+
+  // ==========================================
+  // SCROLL TO RESTAURANTS WHEN SORT CHANGES
+  // ==========================================
+
+  useEffect(() => {
+
+    if (
+      filters.sort === "Fastest" ||
+      filters.sort === "Top rated"
+    ) {
+
+      setTimeout(() => {
+
+        restaurantResultsRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+      }, 100);
+
+    }
+
+  }, [filters.sort]);
+
+
+  // ==========================================
+  // DETERMINE PAGE MODE
+  // ==========================================
+
+  const isSearching =
+    Boolean(debouncedSearch);
+
+  const isSorting =
+    filters.sort !== "Relevance";
+
+  const showNormalHome =
+    !isSearching && !isSorting;
+
+
+  // ==========================================
   // LOADING
+  // ==========================================
 
   if (loading) {
+
     return <h2>Loading restaurants...</h2>;
+
   }
 
+
+  // ==========================================
   // ERROR
+  // ==========================================
 
   if (error) {
+
     return <h2>Something went wrong!</h2>;
+
   }
 
 
+  // ==========================================
+  // RETURN
+  // ==========================================
+
   return (
+
     <>
 
       <Header
         searchText={searchText}
         setSearchText={setSearchText}
       />
+
 
       <main className="main-layout">
 
@@ -200,55 +297,170 @@ function Home() {
           setFilters={setFilters}
         />
 
+
         <div className="main-content">
 
-          <Banner />
 
-          <CuisineSection
-            onCuisineSelect={handleCuisineSelect}
-            selectedCuisine={filters.cuisines[0]}
-          />
+          {/* =====================================
+              NORMAL HOME PAGE
+              ===================================== */}
 
-          <PromoSection />
+          {showNormalHome && (
 
-          <RestaurantSection
-            title="Most popular for groups"
-            restaurants={filteredRestaurants}
-            onFavorite={handleFavorite}
-            favorites={favorites}
-          />
+            <>
 
-          <RestaurantSection
-            title="Recommended for you"
-            restaurants={
-              filteredRestaurants.slice(4, 8)
-            }
-            onFavorite={handleFavorite}
-            favorites={favorites}
-          />
+              <Banner />
 
-          <RestaurantSection
-            title="Fastest delivery"
-            restaurants={
-              filteredRestaurants
-                .slice()
-                .sort(
-                  (a, b) => a.deliveryTime - b.deliveryTime).slice(0, 4)
-            }
-            onFavorite={handleFavorite}
-            favorites={favorites}
-          />
+              <CuisineSection
+                onCuisineSelect={handleCuisineSelect}
+                selectedCuisine={
+                  filters.cuisines[0]
+                }
+              />
+
+              <PromoSection />
+
+            </>
+
+          )}
+
+
+          {/* =====================================
+              SEARCH RESULTS
+              ===================================== */}
+
+          {isSearching && (
+
+            <div className="search-results-heading">
+
+              <h2>
+                Search results for "{debouncedSearch}"
+              </h2>
+
+            </div>
+
+          )}
+
+
+          {/* =====================================
+              SORT RESULTS HEADING
+              ===================================== */}
+
+          {isSorting && !isSearching && (
+
+            <div className="search-results-heading">
+
+              <h2>
+
+                {filters.sort === "Fastest"
+                  ? "Fastest delivery"
+                  : "Top rated restaurants"}
+
+              </h2>
+
+              <p>
+                Showing the best results based on your filter
+              </p>
+
+            </div>
+
+          )}
+
+
+          {/* =====================================
+              MAIN RESTAURANT RESULTS
+              ===================================== */}
+
+          <div
+            ref={restaurantResultsRef}
+            className="restaurant-results"
+          >
+
+            <RestaurantSection
+              title={
+                isSearching
+                  ? `Restaurants matching "${debouncedSearch}"`
+                  : isSorting
+                    ? filters.sort === "Fastest"
+                      ? "Fastest delivery"
+                      : "Top rated restaurants"
+                    : "Most popular for groups"
+              }
+
+              restaurants={filteredRestaurants}
+
+              onFavorite={handleFavorite}
+
+              favorites={favorites}
+
+            />
+
+          </div>
+
+
+          {/* =====================================
+              RECOMMENDED + FASTEST
+              ONLY NORMAL HOME PAGE
+              ===================================== */}
+
+          {showNormalHome && (
+
+            <>
+
+              <RestaurantSection
+                title="Recommended for you"
+
+                restaurants={
+                  filteredRestaurants.slice(4, 8)
+                }
+
+                onFavorite={handleFavorite}
+
+                favorites={favorites}
+              />
+
+
+              <RestaurantSection
+                title="Fastest delivery"
+
+                restaurants={
+                  filteredRestaurants
+                    .slice()
+                    .sort(
+                      (a, b) =>
+                        Number(a.deliveryTime) -
+                        Number(b.deliveryTime)
+                    )
+                    .slice(0, 4)
+                }
+
+                onFavorite={handleFavorite}
+
+                favorites={favorites}
+              />
+
+            </>
+
+          )}
 
         </div>
 
       </main>
 
-      <InfoSection />
+
+      {/* =====================================
+          INFO SECTION
+          ===================================== */}
+
+      {showNormalHome && <InfoSection />}
+
 
       <Footer />
 
     </>
+
   );
+
 }
 
 export default Home;

@@ -6,6 +6,8 @@ function ProtectedRoute() {
 
   if (!user) {
     return <Navigate to="/login" replace />;
+     return user ? <Outlet /> : <Navigate to="/login" replace />;
+   
   }
 
   return <Outlet />;

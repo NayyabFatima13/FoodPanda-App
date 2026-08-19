@@ -100,7 +100,7 @@ function RestaurantDetails() {
             </span>
 
             <span>
-              {restaurant.price}
+               Rs. {restaurant.price}
             </span>
 
           </div>

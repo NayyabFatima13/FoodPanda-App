@@ -4,47 +4,47 @@ const cuisines = [
   {
     name: "Pizza",
     image:
-      "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=300"
+      "/pictures/pizza.jpg"
   },
   {
     name: "Fast Food",
     image:
-      "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300"
+      "/pictures/fastfood.jpg"
   },
   {
     name: "Burgers",
     image:
-      "https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=300"
+      "/pictures/burger.jpg"
   },
   {
     name: "BBQ",
     image:
-      "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=300"
+      "/pictures/bbq.jpg"
   },
   {
     name: "Desserts",
     image:
-      "https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=300"
+      "/pictures/desserts.jpg"
   },
   {
     name: "Pakistani",
     image:
-      "https://images.unsplash.com/photo-1517244683847-7456b63c5969?w=300"
+      "/pictures/pakistani.jpg"
   },
   {
     name: "Shawarma",
     image:
-      "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=300"
+      "/pictures/shawarma.jpg"
   },
    {
     name: "Continental",
     image:
-      "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80"
+      "/pictures/continental.jpg"
   },
   {
     name: "Healthy",
     image:
-      "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80"
+      "/pictures/healthy.jpg"
   }
 
 ];

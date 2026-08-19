@@ -1,11 +1,15 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import {
   increaseQuantity,
   decreaseQuantity,
-  removeFromCart
+  removeFromCart,
+  clearCart
 } from "../redux/slices/cartSlice";
+
+import Checkout from "../components/Checkout";
 
 
 function Cart() {
@@ -15,6 +19,10 @@ function Cart() {
   );
 
   const dispatch = useDispatch();
+
+  // Controls checkout visibility
+  const [showCheckout, setShowCheckout] = useState(false);
+
 
   // Subtotal
   const subtotal = cart.reduce(
@@ -76,7 +84,8 @@ function Cart() {
 
       <div className="cart-container">
 
-        {/* Heading */}
+
+        {/* CART HEADER */}
 
         <div className="cart-header">
 
@@ -92,7 +101,11 @@ function Cart() {
         </div>
 
 
+
+        {/* CART LAYOUT */}
+
         <div className="cart-layout">
+
 
           {/* LEFT SIDE */}
 
@@ -104,6 +117,7 @@ function Cart() {
                 className="cart-item"
                 key={item.id}
               >
+
 
                 {/* Image */}
 
@@ -125,6 +139,7 @@ function Cart() {
                   )}
 
                 </div>
+
 
 
                 {/* Information */}
@@ -154,9 +169,11 @@ function Cart() {
                       −
                     </button>
 
+
                     <span>
                       {item.quantity}
                     </span>
+
 
                     <button
                       onClick={() =>
@@ -173,7 +190,8 @@ function Cart() {
                 </div>
 
 
-                {/* Item total */}
+
+                {/* Item Total */}
 
                 <div className="cart-item-right">
 
@@ -181,6 +199,7 @@ function Cart() {
                     Rs.{" "}
                     {item.price * item.quantity}
                   </strong>
+
 
                   <button
                     className="remove-item"
@@ -202,6 +221,7 @@ function Cart() {
           </div>
 
 
+
           {/* RIGHT SIDE */}
 
           <div className="cart-summary">
@@ -210,6 +230,8 @@ function Cart() {
               Order Summary
             </h2>
 
+
+            {/* Subtotal */}
 
             <div className="summary-row">
 
@@ -223,6 +245,8 @@ function Cart() {
 
             </div>
 
+
+            {/* Delivery Fee */}
 
             <div className="summary-row">
 
@@ -240,6 +264,8 @@ function Cart() {
             <hr />
 
 
+            {/* Total */}
+
             <div className="summary-total">
 
               <span>
@@ -253,15 +279,17 @@ function Cart() {
             </div>
 
 
+            {/* Checkout */}
+
             <button
               className="checkout-btn"
-              onClick={() =>
-                alert("Checkout coming soon!")
-              }
+              onClick={() => setShowCheckout(true)}
             >
               Proceed to Checkout
             </button>
 
+
+            {/* Continue Shopping */}
 
             <Link
               to="/restaurants"
@@ -274,11 +302,55 @@ function Cart() {
 
         </div>
 
+
+
+        {/* CHECKOUT */}
+
+        {showCheckout && (
+
+          <div className="checkout-section">
+
+            <Checkout
+              cart={cart}
+              total={total}
+
+              onPlaceOrder={(orderData) => {
+
+                // See the complete order in console
+                console.log(
+                  "Order placed:",
+                  orderData
+                );
+
+
+                // Clear Redux cart
+                dispatch(clearCart());
+
+
+                // Hide checkout
+                setShowCheckout(false);
+
+
+                // Success message
+                alert(
+                  "🎉 Order placed successfully!"
+                );
+
+              }}
+
+            />
+
+          </div>
+
+        )}
+
       </div>
 
     </div>
 
   );
+
 }
+
 
 export default Cart;

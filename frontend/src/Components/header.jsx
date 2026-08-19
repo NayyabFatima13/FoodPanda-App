@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -18,12 +19,16 @@ import {
   Bike,
   Store,
   ShoppingCart,
-  ArrowRight
+  ArrowRight,
+  Menu,
+  X
 } from "lucide-react";
 
 import foodpandaLogo from "../assets/foodpanda-logo-horizontal.png";
 
 function Header({ searchText, setSearchText }) {
+
+const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const user = useSelector(
     (state) => state.auth.user
@@ -39,8 +44,117 @@ function Header({ searchText, setSearchText }) {
 
   return (
     <header>
+{/* Mobile Header */}
+<div className="mobile-header">
 
-      {/* Top Header */}
+  <button
+    className="hamburger-btn"
+    onClick={() => setIsMenuOpen(!isMenuOpen)}
+  >
+    {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+  </button>
+
+  <Link to="/" className="mobile-logo">
+    <img
+      src={foodpandaLogo}
+      alt="foodpanda"
+    />
+  </Link>
+
+  <Link to="/cart" className="mobile-cart">
+    <ShoppingBag size={22} />
+  </Link>
+
+</div>
+
+{isMenuOpen && (
+  <div className="mobile-menu">
+
+    <Link
+      to="/favorites"
+      className="mobile-menu-item"
+      onClick={() => setIsMenuOpen(false)}
+    >
+      <Heart size={20} />
+      <span>Favorites</span>
+    </Link>
+
+    <Link
+      to="/cart"
+      className="mobile-menu-item"
+      onClick={() => setIsMenuOpen(false)}
+    >
+      <ShoppingBag size={20} />
+      <span>Cart</span>
+    </Link>
+
+    {user ? (
+      <>
+        <button
+          className="mobile-menu-item"
+          onClick={() => {
+            navigate("/dashboard");
+            setIsMenuOpen(false);
+          }}
+        >
+          👤
+          <span>Hi, {user.name}</span>
+        </button>
+
+        <button
+          className="mobile-menu-item"
+          onClick={() => {
+            dispatch(logout());
+            navigate("/");
+            setIsMenuOpen(false);
+          }}
+        >
+          🚪
+          <span>Logout</span>
+        </button>
+      </>
+    ) : (
+      <>
+        <button
+          className="mobile-menu-item"
+          onClick={() => {
+            navigate("/login");
+            setIsMenuOpen(false);
+          }}
+        >
+          👤
+          <span>Log in</span>
+        </button>
+
+        <button
+          className="mobile-menu-item"
+          onClick={() => {
+            navigate("/register");
+            setIsMenuOpen(false);
+          }}
+        >
+          📝
+          <span>Sign up</span>
+        </button>
+      </>
+    )}
+
+    <button
+      className="mobile-menu-item"
+      onClick={() => dispatch(toggleTheme())}
+    >
+      {theme === "light" ? "🌙" : "☀️"}
+
+      <span>
+        {theme === "light" ? "Dark mode" : "Light mode"}
+      </span>
+    </button>
+
+  </div>
+)}
+
+
+      {/* Top Header DEsktop*/}
       <div className="top-header">
 
         {/* Logo */}

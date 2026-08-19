@@ -1,12 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 
+// Get currently logged-in user
 function getInitialUser() {
 
     try {
 
         const savedUser =
-            localStorage.getItem("user");
+            localStorage.getItem("currentUser");
 
         return savedUser
             ? JSON.parse(savedUser)
@@ -21,8 +22,11 @@ function getInitialUser() {
 
 
 const initialState = {
+
     user: getInitialUser(),
+
     error: null
+
 };
 
 
@@ -39,20 +43,45 @@ const authSlice = createSlice({
 
             const userData = action.payload;
 
+
             const newUser = {
+
                 name: userData.name,
+
                 email: userData.email,
+
                 password: userData.password
+
             };
 
 
+            // Get already registered users
+            const savedUsers =
+                JSON.parse(
+                    localStorage.getItem("registeredUsers")
+                ) || [];
+
+
+            // Add new user
+            savedUsers.push(newUser);
+
+
+            // Save all registered users
             localStorage.setItem(
-                "user",
+                "registeredUsers",
+                JSON.stringify(savedUsers)
+            );
+
+
+            // Make this user the currently logged-in user
+            localStorage.setItem(
+                "currentUser",
                 JSON.stringify(newUser)
             );
 
 
             state.user = newUser;
+
             state.error = null;
 
         },
@@ -61,7 +90,17 @@ const authSlice = createSlice({
         // SET USER AFTER LOGIN
         setUser: (state, action) => {
 
-            state.user = action.payload;
+            const user = action.payload;
+
+
+            localStorage.setItem(
+                "currentUser",
+                JSON.stringify(user)
+            );
+
+
+            state.user = user;
+
             state.error = null;
 
         },
@@ -78,9 +117,14 @@ const authSlice = createSlice({
         // LOGOUT
         logout: (state) => {
 
-            localStorage.removeItem("user");
+            // Only remove current login session
+            localStorage.removeItem("currentUser");
+
+
+            // DO NOT remove registeredUsers
 
             state.user = null;
+
             state.error = null;
 
         }
@@ -91,11 +135,17 @@ const authSlice = createSlice({
 
 
 export const {
+
     register,
+
     setUser,
+
     setError,
+
     logout
+
 } = authSlice.actions;
+
 
 
 // LOGIN
@@ -103,46 +153,64 @@ export const login = (email, password) => {
 
     return (dispatch) => {
 
-        const savedUser =
-            localStorage.getItem("user");
+
+        // Get all registered users
+        const savedUsers =
+            JSON.parse(
+                localStorage.getItem("registeredUsers")
+            ) || [];
 
 
-        if (!savedUser) {
+        // Check whether account exists
+        const existingUser =
+            savedUsers.find(
+                (user) =>
+                    user.email === email
+            );
+
+
+        // No account
+        if (!existingUser) {
 
             return {
+
                 success: false,
+
                 message:
                     "No account found. Please register first."
+
             };
 
         }
 
 
-        const existingUser =
-            JSON.parse(savedUser);
-
-
+        // Wrong password
         if (
-            existingUser.email !== email ||
             existingUser.password !== password
         ) {
 
             return {
+
                 success: false,
+
                 message:
                     "Invalid email or password."
+
             };
 
         }
 
 
+        // Login successful
         dispatch(
             setUser(existingUser)
         );
 
 
         return {
+
             success: true
+
         };
 
     };
