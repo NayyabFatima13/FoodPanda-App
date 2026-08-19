@@ -11,21 +11,34 @@ import RestaurantSection from "../Components/restaurantSection";
 import InfoSection from "../Components/infoSection";
 import Footer from "../Components/footer";
 
-import useFetch from "../Hooks/useFetch";
 import useLocalStorage from "../Hooks/useLocalStorage";
 import useDebounce from "../Hooks/useDebounce";
+
+import { useDispatch, useSelector } from "react-redux";
+
+import { fetchRestaurants } from "../redux/slices/restaurantSlice";
+
 
 function Home() {
 
   // ==========================================
-  // FETCH RESTAURANTS
+  // REDUX RESTAURANTS
   // ==========================================
 
+  const dispatch = useDispatch();
+
   const {
-    data,
+    restaurants,
     loading,
-    error
-  } = useFetch("/restaurants.json");
+    error,
+  } = useSelector((state) => state.restaurants);
+
+
+  useEffect(() => {
+
+    dispatch(fetchRestaurants());
+
+  }, [dispatch]);
 
 
   // ==========================================
@@ -71,24 +84,6 @@ function Home() {
     });
 
   };
-
-
-  // ==========================================
-  // RESTAURANTS
-  // ==========================================
-
-  const [restaurants, setRestaurants] = useState([]);
-
-
-  useEffect(() => {
-
-    if (data) {
-
-      setRestaurants(data.restaurants);
-
-    }
-
-  }, [data]);
 
 
   // ==========================================
@@ -271,7 +266,7 @@ function Home() {
 
   if (error) {
 
-    return <h2>Something went wrong!</h2>;
+    return <h2>{error}</h2>;
 
   }
 
@@ -377,6 +372,7 @@ function Home() {
           >
 
             <RestaurantSection
+
               title={
                 isSearching
                   ? `Restaurants matching "${debouncedSearch}"`
@@ -408,6 +404,7 @@ function Home() {
             <>
 
               <RestaurantSection
+
                 title="Recommended for you"
 
                 restaurants={
@@ -417,10 +414,12 @@ function Home() {
                 onFavorite={handleFavorite}
 
                 favorites={favorites}
+
               />
 
 
               <RestaurantSection
+
                 title="Fastest delivery"
 
                 restaurants={
@@ -437,6 +436,7 @@ function Home() {
                 onFavorite={handleFavorite}
 
                 favorites={favorites}
+
               />
 
             </>
@@ -462,5 +462,6 @@ function Home() {
   );
 
 }
+
 
 export default Home;

@@ -2,15 +2,22 @@ import mongoose from "mongoose";
 
 const restaurantSchema = new mongoose.Schema(
   {
+    id: {
+      type: Number,
+      required: true,
+      unique: true,
+    },
+
     name: {
       type: String,
       required: true,
       trim: true,
     },
 
-    image: {
+    cuisine: {
       type: String,
       required: true,
+      trim: true,
     },
 
     rating: {
@@ -20,21 +27,34 @@ const restaurantSchema = new mongoose.Schema(
       max: 5,
     },
 
-    cuisine: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-
-    location: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-
     deliveryTime: {
       type: String,
       required: true,
+      trim: true,
+    },
+
+    price: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+
+    image: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    discount: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    description: {
+      type: String,
+      required: true,
+      trim: true,
     },
   },
   {
