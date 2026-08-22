@@ -92,21 +92,24 @@ backend/
 ├── package.json
 ├── package-lock.json
 └── README.md
+```
 
 ## 4. Installation
 
 Clone/download the project and install dependencies:
-
+```
 npm install
+```
 
 ## - 5. Environment Variables
 
 Create a .env file in the backend root:
-
+```
 - PORT=3000
 - MONGO_URI=your_mongodb_connection_string
 - JWT_SECRET=your_jwt_secret
 - FRONTEND_URL=http://localhost:5173
+```
 
 ### Environment variables
 Variable	Description
