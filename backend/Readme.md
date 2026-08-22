@@ -1,50 +1,63 @@
-# Foodpanda Backend API
-## 1. Project Overview
+# 🍔 Foodpanda Backend API
 
-This project is a RESTful backend API for a Foodpanda-style food delivery application.
+A RESTful backend API for a Foodpanda-style food delivery application built using Node.js, Express.js, MongoDB, and Mongoose.
 
-#### The backend is built using:
-- Node.js
-- Express.js
-- MongoDB
-- Mongoose
-- JWT authentication
-- bcrypt password hashing
-- Helmet
-- CORS
-- Express Rate Limit
-- REST API architecture
+The backend provides user authentication, JWT-based authorization, restaurant CRUD operations, validation, error handling, ownership protection, and basic API security.
 
-#### The API provides:
+---
+
+## 📌 Project Overview
+
+This backend was developed as part of a Foodpanda full-stack application.
+
+The API provides:
+
 - User registration
 - User login
 - JWT authentication
+- Password hashing
+- Protected routes
 - Restaurant CRUD operations
-- Restaurant ownership/authorization
-- Request validation
-- Error handling
-- Rate limiting
-- Security headers
+- Restaurant ownership and authorization
 - MongoDB database integration
+- Mongoose schemas and validation
+- Centralized error handling
+- 404 route handling
+- CORS
+- Security middleware
+- Rate limiting
+- API testing with Postman
+- Deployment using Render
 
-## 2. Technologies Used
-Technology	Purpose
-Node.js	JavaScript runtime
-Express.js	REST API framework
-MongoDB	Database
-Mongoose	MongoDB ODM
-JWT	User authentication
-bcrypt	Password hashing
-Helmet	HTTP security headers
-CORS	Cross-origin requests
-express-rate-limit	Request rate limiting
-dotenv	Environment variables
-Nodemon	Development server
+---
 
-## 3. Project Structure
+# 🛠️ Technologies Used
+
+| Technology | Purpose |
+|---|---|
+| Node.js | JavaScript runtime |
+| Express.js | REST API framework |
+| MongoDB | NoSQL database |
+| Mongoose | MongoDB ODM |
+| JWT | Authentication |
+| bcrypt | Password hashing |
+| dotenv | Environment variables |
+| CORS | Cross-origin requests |
+| Helmet | HTTP security headers |
+| express-rate-limit | API rate limiting |
+| Nodemon | Development server |
+| Postman | API testing |
+| Render | Backend deployment |
+
+---
+
+# 📁 Project Structure
+
+```text
 backend/
 │
 ├── src/
+│   │
 │   ├── config/
 │   │   └── db.js
 │   │
@@ -55,8 +68,8 @@ backend/
 │   ├── middleware/
 │   │   ├── logger.js
 │   │   ├── authMiddleware.js
-│   │   ├── rateLimiter.js
 │   │   ├── validateRequest.js
+│   │   ├── rateLimiter.js
 │   │   ├── notFound.js
 │   │   └── errorHandler.js
 │   │
@@ -75,65 +88,108 @@ backend/
 │   └── restaurants.js
 │
 ├── .env
+├── .gitignore
 ├── package.json
+├── package-lock.json
 └── README.md
+```
 
 ## 4. Installation
 
 Clone/download the project and install dependencies:
-
+```
 npm install
+```
 
 ## - 5. Environment Variables
 
 Create a .env file in the backend root:
-
+```
 - PORT=3000
 - MONGO_URI=your_mongodb_connection_string
 - JWT_SECRET=your_jwt_secret
 - FRONTEND_URL=http://localhost:5173
+```
 
 ### Environment variables
-Variable	Description
-PORT	Port used by Express
-MONGO_URI	MongoDB connection string
-JWT_SECRET	Secret used to sign JWT tokens
-FRONTEND_URL	Allowed frontend origin
+|Variable |	Description|
+|---|---|
+|PORT |	Port used by Express |
+|MONGO_URI |	MongoDB connection string |
+|JWT_SECRET |	Secret used to sign JWT tokens |
+|FRONTEND_URL |	Allowed frontend origin |
+
 
 Do not commit .env to GitHub because it contains sensitive credentials.
 
+
 ## 6. Running the Project
 - Development:
+```
 npm run dev
+```
 - Production:
+```
 npm start
+```
 - Seed database:
+```
 npm run seed
+```
 
 The seed script inserts predefined restaurant data into MongoDB.
 
+#### Seed Database
+The project contains a seed script for inserting predefined restaurant data into MongoDB.
+- Run:
+```
+npm run seed
+```
+- The command executes:
+```
+node seed/restaurants.js
+```
+The seed script:
+- Connects to MongoDB.
+- Loads predefined restaurant data.
+- Inserts the data into the restaurant collection.
+- Closes the database connection.
+- Exits the process.
+  
+⚠️ The seed script should be used carefully with production databases, especially if it removes existing data before inserting seed data.
+
 ## 7. API Base URL
-- Local:
+- **Local:**
+```
 http://localhost:3000
-- Production:
+```
+- **Production:**
+```
 https://foodpanda-app-1.onrender.com
+```
 
 ## 8. Authentication API
-Register User
-
+#### 1.Register User
 Creates a new user account.
 
-Request
-POST /api/auth/register
-URL
-/api/auth/register
+**Request**
+```
+POST URL/api/auth/register
+```
+**Production URL**
+```
+https://foodpanda-app-1.onrender.com/api/auth/register
+```
 Body
+```
 {
   "name": "Test User",
   "email": "testuser@example.com",
   "password": "password123"
 }
+```
 Success Response
+```
 {
   "success": true,
   "message": "User registered successfully",
@@ -143,21 +199,29 @@ Success Response
     "email": "testuser@example.com"
   }
 }
-Status
+```
+Status Code
+```
 201 Created
+```
 
 ## 9. Login User
 
 Authenticates an existing user and returns a JWT token.
 
-Request
+**Request**
+```
 POST /api/auth/login
+```
 Body
+```
 {
   "email": "testuser@example.com",
   "password": "password123"
 }
+```
 Success Response
+```
 {
   "success": true,
   "message": "Login successful",
@@ -168,26 +232,54 @@ Success Response
     "email": "testuser@example.com"
   }
 }
-Status
+```
+Status Code
+```
 200 OK
+```
 
 The returned JWT must be sent with protected requests.
 
-Authorization Header
+### 🔒 JWT Authorization
+
+Protected endpoints require a JWT token.
+
+- The token must be sent in the HTTP Authorization header:
+```
 Authorization: Bearer <JWT_TOKEN>
+```
+- Example:
+```
+Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
+```
+**The JWT middleware:**
+
+- Reads the Authorization header.
+- Extracts the Bearer token.
+- Verifies the token.
+- Identifies the authenticated user.
+- Adds the user information to the request.
+- Allows the request to continue.
+
+If the token is missing or invalid:
+```
+401 Unauthorized
+```
 
 ## 10. Restaurant API
 Get All Restaurants
-
 Returns all restaurants.
 
 Request
+```
 GET /api/restaurants
-Authentication
+```
+Authentication:
 
 Not required.
 
 Response
+```
 {
   "success": true,
   "count": 2,
@@ -200,48 +292,78 @@ Response
     }
   ]
 }
+```
 Status
+```
 200 OK
+```
 
 ## 11. Get Restaurant By ID
 
 Returns a single restaurant.
 
 Request
+```
 GET /api/restaurants/:id
-
-Example:
-
+```
+Example
+```
 GET /api/restaurants/1
+```
+
 Authentication
 
 Not required.
 
-Success
+Successful Response
+```
+{
+  "success": true,
+  "data": {
+    "id": 1,
+    "name": "Pizza House",
+    "cuisine": "Italian",
+    "rating": 4.5
+  }
+}
+```
+Status Code
+```
 200 OK
-Restaurant not found
+```
+
+Restaurant Not Found
+
+If the restaurant does not exist:
+```
 {
   "success": false,
   "message": "Restaurant not found"
 }
-
+```
 Status:
-
+```
 404 Not Found
+```
 
 ## 12. Create Restaurant
 
 Creates a new restaurant.
 
 Request
+```
 POST /api/restaurants
+```
 Authentication
 
 Required.
 
 Header
+```
 Authorization: Bearer <JWT_TOKEN>
+```
 Body
+```
 {
   "id": 100,
   "name": "Demo Pizza",
@@ -253,66 +375,92 @@ Body
   "discount": "20%",
   "description": "A demo restaurant"
 }
-
+```
 The owner is obtained from the authenticated user's JWT rather than being manually supplied by the client.
 
 Success
+```
 201 Created
+```
 
 ## 13. Update Restaurant
 
 Updates an existing restaurant.
 
 Request
+```
 PUT /api/restaurants/:id
-
+```
 Example:
-
+```
 PUT /api/restaurants/100
+```
+
 Authentication
 
 Required.
-
+```
 Authorization: Bearer <JWT_TOKEN>
+```
 Body
+```
 {
   "name": "Updated Pizza House",
   "rating": 4.8,
   "price": 900
 }
+```
 Authorization
 
 Only the restaurant owner can update the restaurant.
 
 If another authenticated user attempts the operation:
-
+```
 403 Forbidden
+```
 
 ## 14. Delete Restaurant
 
 Deletes a restaurant.
 
 Request
+```
 DELETE /api/restaurants/:id
+```
 
 Example:
-
+```
 DELETE /api/restaurants/100
+```
+
 Authentication
 
 Required.
-
+```
 Authorization: Bearer <JWT_TOKEN>
+```
 
 Only the restaurant owner can delete it.
 
 Success
+```
 200 OK
+```
+## 📋 API Endpoint Summary
+|Method	| Endpoint |	Authentication |	Description |
+|--|--|--|--|
+|POST |	/api/auth/register |	No	| Register a user |
+|POST |	/api/auth/login |	No	| Login and receive JWT |
+|GET |	/api/restaurants	| No	| Get all restaurants |
+|GET |	/api/restaurants/:id	| No | Get restaurant by ID |
+|POST |	/api/restaurants	| Yes	| Create restaurant |
+|PUT |	/api/restaurants/:id	| Yes + Owner	| Update restaurant |
+|DELETE |	/api/restaurants/:id |	Yes + Owner |	Delete restaurant |
 
 ## 15. Restaurant Data Model
 
 A restaurant contains:
-
+```
 {
   "id": 1,
   "name": "Pizza House",
@@ -325,24 +473,28 @@ A restaurant contains:
   "description": "Delicious Italian pizza",
   "owner": "USER_OBJECT_ID"
 }
-Validation
-Field	Rule
-id	Required, unique
-name	Required
-cuisine	Required
-rating	Required, 0–5
-deliveryTime	Required
-price	Required, minimum 0
-image	Required
-discount	Required
-description	Required
-owner	Required for protected creation
+```
+
+**Validation**
+| Field | Rule |
+| --- | --- |
+| id | Required, unique |
+| name | Required |
+| cuisine | Required |
+| rating | Required, 0–5 |
+| deliveryTime | Required |
+| price | Required, minimum 0 |
+| image | Required |
+| discount | Required |
+| description | Required |
+| owner | Required for protected creation |
 
 ## 16. Authentication & Authorization
 
 The API uses JWT-based authentication.
 
-Authentication flow
+**Authentication flow**
+```
 Register
    ↓
 Password hashed with bcrypt
@@ -356,9 +508,10 @@ Credentials verified
 JWT generated
    ↓
 Client receives token
+```
 
 For protected routes:
-
+```
 Client
    ↓
 Authorization: Bearer JWT
@@ -370,27 +523,28 @@ Token verified
 req.user
    ↓
 Controller
+```
 
 ## 17. Restaurant Ownership
 
 Restaurants are associated with users through the owner field.
-
+```
 User
   │
   │ _id
   ↓
 Restaurant.owner
-
+```
 When a user creates a restaurant:
-
+```
 JWT
  ↓
 Authenticated user ID
  ↓
 Restaurant.owner
-
+```
 When updating or deleting:
-
+```
 Authenticated user
         ↓
 Compare user ID
@@ -402,6 +556,7 @@ Match?
   Yes        No
    ↓          ↓
 Allow       403
+```
 
 ## 18. Middleware
 
@@ -410,30 +565,35 @@ The backend uses middleware for reusable request processing.
 Logger
 
 Logs:
-
+```
 GET /api/restaurants
 POST /api/auth/login
-Authentication Middleware
+```
+
+**Authentication Middleware**
 
 Verifies JWT tokens for protected routes.
 
-Rate Limiter
+**Rate Limiter**
 
 Limits excessive authentication requests.
 
 Example:
-
+```
 10 requests / 15 minutes
-Validation Middleware
+```
+
+**Validation Middleware**
 
 Validates incoming request data before reaching the controller.
 
-Not Found Middleware
+**Not Found Middleware**
 
 Handles undefined routes with:
-
+```
 404 Not Found
-Error Handler
+```
+**Error Handler**
 
 Provides centralized error handling for the application.
 
@@ -441,51 +601,53 @@ Provides centralized error handling for the application.
 
 The API implements several security practices.
 
-Helmet
+**Helmet**
 
 Adds security-related HTTP headers.
 
-CORS
+**CORS**
 
 Controls which frontend origins can access the API.
 
-Rate Limiting
+**Rate Limiting**
 
 Protects authentication endpoints against excessive requests.
 
-Password Hashing
+**Password Hashing**
 
 Passwords are hashed using bcrypt before being stored.
 
-JWT
+**JWT**
 
 JWT is used for authentication.
 
-Authorization
+**Authorization**
 
 Restaurant ownership prevents users from modifying other users' restaurants.
 
 ## 20. HTTP Status Codes
-Status	Meaning
-200	Request successful
-201	Resource created
-400	Invalid request/data
-401	Authentication required/invalid
-403	Access forbidden
-404	Resource/route not found
-409	Resource conflict
-429	Too many requests
-500	Internal server error
+| Status | Meaning |
+| :--- | :--- |
+| `200` | Request successful |
+| `201` | Resource created |
+| `400` | Invalid request/data |
+| `401` | Authentication required/invalid |
+| `403` | Access forbidden |
+| `404` | Resource/route not found |
+| `409` | Resource conflict |
+| `429` | Too many requests |
+| `500` | Internal server error |
 
 ## 21. API Endpoint Summary
-Method	Endpoint	Auth	Description
-POST	/api/auth/register	No	Register user
-POST	/api/auth/login	No	Login and receive JWT
-GET	/api/restaurants	No	Get all restaurants
-GET	/api/restaurants/:id	No	Get restaurant
-POST	/api/restaurants	Yes	Create restaurant
-PUT	/api/restaurants/:id	Yes + Owner	Update restaurant
-DELETE	/api/restaurants/:id	Yes + Owner	Delete restaurant
+| Method | Endpoint | Auth | Description |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/auth/register` | No | Register user |
+| `POST` | `/api/auth/login` | No | Login and receive JWT |
+| `GET` | `/api/restaurants` | No | Get all restaurants |
+| `GET` | `/api/restaurants/:id` | No | Get restaurant |
+| `POST` | `/api/restaurants` | Yes | Create restaurant |
+| `PUT` | `/api/restaurants/:id` | Yes + Owner | Update restaurant |
+| `DELETE` | `/api/restaurants/:id` | Yes + Owner | Delete restaurant |
 
 ## 22. Postman Collection
 
@@ -493,6 +655,7 @@ A Postman collection is included for testing the API.
 
 The collection contains:
 
+```
 Foodpanda Backend API
 │
 ├── Authentication
@@ -507,6 +670,7 @@ Foodpanda Backend API
 │   └── Delete Restaurant
 │
 └── Error & Validation Tests
+```
 
 The Postman collection can be imported into Postman to test the API endpoints.
 
@@ -515,12 +679,13 @@ The Postman collection can be imported into Postman to test the API endpoints.
 The backend is deployed on Render.
 
 Production base URL:
-
+```
 https://foodpanda-app-1.onrender.com
-
+```
 Example:
-
+```
 GET https://foodpanda-app-1.onrender.com/api/restaurants
+```
 
 ## 24. Learning Outcomes
 
