@@ -112,29 +112,59 @@ Create a .env file in the backend root:
 ```
 
 ### Environment variables
-Variable	Description
-PORT	Port used by Express
-MONGO_URI	MongoDB connection string
-JWT_SECRET	Secret used to sign JWT tokens
-FRONTEND_URL	Allowed frontend origin
+|Variable |	Description|
+|---|---|
+PORT |	Port used by Express |
+MONGO_URI |	MongoDB connection string |
+JWT_SECRET |	Secret used to sign JWT tokens |
+FRONTEND_URL |	Allowed frontend origin |
 
+```
 Do not commit .env to GitHub because it contains sensitive credentials.
+```
 
 ## 6. Running the Project
 - Development:
+```
 npm run dev
+```
 - Production:
+```
 npm start
+```
 - Seed database:
+```
 npm run seed
+```
 
 The seed script inserts predefined restaurant data into MongoDB.
+### Seed Database
+The project contains a seed script for inserting predefined restaurant data into MongoDB.
+- Run:
+```
+npm run seed
+```
+- The command executes:
+```
+node seed/restaurants.js
+```
+The seed script:
+- Connects to MongoDB.
+- Loads predefined restaurant data.
+- Inserts the data into the restaurant collection.
+- Closes the database connection.
+- Exits the process.
+⚠️ The seed script should be used carefully with production databases, especially if it removes existing data before inserting seed data.
 
 ## 7. API Base URL
-- Local:
+- **Local:**
+```
 http://localhost:3000
-- Production:
+```
+- **Production:**
+```
 https://foodpanda-app-1.onrender.com
+```
 
 ## 8. Authentication API
 Register User
