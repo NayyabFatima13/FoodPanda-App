@@ -114,14 +114,14 @@ Create a .env file in the backend root:
 ### Environment variables
 |Variable |	Description|
 |---|---|
-PORT |	Port used by Express |
-MONGO_URI |	MongoDB connection string |
-JWT_SECRET |	Secret used to sign JWT tokens |
-FRONTEND_URL |	Allowed frontend origin |
+|PORT |	Port used by Express |
+|MONGO_URI |	MongoDB connection string |
+|JWT_SECRET |	Secret used to sign JWT tokens |
+|FRONTEND_URL |	Allowed frontend origin |
 
-```
+
 Do not commit .env to GitHub because it contains sensitive credentials.
-```
+
 
 ## 6. Running the Project
 - Development:
@@ -138,6 +138,7 @@ npm run seed
 ```
 
 The seed script inserts predefined restaurant data into MongoDB.
+
 ### Seed Database
 The project contains a seed script for inserting predefined restaurant data into MongoDB.
 - Run:
@@ -154,6 +155,7 @@ The seed script:
 - Inserts the data into the restaurant collection.
 - Closes the database connection.
 - Exits the process.
+  
 ⚠️ The seed script should be used carefully with production databases, especially if it removes existing data before inserting seed data.
 
 ## 7. API Base URL
