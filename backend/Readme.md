@@ -139,7 +139,7 @@ npm run seed
 
 The seed script inserts predefined restaurant data into MongoDB.
 
-### Seed Database
+#### Seed Database
 The project contains a seed script for inserting predefined restaurant data into MongoDB.
 - Run:
 ```
@@ -169,21 +169,27 @@ https://foodpanda-app-1.onrender.com
 ```
 
 ## 8. Authentication API
-Register User
-
+#### 1.Register User
 Creates a new user account.
 
-Request
-POST /api/auth/register
-URL
-/api/auth/register
+**Request**
+```
+POST URL/api/auth/register
+```
+**Production URL**
+```
+https://foodpanda-app-1.onrender.com/api/auth/register
+```
 Body
+```
 {
   "name": "Test User",
   "email": "testuser@example.com",
   "password": "password123"
 }
+```
 Success Response
+```
 {
   "success": true,
   "message": "User registered successfully",
@@ -193,21 +199,29 @@ Success Response
     "email": "testuser@example.com"
   }
 }
-Status
+```
+Status Code
+```
 201 Created
+```
 
 ## 9. Login User
 
 Authenticates an existing user and returns a JWT token.
 
-Request
+**Request**
+```
 POST /api/auth/login
+```
 Body
+```
 {
   "email": "testuser@example.com",
   "password": "password123"
 }
+```
 Success Response
+```
 {
   "success": true,
   "message": "Login successful",
@@ -218,26 +232,54 @@ Success Response
     "email": "testuser@example.com"
   }
 }
-Status
+```
+Status Code
+```
 200 OK
+```
 
 The returned JWT must be sent with protected requests.
 
-Authorization Header
+### 🔒 JWT Authorization
+
+Protected endpoints require a JWT token.
+
+- The token must be sent in the HTTP Authorization header:
+```
 Authorization: Bearer <JWT_TOKEN>
+```
+- Example:
+```
+Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
+```
+**The JWT middleware:**
+
+- Reads the Authorization header.
+- Extracts the Bearer token.
+- Verifies the token.
+- Identifies the authenticated user.
+- Adds the user information to the request.
+- Allows the request to continue.
+
+If the token is missing or invalid:
+```
+401 Unauthorized
+```
 
 ## 10. Restaurant API
 Get All Restaurants
-
 Returns all restaurants.
 
 Request
+```
 GET /api/restaurants
-Authentication
+```
+Authentication:
 
 Not required.
 
 Response
+```
 {
   "success": true,
   "count": 2,
@@ -250,48 +292,78 @@ Response
     }
   ]
 }
+```
 Status
+```
 200 OK
+```
 
 ## 11. Get Restaurant By ID
 
 Returns a single restaurant.
 
 Request
+```
 GET /api/restaurants/:id
-
-Example:
-
+```
+Example
+```
 GET /api/restaurants/1
+```
+
 Authentication
 
 Not required.
 
-Success
+Successful Response
+```
+{
+  "success": true,
+  "data": {
+    "id": 1,
+    "name": "Pizza House",
+    "cuisine": "Italian",
+    "rating": 4.5
+  }
+}
+```
+Status Code
+```
 200 OK
-Restaurant not found
+```
+
+Restaurant Not Found
+
+If the restaurant does not exist:
+```
 {
   "success": false,
   "message": "Restaurant not found"
 }
-
+```
 Status:
-
+```
 404 Not Found
+```
 
 ## 12. Create Restaurant
 
 Creates a new restaurant.
 
 Request
+```
 POST /api/restaurants
+```
 Authentication
 
 Required.
 
 Header
+```
 Authorization: Bearer <JWT_TOKEN>
+```
 Body
+```
 {
   "id": 100,
   "name": "Demo Pizza",
@@ -303,61 +375,87 @@ Body
   "discount": "20%",
   "description": "A demo restaurant"
 }
-
+```
 The owner is obtained from the authenticated user's JWT rather than being manually supplied by the client.
 
 Success
+```
 201 Created
+```
 
 ## 13. Update Restaurant
 
 Updates an existing restaurant.
 
 Request
+```
 PUT /api/restaurants/:id
-
+```
 Example:
-
+```
 PUT /api/restaurants/100
+```
+
 Authentication
 
 Required.
-
+```
 Authorization: Bearer <JWT_TOKEN>
+```
 Body
+```
 {
   "name": "Updated Pizza House",
   "rating": 4.8,
   "price": 900
 }
+```
 Authorization
 
 Only the restaurant owner can update the restaurant.
 
 If another authenticated user attempts the operation:
-
+```
 403 Forbidden
+```
 
 ## 14. Delete Restaurant
 
 Deletes a restaurant.
 
 Request
+```
 DELETE /api/restaurants/:id
+```
 
 Example:
-
+```
 DELETE /api/restaurants/100
+```
+
 Authentication
 
 Required.
-
+```
 Authorization: Bearer <JWT_TOKEN>
+```
 
 Only the restaurant owner can delete it.
 
 Success
+```
 200 OK
+```
+## 📋 API Endpoint Summary
+|Method	| Endpoint |	Authentication |	Description |
+|--|--|--|--|
+|POST |	/api/auth/register |	No	| Register a user |
+|POST |	/api/auth/login |	No	| Login and receive JWT |
+|GET |	/api/restaurants	| No	| Get all restaurants |
+|GET |	/api/restaurants/:id	| No | Get restaurant by ID |
+|POST |	/api/restaurants	| Yes	| Create restaurant |
+|PUT |	/api/restaurants/:id	| Yes + Owner	| Update restaurant |
+|DELETE |	/api/restaurants/:id |	Yes + Owner |	Delete restaurant |
 
 ## 15. Restaurant Data Model
 
