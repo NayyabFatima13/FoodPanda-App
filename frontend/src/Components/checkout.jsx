@@ -1,7 +1,11 @@
+import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-function Checkout({ cart, total }) {
+function Checkout({ cart, total, onPlaceOrder }) {
+
+    const [showSuccess, setShowSuccess] = useState(false);
+
 
     const formik = useFormik({
 
@@ -14,46 +18,103 @@ function Checkout({ cart, total }) {
             paymentMethod: "Cash on Delivery"
         },
 
+
         validationSchema: Yup.object({
 
             fullName: Yup.string()
-                .min(3, "Name must be at least 3 characters")
-                .required("Full name is required"),
+                .min(
+                    3,
+                    "Name must be at least 3 characters"
+                )
+                .required(
+                    "Full name is required"
+                ),
 
             email: Yup.string()
-                .email("Invalid email address")
-                .required("Email is required"),
+                .email(
+                    "Invalid email address"
+                )
+                .required(
+                    "Email is required"
+                ),
 
             phone: Yup.string()
                 .matches(
                     /^[0-9]{10,15}$/,
                     "Enter a valid phone number"
                 )
-                .required("Phone number is required"),
+                .required(
+                    "Phone number is required"
+                ),
 
             address: Yup.string()
-                .min(10, "Please enter a complete address")
-                .required("Delivery address is required"),
+                .min(
+                    10,
+                    "Please enter a complete address"
+                )
+                .required(
+                    "Delivery address is required"
+                ),
 
             city: Yup.string()
-                .required("City is required"),
+                .required(
+                    "City is required"
+                ),
 
             paymentMethod: Yup.string()
-                .required("Please select a payment method")
+                .required(
+                    "Please select a payment method"
+                )
 
         }),
+
 
         onSubmit: (values) => {
 
             const order = {
+
                 customer: values,
+
                 items: cart,
+
                 total: total
+
             };
 
-            console.log("ORDER:", order);
 
-            onPlaceOrder(order);
+            console.log(
+                "ORDER:",
+                order
+            );
+
+
+            // Call parent function if provided
+
+            if (onPlaceOrder) {
+
+                onPlaceOrder(order);
+
+            }
+
+
+            // Show success popup
+
+            setShowSuccess(true);
+
+
+            // Hide popup after 3 seconds
+
+            setTimeout(() => {
+
+                setShowSuccess(false);
+
+            }, 3000);
+
+
+            // Reset form
+
+            formik.resetForm();
+
         }
 
     });
@@ -63,10 +124,45 @@ function Checkout({ cart, total }) {
 
         <div className="checkout-container">
 
-            <h2>Checkout</h2>
+
+            {/* SUCCESS POPUP */}
+
+            {showSuccess && (
+
+                <div className="order-success-popup">
+
+                    <div className="success-icon">
+                        ✓
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Order placed successfully!
+                        </strong>
+
+                        <p>
+                            Your order has been placed.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            )}
 
 
-            <form onSubmit={formik.handleSubmit}>
+            <h2>
+                Checkout
+            </h2>
+
+
+            <form
+                onSubmit={
+                    formik.handleSubmit
+                }
+            >
+
 
                 {/* FULL NAME */}
 
@@ -80,16 +176,27 @@ function Checkout({ cart, total }) {
                         type="text"
                         name="fullName"
                         placeholder="Enter your full name"
-                        value={formik.values.fullName}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
+                        value={
+                            formik.values.fullName
+                        }
+                        onChange={
+                            formik.handleChange
+                        }
+                        onBlur={
+                            formik.handleBlur
+                        }
                     />
 
                     {formik.touched.fullName &&
                         formik.errors.fullName && (
 
                             <p className="error">
-                                {formik.errors.fullName}
+
+                                {
+                                    formik.errors
+                                        .fullName
+                                }
+
                             </p>
 
                         )}
@@ -109,16 +216,27 @@ function Checkout({ cart, total }) {
                         type="email"
                         name="email"
                         placeholder="Enter your email"
-                        value={formik.values.email}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
+                        value={
+                            formik.values.email
+                        }
+                        onChange={
+                            formik.handleChange
+                        }
+                        onBlur={
+                            formik.handleBlur
+                        }
                     />
 
                     {formik.touched.email &&
                         formik.errors.email && (
 
                             <p className="error">
-                                {formik.errors.email}
+
+                                {
+                                    formik.errors
+                                        .email
+                                }
+
                             </p>
 
                         )}
@@ -138,16 +256,27 @@ function Checkout({ cart, total }) {
                         type="tel"
                         name="phone"
                         placeholder="03XXXXXXXXX"
-                        value={formik.values.phone}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
+                        value={
+                            formik.values.phone
+                        }
+                        onChange={
+                            formik.handleChange
+                        }
+                        onBlur={
+                            formik.handleBlur
+                        }
                     />
 
                     {formik.touched.phone &&
                         formik.errors.phone && (
 
                             <p className="error">
-                                {formik.errors.phone}
+
+                                {
+                                    formik.errors
+                                        .phone
+                                }
+
                             </p>
 
                         )}
@@ -166,16 +295,27 @@ function Checkout({ cart, total }) {
                     <textarea
                         name="address"
                         placeholder="Enter your complete delivery address"
-                        value={formik.values.address}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
+                        value={
+                            formik.values.address
+                        }
+                        onChange={
+                            formik.handleChange
+                        }
+                        onBlur={
+                            formik.handleBlur
+                        }
                     />
 
                     {formik.touched.address &&
                         formik.errors.address && (
 
                             <p className="error">
-                                {formik.errors.address}
+
+                                {
+                                    formik.errors
+                                        .address
+                                }
+
                             </p>
 
                         )}
@@ -195,16 +335,27 @@ function Checkout({ cart, total }) {
                         type="text"
                         name="city"
                         placeholder="Enter your city"
-                        value={formik.values.city}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
+                        value={
+                            formik.values.city
+                        }
+                        onChange={
+                            formik.handleChange
+                        }
+                        onBlur={
+                            formik.handleBlur
+                        }
                     />
 
                     {formik.touched.city &&
                         formik.errors.city && (
 
                             <p className="error">
-                                {formik.errors.city}
+
+                                {
+                                    formik.errors
+                                        .city
+                                }
+
                             </p>
 
                         )}
@@ -222,8 +373,13 @@ function Checkout({ cart, total }) {
 
                     <select
                         name="paymentMethod"
-                        value={formik.values.paymentMethod}
-                        onChange={formik.handleChange}
+                        value={
+                            formik.values
+                                .paymentMethod
+                        }
+                        onChange={
+                            formik.handleChange
+                        }
                     >
 
                         <option value="Cash on Delivery">
@@ -258,12 +414,13 @@ function Checkout({ cart, total }) {
                 </div>
 
 
-                <button 
-                
+                <button
                     type="submit"
                     className="place-order-btn"
                 >
+
                     Place Order
+
                 </button>
 
             </form>

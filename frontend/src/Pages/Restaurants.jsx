@@ -8,11 +8,16 @@ import useDebounce from "../Hooks/useDebounce";
 
 import { fetchRestaurants } from "../redux/slices/restaurantSlice";
 
+import {
+  deleteRestaurant
+} from "../redux/slices/restaurantSlice";
 
 function Restaurants() {
 
   const dispatch = useDispatch();
-
+  const user = useSelector(
+    (state) => state.auth.user
+  );
 
   // Get restaurant state from Redux
   const {
@@ -27,10 +32,10 @@ function Restaurants() {
 
   // Fetch restaurants from backend
   useEffect(() => {
-  if (restaurants.length === 0) {
-    dispatch(fetchRestaurants());
-  }
-}, [dispatch, restaurants.length]);
+    if (restaurants.length === 0) {
+      dispatch(fetchRestaurants());
+    }
+  }, [dispatch, restaurants.length]);
 
   // Debounce global search text
   const debouncedSearch = useDebounce(
@@ -80,6 +85,34 @@ function Restaurants() {
 
   };
 
+  // Delete handler
+  const handleDelete = async (id) => {
+
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this restaurant?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+
+      await dispatch(
+        deleteRestaurant(id)
+      ).unwrap();
+
+    } catch (error) {
+
+      console.error(
+        "Delete failed:",
+        error
+      );
+
+    }
+
+  };
+
 
   // Loading state
   if (loading) {
@@ -117,6 +150,13 @@ function Restaurants() {
             Discover restaurants and food
             near you
           </p>
+
+          <Link
+            to="/restaurants/add"
+            className="add-restaurant-button"
+          >
+            Add Restaurant
+          </Link>
 
           {debouncedSearch && (
             <p>
@@ -159,6 +199,35 @@ function Restaurants() {
                     />
 
                   </Link>
+
+                  {user &&
+                    String(restaurant.owner) ===
+                    String(user.id) && (
+
+                      <div className="restaurant-actions">
+
+                        <Link
+                          to={`/restaurants/edit/${restaurant.id}`}
+                          className="edit-restaurant-button"
+                        >
+                          Edit
+                        </Link>
+
+
+                        <button
+                          type="button"
+                          className="delete-restaurant-button"
+                          onClick={() =>
+                            handleDelete(restaurant.id)
+                          }
+                        >
+                          Delete
+                        </button>
+
+                      </div>
+
+                    )}
+
 
                 </div>
 

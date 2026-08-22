@@ -60,29 +60,26 @@ function Login() {
         }),
 
 
-        onSubmit: (values) => {
+        onSubmit: async (values) => {
 
             setLoginError("");
 
-            const result = dispatch(
-                login(
-                    values.email,
-                    values.password
-                )
-            );
+            try {
 
+                await dispatch(
+                    login({
+                        email: values.email,
+                        password: values.password
+                    })
+                ).unwrap();
 
-            if (!result.success) {
+                navigate("/dashboard");
 
-                setLoginError(
-                    result.message
-                );
+            } catch (error) {
 
-                return;
+                setLoginError(error);
+
             }
-
-
-            navigate("/dashboard");
 
         }
 

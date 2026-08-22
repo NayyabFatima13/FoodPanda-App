@@ -112,13 +112,25 @@ function Register() {
         }),
 
 
-        onSubmit: (values) => {
+        onSubmit: async (values) => {
 
-            dispatch(
-                register(values)
-            );
+            try {
 
-            navigate("/dashboard");
+                await dispatch(
+                    register({
+                        name: values.name,
+                        email: values.email,
+                        password: values.password
+                    })
+                ).unwrap();
+
+                navigate("/dashboard");
+
+            } catch (error) {
+
+                console.log(error);
+
+            }
 
         }
 

@@ -13,6 +13,7 @@ import Restaurants from "./Pages/Restaurants";
 import Favorites from "./Pages/Favorites";
 import Cart from "./Pages/Cart";
 import RestaurantDetails from "./Pages/RestaurantDetails";
+import RestaurantForm from "./Pages/RestaurantForm";
 
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
@@ -40,9 +41,20 @@ function App() {
               element={<Restaurants />}
             />
 
+
             <Route
               path="/restaurants/:id"
               element={<RestaurantDetails />}
+            />
+
+            <Route
+              path="/restaurants/add"
+              element={<RestaurantForm />}
+            />
+
+            <Route
+              path="/restaurants/edit/:id"
+              element={<RestaurantForm />}
             />
 
             <Route
