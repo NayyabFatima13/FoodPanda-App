@@ -1,50 +1,63 @@
-# Foodpanda Backend API
-## 1. Project Overview
+# 🍔 Foodpanda Backend API
 
-This project is a RESTful backend API for a Foodpanda-style food delivery application.
+A RESTful backend API for a Foodpanda-style food delivery application built using Node.js, Express.js, MongoDB, and Mongoose.
 
-#### The backend is built using:
-- Node.js
-- Express.js
-- MongoDB
-- Mongoose
-- JWT authentication
-- bcrypt password hashing
-- Helmet
-- CORS
-- Express Rate Limit
-- REST API architecture
+The backend provides user authentication, JWT-based authorization, restaurant CRUD operations, validation, error handling, ownership protection, and basic API security.
 
-#### The API provides:
+---
+
+## 📌 Project Overview
+
+This backend was developed as part of a Foodpanda full-stack application.
+
+The API provides:
+
 - User registration
 - User login
 - JWT authentication
+- Password hashing
+- Protected routes
 - Restaurant CRUD operations
-- Restaurant ownership/authorization
-- Request validation
-- Error handling
-- Rate limiting
-- Security headers
+- Restaurant ownership and authorization
 - MongoDB database integration
+- Mongoose schemas and validation
+- Centralized error handling
+- 404 route handling
+- CORS
+- Security middleware
+- Rate limiting
+- API testing with Postman
+- Deployment using Render
 
-## 2. Technologies Used
-Technology	Purpose
-Node.js	JavaScript runtime
-Express.js	REST API framework
-MongoDB	Database
-Mongoose	MongoDB ODM
-JWT	User authentication
-bcrypt	Password hashing
-Helmet	HTTP security headers
-CORS	Cross-origin requests
-express-rate-limit	Request rate limiting
-dotenv	Environment variables
-Nodemon	Development server
+---
 
-## 3. Project Structure
+# 🛠️ Technologies Used
+
+| Technology | Purpose |
+|---|---|
+| Node.js | JavaScript runtime |
+| Express.js | REST API framework |
+| MongoDB | NoSQL database |
+| Mongoose | MongoDB ODM |
+| JWT | Authentication |
+| bcrypt | Password hashing |
+| dotenv | Environment variables |
+| CORS | Cross-origin requests |
+| Helmet | HTTP security headers |
+| express-rate-limit | API rate limiting |
+| Nodemon | Development server |
+| Postman | API testing |
+| Render | Backend deployment |
+
+---
+
+# 📁 Project Structure
+
+```text
 backend/
 │
 ├── src/
+│   │
 │   ├── config/
 │   │   └── db.js
 │   │
@@ -55,8 +68,8 @@ backend/
 │   ├── middleware/
 │   │   ├── logger.js
 │   │   ├── authMiddleware.js
-│   │   ├── rateLimiter.js
 │   │   ├── validateRequest.js
+│   │   ├── rateLimiter.js
 │   │   ├── notFound.js
 │   │   └── errorHandler.js
 │   │
@@ -75,7 +88,9 @@ backend/
 │   └── restaurants.js
 │
 ├── .env
+├── .gitignore
 ├── package.json
+├── package-lock.json
 └── README.md
 
 ## 4. Installation
