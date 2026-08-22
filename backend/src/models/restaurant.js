@@ -1,77 +1,179 @@
-import mongoose from "mongoose";
+import { pool } from "../config/db.js";
 
-const restaurantSchema = new mongoose.Schema(
-  {
-    //Data Validation through mongoose validation
-    id: {
-      type: Number,
-      required: [true, "Restaurant ID is required"],
-      unique: true,
-    },
+// Get all restaurants
+export const getAllRestaurants = async () => {
+  const result = await pool.query(`
+    SELECT
+      id,
+      owner_id AS owner,
+      name,
+      cuisine,
+      rating,
+      delivery_time AS "deliveryTime",
+      price,
+      image,
+      discount,
+      description,
+      created_at AS "createdAt",
+      updated_at AS "updatedAt"
+    FROM restaurants
+    ORDER BY id
+  `);
 
-    owner: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
+  return result.rows;
+};
 
-    name: {
-      type: String,
-      required: [true, "Restaurant name is required"],
-      trim: true,     // This is examples of normalization/sanitization.
-    },
+// Get restaurant by ID
+export const getRestaurantById = async (id) => {
+  const result = await pool.query(
+    `
+    SELECT
+      id,
+      owner_id AS owner,
+      name,
+      cuisine,
+      rating,
+      delivery_time AS "deliveryTime",
+      price,
+      image,
+      discount,
+      description,
+      created_at AS "createdAt",
+      updated_at AS "updatedAt"
+    FROM restaurants
+    WHERE id = $1
+    `,
+    [id]
+  );
 
-    cuisine: {
-      type: String,
-      required: [true, "Cuisine is required"],
-      trim: true,    // This is examples of normalization/sanitization.
-    },
+  return result.rows[0];
+};
 
-    rating: {
-      type: Number,
-      required: [true, "Rating is required"],
-      min: [0, "Rating cannot be less than 0"],
-      max: [5, "Rating cannot be greater than 5"],
-    },
+// Create restaurant
+export const createRestaurant = async (
+  id,
+  ownerId,
+  name,
+  cuisine,
+  rating,
+  deliveryTime,
+  price,
+  image,
+  discount,
+  description
+) => {
+  const result = await pool.query(
+    `
+    INSERT INTO restaurants (
+      id,
+      owner_id,
+      name,
+      cuisine,
+      rating,
+      delivery_time,
+      price,
+      image,
+      discount,
+      description
+    )
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+    RETURNING
+      id,
+      owner_id AS owner,
+      name,
+      cuisine,
+      rating,
+      delivery_time AS "deliveryTime",
+      price,
+      image,
+      discount,
+      description,
+      created_at AS "createdAt",
+      updated_at AS "updatedAt"
+    `,
+    [
+      id,
+      ownerId,
+      name,
+      cuisine,
+      rating,
+      deliveryTime,
+      price,
+      image,
+      discount,
+      description,
+    ]
+  );
 
-    deliveryTime: {
-      type: String,
-      required: [true, "Delivery time is required"],
-      trim: true,
-    },
+  return result.rows[0];
+};
 
-    price: {
-      type: Number,
-      required: [true, "Price is required"],
-      min: [0, "Price cannot be negative"],
-    },
+// Update restaurant
+export const updateRestaurant = async (
+  id,
+  name,
+  cuisine,
+  rating,
+  deliveryTime,
+  price,
+  image,
+  discount,
+  description
+) => {
+  const result = await pool.query(
+    `
+    UPDATE restaurants
+    SET
+      name = $2,
+      cuisine = $3,
+      rating = $4,
+      delivery_time = $5,
+      price = $6,
+      image = $7,
+      discount = $8,
+      description = $9,
+      updated_at = CURRENT_TIMESTAMP
+    WHERE id = $1
+    RETURNING
+      id,
+      owner_id AS owner,
+      name,
+      cuisine,
+      rating,
+      delivery_time AS "deliveryTime",
+      price,
+      image,
+      discount,
+      description,
+      created_at AS "createdAt",
+      updated_at AS "updatedAt"
+    `,
+    [
+      id,
+      name,
+      cuisine,
+      rating,
+      deliveryTime,
+      price,
+      image,
+      discount,
+      description,
+    ]
+  );
 
-    image: {
-      type: String,
-      required: [true, "Image is required"],
-      trim: true,
-    },
+  return result.rows[0];
+};
 
-    discount: {
-      type: String,
-      required: [true, "Discount is required"],
-      trim: true,
-    },
+// Delete restaurant
+export const deleteRestaurant = async (id) => {
+  const result = await pool.query(
+    `
+    DELETE FROM restaurants
+    WHERE id = $1
+    RETURNING id
+    `,
+    [id]
+  );
 
-    description: {
-      type: String,
-      required: [true, "Description is required"],
-      trim: true,
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
-
-const Restaurant = mongoose.model(
-  "Restaurant",
-  restaurantSchema
-);
-
-export default Restaurant;
+  return result.rows[0];
+};

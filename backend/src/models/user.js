@@ -1,33 +1,37 @@
-import mongoose from "mongoose";
+import { pool } from "../config/db.js";
 
-const userSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: [true, "Name is required"],
-      trim: true,
-    },
+// Create a new user
+export const createUser = async (name, email, password) => {
+  const result = await pool.query(
+    `INSERT INTO users (name, email, password)
+     VALUES ($1, $2, $3)
+     RETURNING id, name, email, password, created_at, updated_at`,
+    [name, email, password]
+  );
 
-    email: {
-      type: String,
-      required: [true, "Email is required"],
-       // This is examples of normalization/sanitization.
-      unique: true,
-      lowercase: true,      
-      trim: true,
-    },
+  return result.rows[0];
+};
 
-    password: {
-      type: String,
-      required: [true, "Password is required"],
-      minlength: [6, "Password must be at least 6 characters"],
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
+// Find user by email
+export const findUserByEmail = async (email) => {
+  const result = await pool.query(
+    `SELECT id, name, email, password, created_at, updated_at
+     FROM users
+     WHERE email = $1`,
+    [email]
+  );
 
-const User = mongoose.model("User", userSchema);
+  return result.rows[0];
+};
 
-export default User;
+// Find user by ID
+export const findUserById = async (id) => {
+  const result = await pool.query(
+    `SELECT id, name, email, created_at, updated_at
+     FROM users
+     WHERE id = $1`,
+    [id]
+  );
+
+  return result.rows[0];
+};

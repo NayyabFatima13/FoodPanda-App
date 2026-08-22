@@ -1,9 +1,18 @@
-import Restaurant from "../models/restaurant.js";
+import {
+  getAllRestaurants,
+  getRestaurantById as findRestaurantById,
+  createRestaurant as insertRestaurant,
+  updateRestaurant as updateRestaurantById,
+  deleteRestaurant as deleteRestaurantById,
+} from "../models/restaurant.js";
 
-// Get Restaurants
+// ======================================
+// GET ALL RESTAURANTS
+// ======================================
+
 export const getRestaurants = async (req, res, next) => {
   try {
-    const restaurants = await Restaurant.find();
+    const restaurants = await getAllRestaurants();
 
     res.status(200).json({
       success: true,
@@ -15,7 +24,10 @@ export const getRestaurants = async (req, res, next) => {
   }
 };
 
-// Get Restaurants by ID
+// ======================================
+// GET RESTAURANT BY ID
+// ======================================
+
 export const getRestaurantById = async (req, res, next) => {
   try {
     const restaurantId = Number(req.params.id);
@@ -27,9 +39,8 @@ export const getRestaurantById = async (req, res, next) => {
       });
     }
 
-    const restaurant = await Restaurant.findOne({
-      id: restaurantId,
-    });
+    const restaurant =
+      await findRestaurantById(restaurantId);
 
     if (!restaurant) {
       return res.status(404).json({
@@ -47,13 +58,36 @@ export const getRestaurantById = async (req, res, next) => {
   }
 };
 
-// Add Restaurants - Post
+// ======================================
+// CREATE RESTAURANT
+// ======================================
+
 export const createRestaurant = async (req, res, next) => {
   try {
-    const restaurant = await Restaurant.create({
-      ...req.body,
-      owner: req.user.userId,
-    });
+    const {
+      id,
+      name,
+      cuisine,
+      rating,
+      deliveryTime,
+      price,
+      image,
+      discount,
+      description,
+    } = req.body;
+
+    const restaurant = await insertRestaurant(
+      id,
+      req.user.userId,
+      name,
+      cuisine,
+      rating,
+      deliveryTime,
+      price,
+      image,
+      discount,
+      description
+    );
 
     res.status(201).json({
       success: true,
@@ -65,7 +99,10 @@ export const createRestaurant = async (req, res, next) => {
   }
 };
 
-// Update Restaurants - Put
+// ======================================
+// UPDATE RESTAURANT
+// ======================================
+
 export const updateRestaurant = async (req, res, next) => {
   try {
     const restaurantId = Number(req.params.id);
@@ -77,9 +114,8 @@ export const updateRestaurant = async (req, res, next) => {
       });
     }
 
-    const restaurant = await Restaurant.findOne({
-      id: restaurantId,
-    });
+    const restaurant =
+      await findRestaurantById(restaurantId);
 
     if (!restaurant) {
       return res.status(404).json({
@@ -88,28 +124,56 @@ export const updateRestaurant = async (req, res, next) => {
       });
     }
 
-    if (restaurant.owner.toString() !== req.user.userId) {
+    // Ownership check
+    if (
+      String(restaurant.owner) !==
+      String(req.user.userId)
+    ) {
       return res.status(403).json({
         success: false,
-        message: "You are not allowed to update this restaurant",
+        message:
+          "You are not allowed to update this restaurant",
       });
     }
 
-    Object.assign(restaurant, req.body);
+    const {
+      name,
+      cuisine,
+      rating,
+      deliveryTime,
+      price,
+      image,
+      discount,
+      description,
+    } = req.body;
 
-    await restaurant.save();
+    const updatedRestaurant =
+      await updateRestaurantById(
+        restaurantId,
+        name,
+        cuisine,
+        rating,
+        deliveryTime,
+        price,
+        image,
+        discount,
+        description
+      );
 
     res.status(200).json({
       success: true,
       message: "Restaurant updated successfully",
-      data: restaurant,
+      data: updatedRestaurant,
     });
   } catch (error) {
     next(error);
   }
 };
 
-// Delete Restaurants
+// ======================================
+// DELETE RESTAURANT
+// ======================================
+
 export const deleteRestaurant = async (req, res, next) => {
   try {
     const restaurantId = Number(req.params.id);
@@ -121,9 +185,8 @@ export const deleteRestaurant = async (req, res, next) => {
       });
     }
 
-    const restaurant = await Restaurant.findOne({
-      id: restaurantId,
-    });
+    const restaurant =
+      await findRestaurantById(restaurantId);
 
     if (!restaurant) {
       return res.status(404).json({
@@ -132,16 +195,19 @@ export const deleteRestaurant = async (req, res, next) => {
       });
     }
 
-    if (restaurant.owner.toString() !== req.user.userId) {
+    // Ownership check
+    if (
+      String(restaurant.owner) !==
+      String(req.user.userId)
+    ) {
       return res.status(403).json({
         success: false,
-        message: "You are not allowed to delete this restaurant",
+        message:
+          "You are not allowed to delete this restaurant",
       });
     }
 
-    await Restaurant.deleteOne({
-      _id: restaurant._id,
-    });
+    await deleteRestaurantById(restaurantId);
 
     res.status(200).json({
       success: true,
