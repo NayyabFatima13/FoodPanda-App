@@ -460,7 +460,7 @@ Success
 ## 15. Restaurant Data Model
 
 A restaurant contains:
-
+```
 {
   "id": 1,
   "name": "Pizza House",
@@ -473,24 +473,28 @@ A restaurant contains:
   "description": "Delicious Italian pizza",
   "owner": "USER_OBJECT_ID"
 }
-Validation
-Field	Rule
-id	Required, unique
-name	Required
-cuisine	Required
-rating	Required, 0–5
-deliveryTime	Required
-price	Required, minimum 0
-image	Required
-discount	Required
-description	Required
-owner	Required for protected creation
+```
+
+**Validation**
+| Field | Rule |
+| --- | --- |
+| id | Required, unique |
+| name | Required |
+| cuisine | Required |
+| rating | Required, 0–5 |
+| deliveryTime | Required |
+| price | Required, minimum 0 |
+| image | Required |
+| discount | Required |
+| description | Required |
+| owner | Required for protected creation |
 
 ## 16. Authentication & Authorization
 
 The API uses JWT-based authentication.
 
-Authentication flow
+**Authentication flow**
+```
 Register
    ↓
 Password hashed with bcrypt
@@ -504,9 +508,10 @@ Credentials verified
 JWT generated
    ↓
 Client receives token
+```
 
 For protected routes:
-
+```
 Client
    ↓
 Authorization: Bearer JWT
@@ -518,27 +523,28 @@ Token verified
 req.user
    ↓
 Controller
+```
 
 ## 17. Restaurant Ownership
 
 Restaurants are associated with users through the owner field.
-
+```
 User
   │
   │ _id
   ↓
 Restaurant.owner
-
+```
 When a user creates a restaurant:
-
+```
 JWT
  ↓
 Authenticated user ID
  ↓
 Restaurant.owner
-
+```
 When updating or deleting:
-
+```
 Authenticated user
         ↓
 Compare user ID
@@ -550,6 +556,7 @@ Match?
   Yes        No
    ↓          ↓
 Allow       403
+```
 
 ## 18. Middleware
 
@@ -558,30 +565,35 @@ The backend uses middleware for reusable request processing.
 Logger
 
 Logs:
-
+```
 GET /api/restaurants
 POST /api/auth/login
-Authentication Middleware
+```
+
+**Authentication Middleware**
 
 Verifies JWT tokens for protected routes.
 
-Rate Limiter
+**Rate Limiter**
 
 Limits excessive authentication requests.
 
 Example:
-
+```
 10 requests / 15 minutes
-Validation Middleware
+```
+
+**Validation Middleware**
 
 Validates incoming request data before reaching the controller.
 
-Not Found Middleware
+**Not Found Middleware**
 
 Handles undefined routes with:
-
+```
 404 Not Found
-Error Handler
+```
+**Error Handler**
 
 Provides centralized error handling for the application.
 
@@ -589,51 +601,53 @@ Provides centralized error handling for the application.
 
 The API implements several security practices.
 
-Helmet
+**Helmet**
 
 Adds security-related HTTP headers.
 
-CORS
+**CORS**
 
 Controls which frontend origins can access the API.
 
-Rate Limiting
+**Rate Limiting**
 
 Protects authentication endpoints against excessive requests.
 
-Password Hashing
+**Password Hashing**
 
 Passwords are hashed using bcrypt before being stored.
 
-JWT
+**JWT**
 
 JWT is used for authentication.
 
-Authorization
+**Authorization**
 
 Restaurant ownership prevents users from modifying other users' restaurants.
 
 ## 20. HTTP Status Codes
-Status	Meaning
-200	Request successful
-201	Resource created
-400	Invalid request/data
-401	Authentication required/invalid
-403	Access forbidden
-404	Resource/route not found
-409	Resource conflict
-429	Too many requests
-500	Internal server error
+| Status | Meaning |
+| :--- | :--- |
+| `200` | Request successful |
+| `201` | Resource created |
+| `400` | Invalid request/data |
+| `401` | Authentication required/invalid |
+| `403` | Access forbidden |
+| `404` | Resource/route not found |
+| `409` | Resource conflict |
+| `429` | Too many requests |
+| `500` | Internal server error |
 
 ## 21. API Endpoint Summary
-Method	Endpoint	Auth	Description
-POST	/api/auth/register	No	Register user
-POST	/api/auth/login	No	Login and receive JWT
-GET	/api/restaurants	No	Get all restaurants
-GET	/api/restaurants/:id	No	Get restaurant
-POST	/api/restaurants	Yes	Create restaurant
-PUT	/api/restaurants/:id	Yes + Owner	Update restaurant
-DELETE	/api/restaurants/:id	Yes + Owner	Delete restaurant
+| Method | Endpoint | Auth | Description |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/auth/register` | No | Register user |
+| `POST` | `/api/auth/login` | No | Login and receive JWT |
+| `GET` | `/api/restaurants` | No | Get all restaurants |
+| `GET` | `/api/restaurants/:id` | No | Get restaurant |
+| `POST` | `/api/restaurants` | Yes | Create restaurant |
+| `PUT` | `/api/restaurants/:id` | Yes + Owner | Update restaurant |
+| `DELETE` | `/api/restaurants/:id` | Yes + Owner | Delete restaurant |
 
 ## 22. Postman Collection
 
@@ -641,6 +655,7 @@ A Postman collection is included for testing the API.
 
 The collection contains:
 
+```
 Foodpanda Backend API
 │
 ├── Authentication
@@ -655,6 +670,7 @@ Foodpanda Backend API
 │   └── Delete Restaurant
 │
 └── Error & Validation Tests
+```
 
 The Postman collection can be imported into Postman to test the API endpoints.
 
@@ -663,12 +679,13 @@ The Postman collection can be imported into Postman to test the API endpoints.
 The backend is deployed on Render.
 
 Production base URL:
-
+```
 https://foodpanda-app-1.onrender.com
-
+```
 Example:
-
+```
 GET https://foodpanda-app-1.onrender.com/api/restaurants
+```
 
 ## 24. Learning Outcomes
 
