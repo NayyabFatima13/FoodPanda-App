@@ -150,6 +150,7 @@
   display: grid;
   grid-template-columns: 240px 1fr;
   gap: 30px;
+  margin-top: 30px;
 }
 
 
@@ -250,6 +251,8 @@
 
   border-radius: 10px;
 
+  margin-top: 15px;
+
   margin-bottom: 15px;
 }
 
@@ -309,6 +312,7 @@
   font-size: 14px;
 
   font-weight: 600;
+
 }
 
 .order-status.preparing {
@@ -353,4 +357,24 @@
     gap: 15px;
   }
 
+}/* =========================
+   DASHBOARD - additional responsive breakpoints & cart tweaks
+========================= */
+@media (max-width: 1000px) {
+  .dashboard { padding: 30px; }
+  .dashboard-stats { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 900px) {
+  .dashboard-content { grid-template-columns: 200px 1fr; }
+}
+@media (max-width: 700px) {
+  .dashboard { padding: 20px; }
+  .dashboard-content { grid-template-columns: 1fr; }
+  .dashboard-stats { grid-template-columns: 1fr; }
+  .order-card { flex-direction: column; align-items: flex-start; gap: 15px; }
+  /* Dashboard cart responsive */
+  .dashboard-cart { padding: 16px; }
+  .dashboard-cart-item { flex-direction: column; align-items: flex-start; gap:10px; padding: 12px; }
+  .dashboard-cart-item h3 { font-size: 16px; }
+  .dashboard-cart-quantity { margin-top: 8px; }
 }

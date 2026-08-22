@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
+import { setSearchText } from "../redux/slices/restaurantSlice";
 import { logout } from "../redux/slices/authSlice";
 
 import { toggleTheme } from "../redux/slices/themeSlice";
@@ -26,9 +27,11 @@ import {
 
 import foodpandaLogo from "../assets/foodpanda-logo-horizontal.png";
 
-function Header({ searchText, setSearchText }) {
+function Header() {
 
-const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const searchText = useSelector(
+    (state) => state.restaurants.searchText
+  );
 
   const user = useSelector(
     (state) => state.auth.user
@@ -36,125 +39,135 @@ const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const dispatch = useDispatch();
 
+  const handleSearchChange = (e) => {
+    dispatch(setSearchText(e.target.value));
+  };
+
   const theme = useSelector(
     (state) => state.theme.theme
   );
 
   const navigate = useNavigate();
+  const handleSearch = () => {
+    navigate("/restaurants");
+  };
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <header>
-{/* Mobile Header */}
-<div className="mobile-header">
 
-  <button
-    className="hamburger-btn"
-    onClick={() => setIsMenuOpen(!isMenuOpen)}
-  >
-    {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-  </button>
-
-  <Link to="/" className="mobile-logo">
-    <img
-      src={foodpandaLogo}
-      alt="foodpanda"
-    />
-  </Link>
-
-  <Link to="/cart" className="mobile-cart">
-    <ShoppingBag size={22} />
-  </Link>
-
-</div>
-
-{isMenuOpen && (
-  <div className="mobile-menu">
-
-    <Link
-      to="/favorites"
-      className="mobile-menu-item"
-      onClick={() => setIsMenuOpen(false)}
-    >
-      <Heart size={20} />
-      <span>Favorites</span>
-    </Link>
-
-    <Link
-      to="/cart"
-      className="mobile-menu-item"
-      onClick={() => setIsMenuOpen(false)}
-    >
-      <ShoppingBag size={20} />
-      <span>Cart</span>
-    </Link>
-
-    {user ? (
-      <>
-        <button
-          className="mobile-menu-item"
-          onClick={() => {
-            navigate("/dashboard");
-            setIsMenuOpen(false);
-          }}
-        >
-          👤
-          <span>Hi, {user.name}</span>
-        </button>
+      {/* Mobile Header */}
+      <div className="mobile-header">
 
         <button
-          className="mobile-menu-item"
-          onClick={() => {
-            dispatch(logout());
-            navigate("/");
-            setIsMenuOpen(false);
-          }}
+          className="hamburger-btn"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
-          🚪
-          <span>Logout</span>
-        </button>
-      </>
-    ) : (
-      <>
-        <button
-          className="mobile-menu-item"
-          onClick={() => {
-            navigate("/login");
-            setIsMenuOpen(false);
-          }}
-        >
-          👤
-          <span>Log in</span>
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
-        <button
-          className="mobile-menu-item"
-          onClick={() => {
-            navigate("/register");
-            setIsMenuOpen(false);
-          }}
-        >
-          📝
-          <span>Sign up</span>
-        </button>
-      </>
-    )}
+        <Link to="/" className="mobile-logo">
+          <img
+            src={foodpandaLogo}
+            alt="foodpanda"
+          />
+        </Link>
 
-    <button
-      className="mobile-menu-item"
-      onClick={() => dispatch(toggleTheme())}
-    >
-      {theme === "light" ? "🌙" : "☀️"}
+        <Link to="/cart" className="mobile-cart">
+          <ShoppingBag size={22} />
+        </Link>
 
-      <span>
-        {theme === "light" ? "Dark mode" : "Light mode"}
-      </span>
-    </button>
+      </div>
 
-  </div>
-)}
+      {isMenuOpen && (
+        <div className="mobile-menu">
+
+          <Link
+            to="/favorites"
+            className="mobile-menu-item"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <Heart size={20} />
+            <span>Favorites</span>
+          </Link>
+
+          <Link
+            to="/cart"
+            className="mobile-menu-item"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <ShoppingBag size={20} />
+            <span>Cart</span>
+          </Link>
+
+          {user ? (
+            <>
+              <button
+                className="mobile-menu-item"
+                onClick={() => {
+                  navigate("/dashboard");
+                  setIsMenuOpen(false);
+                }}
+              >
+                👤
+                <span>Hi, {user.name}</span>
+              </button>
+
+              <button
+                className="mobile-menu-item"
+                onClick={() => {
+                  dispatch(logout());
+                  navigate("/");
+                  setIsMenuOpen(false);
+                }}
+              >
+                🚪
+                <span>Logout</span>
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                className="mobile-menu-item"
+                onClick={() => {
+                  navigate("/login");
+                  setIsMenuOpen(false);
+                }}
+              >
+                👤
+                <span>Log in</span>
+              </button>
+
+              <button
+                className="mobile-menu-item"
+                onClick={() => {
+                  navigate("/register");
+                  setIsMenuOpen(false);
+                }}
+              >
+                📝
+                <span>Sign up</span>
+              </button>
+            </>
+          )}
+
+          <button
+            className="mobile-menu-item"
+            onClick={() => dispatch(toggleTheme())}
+          >
+            {theme === "light" ? "🌙" : "☀️"}
+
+            <span>
+              {theme === "light" ? "Dark mode" : "Light mode"}
+            </span>
+          </button>
+
+        </div>
+      )}
 
 
-      {/* Top Header DEsktop*/}
+      {/* Top Header Desktop*/}
       <div className="top-header">
 
         {/* Logo */}
@@ -313,25 +326,29 @@ const [isMenuOpen, setIsMenuOpen] = useState(false);
 
         {/* Search */}
         <div className="search-box">
-
-          <Search
-            size={20}
-            className="search-icon"
-          />
+          <Search />
 
           <input
             type="text"
-            placeholder="Search for restaurants, cuisines, and dishes"
+            placeholder="Search restaurants"
             value={searchText}
-            onChange={(event) =>
-              setSearchText(event.target.value)
+            onChange={(e) =>
+              dispatch(setSearchText(e.target.value))
             }
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSearch();
+              }
+            }}
           />
 
+          {/* <button onClick={handleSearch}>
+            Search
+          </button> */}
         </div>
 
       </div>
-
     </header>
   );
 }

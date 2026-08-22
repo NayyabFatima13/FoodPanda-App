@@ -1,33 +1,68 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import RestaurantCard from "../Components/restaurantCard";
-
-import useFetch from "../Hooks/useFetch";
 import useLocalStorage from "../Hooks/useLocalStorage";
+import useDebounce from "../Hooks/useDebounce";
+
+import { fetchRestaurants } from "../redux/slices/restaurantSlice";
 
 
 function Restaurants() {
 
+  const dispatch = useDispatch();
+
+
+  // Get restaurant state from Redux
   const {
-    data,
+    restaurants,
     loading,
-    error
-  } = useFetch("/restaurants.json");
+    error,
+    searchText
+  } = useSelector(
+    (state) => state.restaurants
+  );
 
 
+  // Fetch restaurants from backend
+  useEffect(() => {
+  if (restaurants.length === 0) {
+    dispatch(fetchRestaurants());
+  }
+}, [dispatch, restaurants.length]);
+
+  // Debounce global search text
+  const debouncedSearch = useDebounce(
+    searchText,
+    500
+  );
+
+
+  // Favorites
   const [favorites, setFavorites] =
     useLocalStorage("favorites", []);
 
 
-  const restaurants =
-    data?.restaurants || [];
+  // Filter restaurants
+  const filteredRestaurants =
+    restaurants.filter((restaurant) =>
+      restaurant.name
+        ?.toLowerCase()
+        .includes(
+          debouncedSearch.toLowerCase()
+        )
+    );
 
 
+  // Favorite handler
   const handleFavorite = (id) => {
 
     setFavorites((previousFavorites) => {
 
-      if (previousFavorites.includes(id)) {
+      if (
+        previousFavorites.includes(id)
+      ) {
 
         return previousFavorites.filter(
           (favoriteId) =>
@@ -35,7 +70,6 @@ function Restaurants() {
         );
 
       }
-
 
       return [
         ...previousFavorites,
@@ -47,13 +81,23 @@ function Restaurants() {
   };
 
 
+  // Loading state
   if (loading) {
-    return <h2>Loading restaurants...</h2>;
+    return (
+      <h2>
+        Loading restaurants...
+      </h2>
+    );
   }
 
 
+  // Error state
   if (error) {
-    return <h2>Something went wrong!</h2>;
+    return (
+      <h2>
+        {error}
+      </h2>
+    );
   }
 
 
@@ -74,39 +118,59 @@ function Restaurants() {
             near you
           </p>
 
+          {debouncedSearch && (
+            <p>
+              Search results for:
+              {" "}
+              <strong>
+                {debouncedSearch}
+              </strong>
+            </p>
+          )}
+
         </div>
 
 
         <div className="restaurant-grid">
 
-          {restaurants.map(
-            (restaurant) => (
+          {filteredRestaurants.length > 0 ? (
 
-              <div
-                className="restaurant-wrapper"
-                key={restaurant.id}
-              >
+            filteredRestaurants.map(
+              (restaurant) => (
 
-                <Link
-                  to={`/restaurants/${restaurant.id}`}
-                  className="restaurant-card-link"
+                <div
+                  className="restaurant-wrapper"
+                  key={restaurant.id}
                 >
 
-                  <RestaurantCard
-                    restaurant={restaurant}
-                    onFavorite={handleFavorite}
-                    isFavorite={
-                      favorites.includes(
-                        restaurant.id
-                      )
-                    }
-                  />
+                  <Link
+                    to={`/restaurants/${restaurant.id}`}
+                    className="restaurant-card-link"
+                  >
 
-                </Link>
+                    <RestaurantCard
+                      restaurant={restaurant}
+                      onFavorite={handleFavorite}
+                      isFavorite={
+                        favorites.includes(
+                          restaurant.id
+                        )
+                      }
+                    />
 
-              </div>
+                  </Link>
 
+                </div>
+
+              )
             )
+
+          ) : (
+
+            <h2>
+              No restaurants found.
+            </h2>
+
           )}
 
         </div>

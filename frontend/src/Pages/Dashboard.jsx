@@ -1,5 +1,5 @@
 import "../Styles/Dashboard.css";
-import { useState } from "react";
+
 import { Link } from "react-router-dom";
 
 import { useSelector } from "react-redux";
@@ -15,10 +15,8 @@ import {
     CheckCircle,
 } from "lucide-react";
 
-import Header from "../Components/header";
 
 function Dashboard() {
-    const [searchText, setSearchText] = useState("");
 
     const user = useSelector(
     (state) => state.auth.user
@@ -42,10 +40,6 @@ function Dashboard() {
 
     return (
         <>
-            <Header
-                searchText={searchText}
-                setSearchText={setSearchText}
-            />
 
             <main className="dashboard">
 
@@ -160,7 +154,8 @@ function Dashboard() {
 
                         </div>
 
-                    ) : (
+                    ) 
+                    : (
 
                         <div className="dashboard-cart-items">
 
@@ -181,7 +176,7 @@ function Dashboard() {
                                             Rs. {item.price}
                                         </p>
 
-                                    </div>
+                                    </div> 
 
 
                                     <div className="dashboard-cart-quantity">
@@ -190,7 +185,7 @@ function Dashboard() {
                                             × {item.quantity}
                                         </span>
 
-                                    </div>
+                                    </div> 
 
                                 </div>
 

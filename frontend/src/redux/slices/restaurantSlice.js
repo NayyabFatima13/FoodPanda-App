@@ -13,7 +13,7 @@ export const fetchRestaurants = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message ||
-        "Failed to fetch restaurants"
+          "Failed to fetch restaurants"
       );
     }
   }
@@ -23,6 +23,9 @@ const initialState = {
   restaurants: [],
   loading: false,
   error: null,
+
+  // Search state
+  searchText: "",
 };
 
 const restaurantSlice = createSlice({
@@ -30,7 +33,15 @@ const restaurantSlice = createSlice({
 
   initialState,
 
-  reducers: {},
+  reducers: {
+    setSearchText: (state, action) => {
+      state.searchText = action.payload;
+    },
+
+    clearSearch: (state) => {
+      state.searchText = "";
+    },
+  },
 
   extraReducers: (builder) => {
     builder
@@ -51,5 +62,10 @@ const restaurantSlice = createSlice({
       });
   },
 });
+
+export const {
+  setSearchText,
+  clearSearch,
+} = restaurantSlice.actions;
 
 export default restaurantSlice.reducer;

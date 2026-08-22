@@ -5,7 +5,6 @@ import useFetch from "../Hooks/useFetch";
 import useLocalStorage from "../Hooks/useLocalStorage";
 
 function Favorites() {
-
   const {
     data,
     loading,

@@ -2,14 +2,12 @@ import "./../App.css";
 
 import { useEffect, useRef, useState } from "react";
 
-import Header from "../Components/header";
 import Sidebar from "../Components/sidebar";
 import Banner from "../Components/banner";
 import CuisineSection from "../Components/cuisineSection";
 import PromoSection from "../Components/promoSection";
 import RestaurantSection from "../Components/restaurantSection";
 import InfoSection from "../Components/infoSection";
-import Footer from "../Components/footer";
 
 import useLocalStorage from "../Hooks/useLocalStorage";
 import useDebounce from "../Hooks/useDebounce";
@@ -34,22 +32,22 @@ function Home() {
   } = useSelector((state) => state.restaurants);
 
 
-  useEffect(() => {
-
+ useEffect(() => {
+  if (restaurants.length === 0) {
     dispatch(fetchRestaurants());
-
-  }, [dispatch]);
+  }
+}, [dispatch, restaurants.length]);
 
 
   // ==========================================
   // SEARCH
   // ==========================================
 
-  const [searchText, setSearchText] = useState("");
+ const searchText = useSelector(
+    (state) => state.restaurants.searchText
+  );
 
-  const debouncedSearch =
-    useDebounce(searchText, 500);
-
+  const debouncedSearch = useDebounce(searchText, 500);
 
   // ==========================================
   // FILTERS
@@ -278,13 +276,6 @@ function Home() {
   return (
 
     <>
-
-      <Header
-        searchText={searchText}
-        setSearchText={setSearchText}
-      />
-
-
       <main className="main-layout">
 
         <Sidebar
@@ -454,8 +445,6 @@ function Home() {
 
       {showNormalHome && <InfoSection />}
 
-
-      <Footer />
 
     </>
 
