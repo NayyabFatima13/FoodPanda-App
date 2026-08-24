@@ -9,7 +9,7 @@ import store from "./redux/store";
 import "./i18n/i18n";
 
 import "./App.css";
-import "./Styles/urdu.css";
+import "./Styles/Urdu.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 
