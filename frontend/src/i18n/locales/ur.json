@@ -1,0 +1,378 @@
+{
+  "header": {
+    "home": "ہوم",
+    "restaurants": "ریسٹورنٹس",
+    "cart": "کارٹ",
+    "login": "لاگ اِن",
+    "logout": "لاگ آؤٹ",
+    "dashboard": "ڈیش بورڈ",
+    "search": "ریسٹورنٹس تلاش کریں"
+  },
+
+ "home": {
+  "loadingRestaurants": "ریسٹورنٹس لوڈ ہو رہے ہیں...",
+  "loadingRestaurantsDescription": "براہ کرم انتظار کریں، ہم تازہ ترین ریسٹورنٹس حاصل کر رہے ہیں۔",
+
+  "searchResultsFor": "\"{{search}}\" کے لیے تلاش کے نتائج",
+
+  "fastestDelivery": "تیز ترین ڈیلیوری",
+  "topRatedRestaurants": "سب سے زیادہ ریٹنگ والے ریسٹورنٹس",
+
+  "bestResultsFilter": "آپ کے منتخب کردہ فلٹر کے مطابق بہترین نتائج دکھائے جا رہے ہیں",
+
+  "restaurantsUnderPrice": "{{price}} روپے سے کم ریسٹورنٹس",
+
+  "selectedPriceRange": "آپ کی منتخب کردہ قیمت کی حد کے اندر ریسٹورنٹس دکھائے جا رہے ہیں",
+
+  "restaurantsMatching": "\"{{search}}\" سے مطابقت رکھنے والے ریسٹورنٹس",
+
+  "mostPopular": "گروپس کے لیے سب سے مقبول",
+
+  "recommended": "آپ کے لیے تجویز کردہ"
+},
+
+  "banner": {
+  "welcome": "خوش آمدید، {{name}}! 👋",
+  "readyToOrder": "آرڈر کرنے کے لیے تیار ہیں؟",
+  "browseRestaurants": "ریسٹورنٹس دیکھیں",
+  "freeDelivery": "مفت ڈیلیوری کے لیے سائن اپ کریں",
+  "firstOrder": "اپنے پہلے آرڈر پر",
+  "signUp": "سائن اپ کریں"
+},
+
+  "cuisine": {
+  "title": "آپ کے لیے کھانے",
+  "items": {
+    "pizza": "پیزا",
+    "fastFood": "فاسٹ فوڈ",
+    "burgers": "برگر",
+    "bbq": "باربی کیو",
+    "desserts": "میٹھے پکوان",
+    "pakistani": "پاکستانی",
+    "shawarma": "شاورما",
+    "continental": "کانٹینینٹل",
+    "healthy": "صحت بخش کھانے"
+  }
+},
+
+ "promo": {
+  "items": {
+    "upTo": "تک",
+    "azaadiDeals": "آزادی ڈیلز",
+    "dealFor": "ڈیل",
+    "rs269": "269 روپے"
+  }
+},
+"favorites": {
+  "loading": "پسندیدہ ریسٹورنٹس لوڈ ہو رہے ہیں...",
+  "error": "کچھ غلط ہو گیا!",
+  "title": "میرے پسندیدہ",
+  "emptyTitle": "ابھی تک کوئی پسندیدہ ریسٹورنٹ نہیں ہے",
+  "emptyDescription": "ہوم پیج پر واپس جائیں اور کسی ریسٹورنٹ پر ❤️ پر کلک کریں۔"
+},
+"restaurantDetails": {
+  "loading": "ریسٹورنٹس لوڈ ہو رہے ہیں...",
+  "notFound": "ریسٹورنٹ نہیں ملا",
+  "notFoundDescription": "آپ جس ریسٹورنٹ کو تلاش کر رہے ہیں وہ موجود نہیں ہے۔",
+  "menu": "مینو",
+  "menuDescription": "اپنا پسندیدہ کھانا منتخب کریں اور اسے اپنی کارٹ میں شامل کریں۔"
+},
+
+  "restaurants": {
+    "title": "تمام ریستوران",
+    "subtitle": "اپنے قریب ریستوران اور کھانا دریافت کریں",
+    "addRestaurant": "ریستوران شامل کریں",
+    "searchResults": "تلاش کے نتائج:",
+    "edit": "ترمیم کریں",
+    "delete": "حذف کریں",
+    "noRestaurants": "کوئی ریستوران نہیں ملا۔",
+    "loading": "ریستوران لوڈ ہو رہے ہیں...",
+    "confirmDelete": "کیا آپ واقعی اس ریستوران کو حذف کرنا چاہتے ہیں؟"
+  },
+  "restaurantForm": {
+    "addTitle": "ریستوران شامل کریں",
+    "editTitle": "ریستوران میں ترمیم کریں",
+
+    "restaurantId": "ریستوران آئی ڈی",
+
+    "name": "ریستوران کا نام",
+    "namePlaceholder": "ریستوران کا نام درج کریں",
+
+    "cuisine": "کھانے کی قسم",
+    "cuisinePlaceholder": "مثلاً پاکستانی",
+
+    "rating": "ریٹنگ",
+
+    "deliveryTime": "ڈیلیوری کا وقت",
+    "deliveryTimePlaceholder": "30-40 منٹ",
+
+    "price": "قیمت",
+
+    "imageUrl": "تصویر کا URL",
+    "imagePlaceholder": "تصویر کا URL درج کریں",
+
+    "discount": "رعایت",
+    "discountPlaceholder": "20% رعایت",
+
+    "description": "تفصیل",
+    "descriptionPlaceholder": "ریستوران کی تفصیل درج کریں",
+
+    "saving": "محفوظ کیا جا رہا ہے...",
+    "updateRestaurant": "ریستوران اپ ڈیٹ کریں",
+    "addRestaurant": "ریستوران شامل کریں",
+    "cancel": "منسوخ کریں",
+
+    "validation": {
+      "idRequired": "ریستوران آئی ڈی ضروری ہے",
+      "idExists": "یہ ریستوران آئی ڈی پہلے سے موجود ہے",
+
+      "nameRequired": "ریستوران کا نام ضروری ہے",
+      "nameExists": "یہ ریستوران کا نام پہلے سے موجود ہے",
+
+      "cuisineRequired": "کھانے کی قسم ضروری ہے",
+
+      "ratingMin": "ریٹنگ 0 سے کم نہیں ہو سکتی",
+      "ratingMax": "ریٹنگ 5 سے زیادہ نہیں ہو سکتی",
+      "ratingRequired": "ریٹنگ ضروری ہے",
+
+      "deliveryRequired": "ڈیلیوری کا وقت ضروری ہے",
+
+      "priceMin": "قیمت منفی نہیں ہو سکتی",
+      "priceRequired": "قیمت ضروری ہے",
+
+      "imageRequired": "تصویر ضروری ہے",
+
+      "discountRequired": "رعایت ضروری ہے",
+
+      "descriptionRequired": "تفصیل ضروری ہے"
+    }
+  },
+
+  "info": {
+    "title": "آن لائن کھانا آرڈر کریں",
+    "description": "مزیدار کھانے سے لطف اٹھائیں جو براہ راست آپ کے گھر تک پہنچایا جائے۔"
+  },
+
+  "cart": {
+  "title": "آپ کی کارٹ",
+  "item": "آئٹم",
+  "items": "آئٹمز",
+
+  "emptyTitle": "آپ کی کارٹ خالی ہے",
+  "emptyDescription": "لگتا ہے کہ آپ نے ابھی تک اپنی کارٹ میں کچھ شامل نہیں کیا۔",
+  "browseRestaurants": "ریسٹورنٹس دیکھیں",
+
+  "orderSummary": "آرڈر کا خلاصہ",
+  "subtotal": "ذیلی کل",
+  "deliveryFee": "ڈیلیوری فیس",
+  "total": "کل",
+
+  "proceedCheckout": "چیک آؤٹ کریں",
+  "continueShopping": "خریداری جاری رکھیں",
+
+  "remove": "ہٹائیں",
+
+  "increaseQuantity": "مقدار بڑھائیں",
+  "decreaseQuantity": "مقدار کم کریں",
+
+  "orderPlaced": "آرڈر کامیابی سے دے دیا گیا!"
+},
+"dashboard": {
+  "welcome": "خوش آمدید",
+  "welcomeDescription": "اپنے ڈیش بورڈ سے اپنے آرڈرز، پسندیدہ اور اکاؤنٹ کا انتظام کریں۔",
+
+  "totalOrders": "کل آرڈرز",
+  "activeOrders": "فعال آرڈرز",
+  "favorites": "پسندیدہ",
+  "cartItems": "کارٹ آئٹمز",
+
+  "yourCart": "آپ کی کارٹ",
+  "viewCart": "کارٹ دیکھیں",
+
+  "emptyCart": "آپ کی کارٹ خالی ہے",
+  "emptyCartDescription": "اپنی کارٹ میں کچھ مزیدار کھانا شامل کریں۔",
+  "browseRestaurants": "ریسٹورنٹس دیکھیں",
+
+  "dashboard": "ڈیش بورڈ",
+  "restaurants": "ریسٹورنٹس",
+  "cart": "کارٹ",
+  "addresses": "پتے",
+  "accountSettings": "اکاؤنٹ کی ترتیبات",
+
+  "recentOrders": "حالیہ آرڈرز",
+  "orderAgain": "دوبارہ آرڈر کریں",
+
+  "delivered": "ڈیلیور ہو گیا",
+  "preparing": "تیار کیا جا رہا ہے"
+},
+
+  "checkout": {
+  "title": "چیک آؤٹ",
+  "fullName": "پورا نام",
+  "email": "ای میل",
+  "phone": "فون نمبر",
+  "address": "ڈیلیوری کا پتہ",
+  "city": "شہر",
+  "paymentMethod": "ادائیگی کا طریقہ",
+  "cashOnDelivery": "کیش آن ڈیلیوری",
+  "cardPayment": "کریڈٹ / ڈیبٹ کارڈ",
+  "orderSummary": "آرڈر کا خلاصہ",
+  "items": "آئٹمز",
+  "total": "کل",
+  "placeOrder": "آرڈر دیں",
+  "successTitle": "آرڈر کامیابی سے دے دیا گیا!",
+  "successMessage": "آپ کا آرڈر دے دیا گیا ہے۔",
+  "placeholders": {
+    "fullName": "اپنا پورا نام درج کریں",
+    "email": "اپنی ای میل درج کریں",
+    "phone": "03XXXXXXXXX",
+    "address": "اپنا مکمل ڈیلیوری پتہ درج کریں",
+    "city": "اپنا شہر درج کریں"
+  },
+  "validation": {
+    "nameMin": "نام کم از کم 3 حروف پر مشتمل ہونا چاہیے",
+    "nameRequired": "پورا نام درج کرنا ضروری ہے",
+    "emailInvalid": "درست ای میل ایڈریس درج کریں",
+    "emailRequired": "ای میل درج کرنا ضروری ہے",
+    "phoneInvalid": "درست فون نمبر درج کریں",
+    "phoneRequired": "فون نمبر درج کرنا ضروری ہے",
+    "addressMin": "براہ کرم مکمل پتہ درج کریں",
+    "addressRequired": "ڈیلیوری کا پتہ درج کرنا ضروری ہے",
+    "cityRequired": "شہر درج کرنا ضروری ہے",
+    "paymentRequired": "براہ کرم ادائیگی کا طریقہ منتخب کریں"
+  }
+},
+
+  "auth": {
+    "login": "لاگ اِن",
+    "register": "رجسٹر",
+    "email": "ای میل",
+    "password": "پاس ورڈ",
+    "name": "نام",
+    "submit": "جمع کریں"
+  },
+
+  "common": {
+    "loading": "لوڈ ہو رہا ہے...",
+    "error": "کچھ غلط ہو گیا",
+    "cancel": "منسوخ کریں",
+    "save": "محفوظ کریں",
+    "close": "بند کریں"
+  },
+  "restaurantCard": {
+  "title": "مقبول ریسٹورنٹس",
+  "ad": "اشتہار",
+  "from": "سے",
+  "freeFirstOrder": "پہلے آرڈر کے لیے مفت",
+  "deliveryTime": "ڈیلیوری کا وقت",
+  "rating": "ریٹنگ",
+  "price": "قیمت",
+  "viewRestaurant": "ریسٹورنٹ دیکھیں",
+  "addToCart": "کارٹ میں شامل کریں",
+  "removeFromCart": "کارٹ سے ہٹائیں"
+},
+"restaurantSection": {
+  "title": "مقبول ریسٹورنٹس",
+  "ad": "اشتہار",
+  "from": "سے",
+  "freeFirstOrder": "پہلے آرڈر کے لیے مفت",
+  "deliveryTime": "ڈیلیوری کا وقت",
+  "rating": "ریٹنگ",
+  "price": "قیمت",
+  "viewRestaurant": "ریسٹورنٹ دیکھیں",
+  "addToCart": "کارٹ میں شامل کریں",
+  "removeFromCart": "کارٹ سے ہٹائیں",
+  "noResults": "کوئی ریسٹورنٹ نہیں ملا",
+  "tryFilters": "اپنی تلاش یا فلٹرز تبدیل کرنے کی کوشش کریں۔",
+  "next": "مزید ریسٹورنٹس"
+},
+"sidebar": {
+  "filters": "فلٹرز",
+  "reset": "ری سیٹ",
+
+  "sortBy": "ترتیب دیں",
+  "relevance": "متعلقہ",
+  "fastestDelivery": "تیز ترین ڈیلیوری",
+  "topRated": "بہترین ریٹنگ",
+
+  "quickFilters": "فوری فلٹرز",
+  "ratings4Plus": "4+ ریٹنگ",
+
+  "offers": "آفرز",
+  "acceptsVouchers": "واؤچرز قبول کرتا ہے",
+
+  "cuisines": "کھانے",
+  "searchCuisine": "کھانے تلاش کریں",
+  "noCuisine": "کوئی کھانا نہیں ملا",
+  "showMore": "مزید دکھائیں",
+  "showLess": "کم دکھائیں",
+
+  "price": "قیمت",
+
+  "cuisineItems": {
+    "american": "امریکن",
+    "bbq": "باربی کیو",
+    "beverages": "مشروبات",
+    "biryani": "بریانی",
+    "broast": "بروسٹ",
+    "burgers": "برگر",
+    "cakesBakery": "کیک اور بیکری",
+    "chinese": "چائنیز",
+    "continental": "کانٹینینٹل",
+    "desserts": "میٹھے پکوان",
+    "fastFood": "فاسٹ فوڈ",
+    "italian": "اٹالین"
+  }
+},
+
+  "infoSection": {
+  "orderFoodTitle": "اسلام آباد میں آن لائن کھانا آرڈر کریں",
+
+  "orderFoodDescription": "اپنے پسندیدہ ریسٹورنٹس تلاش کریں اور اسلام آباد میں آن لائن مزیدار کھانا آرڈر کریں۔ فوڈ پانڈا آپ کے قریب ریسٹورنٹس تلاش کرنا اور اپنے پسندیدہ کھانے براہ راست گھر تک منگوانا آسان بناتا ہے۔",
+
+  "foodDeliveryTitle": "اسلام آباد میں فوڈ ڈیلیوری",
+
+  "foodDeliveryDescription": "چاہے آپ پاکستانی کھانا، برگر، پیزا، چائنیز کھانے، میٹھے پکوان یا کچھ اور تلاش کر رہے ہوں، آپ کو ڈیلیوری کے لیے مختلف قسم کے ریسٹورنٹس اور کھانے دستیاب مل سکتے ہیں۔",
+
+  "discoverTitle": "اپنے قریب ریسٹورنٹس دریافت کریں",
+
+  "discoverDescription": "مختلف کھانے دریافت کریں، ریسٹورنٹس کا موازنہ کریں، خصوصی آفرز دیکھیں اور اپنی پسند کا کھانا منتخب کریں۔"
+},
+
+  "footer": {
+  "description": "اپنے پسندیدہ ریسٹورنٹس سے آن لائن کھانا آرڈر کریں اور تیز ڈیلیوری سے لطف اٹھائیں۔",
+
+  "company": {
+    "title": "کمپنی",
+    "about": "ہمارے بارے میں",
+    "careers": "ملازمتیں",
+    "terms": "شرائط و ضوابط",
+    "privacy": "رازداری کی پالیسی"
+  },
+
+  "customers": {
+    "title": "صارفین کے لیے",
+    "help": "مدد مرکز",
+    "contact": "ہم سے رابطہ کریں",
+    "refunds": "رقم کی واپسی",
+    "tracking": "آرڈر ٹریک کریں"
+  },
+
+  "partners": {
+    "title": "پارٹنرز کے لیے",
+    "restaurant": "اپنا ریسٹورنٹ شامل کریں",
+    "rider": "رائیڈر بنیں",
+    "business": "کاروباری حل"
+  },
+
+  "social": {
+    "title": "ہمیں فالو کریں"
+  },
+
+  "bottom": {
+    "privacy": "رازداری",
+    "terms": "شرائط",
+    "cookies": "کوکیز"
+  }
+}
+}

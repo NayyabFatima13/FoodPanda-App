@@ -1,433 +1,586 @@
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import DOMPurify from "dompurify";
+import { useTranslation } from "react-i18next";
 
 function Checkout({ cart, total, onPlaceOrder }) {
 
-    const [showSuccess, setShowSuccess] = useState(false);
+  const [showSuccess, setShowSuccess] =
+    useState(false);
+
+  const { t } = useTranslation();
 
 
-    const formik = useFormik({
+  // ==========================================
+  // FORM VALIDATION
+  // ==========================================
 
-        initialValues: {
-            fullName: "",
-            email: "",
-            phone: "",
-            address: "",
-            city: "",
-            paymentMethod: "Cash on Delivery"
-        },
+  const formik = useFormik({
 
-
-        validationSchema: Yup.object({
-
-            fullName: Yup.string()
-                .min(
-                    3,
-                    "Name must be at least 3 characters"
-                )
-                .required(
-                    "Full name is required"
-                ),
-
-            email: Yup.string()
-                .email(
-                    "Invalid email address"
-                )
-                .required(
-                    "Email is required"
-                ),
-
-            phone: Yup.string()
-                .matches(
-                    /^[0-9]{10,15}$/,
-                    "Enter a valid phone number"
-                )
-                .required(
-                    "Phone number is required"
-                ),
-
-            address: Yup.string()
-                .min(
-                    10,
-                    "Please enter a complete address"
-                )
-                .required(
-                    "Delivery address is required"
-                ),
-
-            city: Yup.string()
-                .required(
-                    "City is required"
-                ),
-
-            paymentMethod: Yup.string()
-                .required(
-                    "Please select a payment method"
-                )
-
-        }),
+    initialValues: {
+      fullName: "",
+      email: "",
+      phone: "",
+      address: "",
+      city: "",
+      paymentMethod: "Cash on Delivery"
+    },
 
 
-        onSubmit: (values) => {
+    validationSchema: Yup.object({
 
-            const order = {
+      fullName: Yup.string()
+        .min(
+          3,
+          t("checkout.validation.nameMin")
+        )
+        .required(
+          t("checkout.validation.nameRequired")
+        ),
 
-                customer: values,
+      email: Yup.string()
+        .email(
+          t("checkout.validation.emailInvalid")
+        )
+        .required(
+          t("checkout.validation.emailRequired")
+        ),
 
-                items: cart,
+      phone: Yup.string()
+        .matches(
+          /^[0-9]{10,15}$/,
+          t("checkout.validation.phoneInvalid")
+        )
+        .required(
+          t("checkout.validation.phoneRequired")
+        ),
 
-                total: total
+      address: Yup.string()
+        .min(
+          10,
+          t("checkout.validation.addressMin")
+        )
+        .required(
+          t("checkout.validation.addressRequired")
+        ),
 
-            };
+      city: Yup.string()
+        .required(
+          t("checkout.validation.cityRequired")
+        ),
 
+      paymentMethod: Yup.string()
+        .required(
+          t("checkout.validation.paymentRequired")
+        )
 
-            console.log(
-                "ORDER:",
-                order
-            );
-
-
-            // Call parent function if provided
-
-            if (onPlaceOrder) {
-
-                onPlaceOrder(order);
-
-            }
-
-
-            // Show success popup
-
-            setShowSuccess(true);
-
-
-            // Hide popup after 3 seconds
-
-            setTimeout(() => {
-
-                setShowSuccess(false);
-
-            }, 3000);
+    }),
 
 
-            // Reset form
+    // ==========================================
+    // SUBMIT
+    // ==========================================
 
-            formik.resetForm();
+    onSubmit: (values) => {
 
+      // ==========================================
+      // SANITIZE DATA BEFORE CREATING ORDER
+      // ==========================================
+
+      const sanitizedCustomer = {
+
+        fullName: DOMPurify.sanitize(
+          values.fullName,
+          {
+            ALLOWED_TAGS: [],
+            ALLOWED_ATTR: []
+          }
+        ),
+
+        email: DOMPurify.sanitize(
+          values.email,
+          {
+            ALLOWED_TAGS: [],
+            ALLOWED_ATTR: []
+          }
+        ),
+
+        phone: DOMPurify.sanitize(
+          values.phone,
+          {
+            ALLOWED_TAGS: [],
+            ALLOWED_ATTR: []
+          }
+        ),
+
+        address: DOMPurify.sanitize(
+          values.address,
+          {
+            ALLOWED_TAGS: [],
+            ALLOWED_ATTR: []
+          }
+        ),
+
+        city: DOMPurify.sanitize(
+          values.city,
+          {
+            ALLOWED_TAGS: [],
+            ALLOWED_ATTR: []
+          }
+        ),
+
+        paymentMethod:
+          values.paymentMethod
+
+      };
+
+
+      // ==========================================
+      // CREATE ORDER
+      // ==========================================
+
+      const order = {
+
+        customer: sanitizedCustomer,
+
+        items: cart,
+
+        total: total
+
+      };
+
+
+      console.log(
+        "ORDER:",
+        order
+      );
+
+
+      // ==========================================
+      // CALL PARENT FUNCTION
+      // ==========================================
+
+      if (onPlaceOrder) {
+
+        onPlaceOrder(order);
+
+      }
+
+
+      // ==========================================
+      // SHOW SUCCESS POPUP
+      // ==========================================
+
+      setShowSuccess(true);
+
+
+      // ==========================================
+      // HIDE POPUP AFTER 3 SECONDS
+      // ==========================================
+
+      setTimeout(() => {
+
+        setShowSuccess(false);
+
+      }, 3000);
+
+
+      // ==========================================
+      // RESET FORM
+      // ==========================================
+
+      formik.resetForm();
+
+    }
+
+  });
+
+
+  // ==========================================
+  // SANITIZED INPUT HANDLER
+  // ==========================================
+
+  const handleSanitizedChange = (e) => {
+
+    const {
+      name,
+      value
+    } = e.target;
+
+
+    const sanitizedValue =
+      DOMPurify.sanitize(
+        value,
+        {
+          ALLOWED_TAGS: [],
+          ALLOWED_ATTR: []
         }
+      );
 
-    });
 
+    formik.setFieldValue(
+      name,
+      sanitizedValue
+    );
 
-    return (
+  };
 
-        <div className="checkout-container">
 
+  return (
 
-            {/* SUCCESS POPUP */}
+    <div className="checkout-container">
 
-            {showSuccess && (
 
-                <div className="order-success-popup">
+      {/* ==========================================
+          SUCCESS POPUP
+          ========================================== */}
 
-                    <div className="success-icon">
-                        ✓
-                    </div>
+      {showSuccess && (
 
-                    <div>
+        <div className="order-success-popup">
 
-                        <strong>
-                            Order placed successfully!
-                        </strong>
+          <div className="success-icon">
+            ✓
+          </div>
 
-                        <p>
-                            Your order has been placed.
-                        </p>
 
-                    </div>
+          <div>
 
-                </div>
+            <strong>
+              {t("checkout.successTitle")}
+            </strong>
 
-            )}
+            <p>
+              {t("checkout.successMessage")}
+            </p>
 
-
-            <h2>
-                Checkout
-            </h2>
-
-
-            <form
-                onSubmit={
-                    formik.handleSubmit
-                }
-            >
-
-
-                {/* FULL NAME */}
-
-                <div className="form-group">
-
-                    <label>
-                        Full Name
-                    </label>
-
-                    <input
-                        type="text"
-                        name="fullName"
-                        placeholder="Enter your full name"
-                        value={
-                            formik.values.fullName
-                        }
-                        onChange={
-                            formik.handleChange
-                        }
-                        onBlur={
-                            formik.handleBlur
-                        }
-                    />
-
-                    {formik.touched.fullName &&
-                        formik.errors.fullName && (
-
-                            <p className="error">
-
-                                {
-                                    formik.errors
-                                        .fullName
-                                }
-
-                            </p>
-
-                        )}
-
-                </div>
-
-
-                {/* EMAIL */}
-
-                <div className="form-group">
-
-                    <label>
-                        Email
-                    </label>
-
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Enter your email"
-                        value={
-                            formik.values.email
-                        }
-                        onChange={
-                            formik.handleChange
-                        }
-                        onBlur={
-                            formik.handleBlur
-                        }
-                    />
-
-                    {formik.touched.email &&
-                        formik.errors.email && (
-
-                            <p className="error">
-
-                                {
-                                    formik.errors
-                                        .email
-                                }
-
-                            </p>
-
-                        )}
-
-                </div>
-
-
-                {/* PHONE */}
-
-                <div className="form-group">
-
-                    <label>
-                        Phone Number
-                    </label>
-
-                    <input
-                        type="tel"
-                        name="phone"
-                        placeholder="03XXXXXXXXX"
-                        value={
-                            formik.values.phone
-                        }
-                        onChange={
-                            formik.handleChange
-                        }
-                        onBlur={
-                            formik.handleBlur
-                        }
-                    />
-
-                    {formik.touched.phone &&
-                        formik.errors.phone && (
-
-                            <p className="error">
-
-                                {
-                                    formik.errors
-                                        .phone
-                                }
-
-                            </p>
-
-                        )}
-
-                </div>
-
-
-                {/* ADDRESS */}
-
-                <div className="form-group">
-
-                    <label>
-                        Delivery Address
-                    </label>
-
-                    <textarea
-                        name="address"
-                        placeholder="Enter your complete delivery address"
-                        value={
-                            formik.values.address
-                        }
-                        onChange={
-                            formik.handleChange
-                        }
-                        onBlur={
-                            formik.handleBlur
-                        }
-                    />
-
-                    {formik.touched.address &&
-                        formik.errors.address && (
-
-                            <p className="error">
-
-                                {
-                                    formik.errors
-                                        .address
-                                }
-
-                            </p>
-
-                        )}
-
-                </div>
-
-
-                {/* CITY */}
-
-                <div className="form-group">
-
-                    <label>
-                        City
-                    </label>
-
-                    <input
-                        type="text"
-                        name="city"
-                        placeholder="Enter your city"
-                        value={
-                            formik.values.city
-                        }
-                        onChange={
-                            formik.handleChange
-                        }
-                        onBlur={
-                            formik.handleBlur
-                        }
-                    />
-
-                    {formik.touched.city &&
-                        formik.errors.city && (
-
-                            <p className="error">
-
-                                {
-                                    formik.errors
-                                        .city
-                                }
-
-                            </p>
-
-                        )}
-
-                </div>
-
-
-                {/* PAYMENT */}
-
-                <div className="form-group">
-
-                    <label>
-                        Payment Method
-                    </label>
-
-                    <select
-                        name="paymentMethod"
-                        value={
-                            formik.values
-                                .paymentMethod
-                        }
-                        onChange={
-                            formik.handleChange
-                        }
-                    >
-
-                        <option value="Cash on Delivery">
-                            Cash on Delivery
-                        </option>
-
-                        <option value="Card">
-                            Credit / Debit Card
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                {/* SUMMARY */}
-
-                <div className="checkout-summary">
-
-                    <h3>
-                        Order Summary
-                    </h3>
-
-                    <p>
-                        Items: {cart.length}
-                    </p>
-
-                    <p>
-                        Total: Rs. {total}
-                    </p>
-
-                </div>
-
-
-                <button
-                    type="submit"
-                    className="place-order-btn"
-                >
-
-                    Place Order
-
-                </button>
-
-            </form>
+          </div>
 
         </div>
 
-    );
+      )}
+
+
+      {/* ==========================================
+          CHECKOUT TITLE
+          ========================================== */}
+
+      <h2>
+        {t("checkout.title")}
+      </h2>
+
+
+      <form
+        onSubmit={
+          formik.handleSubmit
+        }
+      >
+
+
+        {/* ==========================================
+            FULL NAME
+            ========================================== */}
+
+        <div className="form-group">
+
+          <label>
+            {t("checkout.fullName")}
+          </label>
+
+
+          <input
+            type="text"
+            name="fullName"
+            placeholder={
+              t("checkout.placeholders.fullName")
+            }
+            value={
+              formik.values.fullName
+            }
+            onChange={
+              handleSanitizedChange
+            }
+            onBlur={
+              formik.handleBlur
+            }
+          />
+
+
+          {formik.touched.fullName &&
+            formik.errors.fullName && (
+
+              <p className="error">
+
+                {
+                  formik.errors.fullName
+                }
+
+              </p>
+
+            )}
+
+        </div>
+
+
+        {/* ==========================================
+            EMAIL
+            ========================================== */}
+
+        <div className="form-group">
+
+          <label>
+            {t("checkout.email")}
+          </label>
+
+
+          <input
+            type="email"
+            name="email"
+            placeholder={
+              t("checkout.placeholders.email")
+            }
+            value={
+              formik.values.email
+            }
+            onChange={
+              handleSanitizedChange
+            }
+            onBlur={
+              formik.handleBlur
+            }
+          />
+
+
+          {formik.touched.email &&
+            formik.errors.email && (
+
+              <p className="error">
+
+                {
+                  formik.errors.email
+                }
+
+              </p>
+
+            )}
+
+        </div>
+
+
+        {/* ==========================================
+            PHONE NUMBER
+            ========================================== */}
+
+        <div className="form-group">
+
+          <label>
+            {t("checkout.phone")}
+          </label>
+
+
+          <input
+            type="tel"
+            name="phone"
+            placeholder={
+              t("checkout.placeholders.phone")
+            }
+            value={
+              formik.values.phone
+            }
+            onChange={
+              handleSanitizedChange
+            }
+            onBlur={
+              formik.handleBlur
+            }
+          />
+
+
+          {formik.touched.phone &&
+            formik.errors.phone && (
+
+              <p className="error">
+
+                {
+                  formik.errors.phone
+                }
+
+              </p>
+
+            )}
+
+        </div>
+
+
+        {/* ==========================================
+            DELIVERY ADDRESS
+            ========================================== */}
+
+        <div className="form-group">
+
+          <label>
+            {t("checkout.address")}
+          </label>
+
+
+          <textarea
+            name="address"
+            placeholder={
+              t(
+                "checkout.placeholders.address"
+              )
+            }
+            value={
+              formik.values.address
+            }
+            onChange={
+              handleSanitizedChange
+            }
+            onBlur={
+              formik.handleBlur
+            }
+          />
+
+
+          {formik.touched.address &&
+            formik.errors.address && (
+
+              <p className="error">
+
+                {
+                  formik.errors.address
+                }
+
+              </p>
+
+            )}
+
+        </div>
+
+
+        {/* ==========================================
+            CITY
+            ========================================== */}
+
+        <div className="form-group">
+
+          <label>
+            {t("checkout.city")}
+          </label>
+
+
+          <input
+            type="text"
+            name="city"
+            placeholder={
+              t("checkout.placeholders.city")
+            }
+            value={
+              formik.values.city
+            }
+            onChange={
+              handleSanitizedChange
+            }
+            onBlur={
+              formik.handleBlur
+            }
+          />
+
+
+          {formik.touched.city &&
+            formik.errors.city && (
+
+              <p className="error">
+
+                {
+                  formik.errors.city
+                }
+
+              </p>
+
+            )}
+
+        </div>
+
+
+        {/* ==========================================
+            PAYMENT METHOD
+            ========================================== */}
+
+        <div className="form-group">
+
+          <label>
+            {t("checkout.paymentMethod")}
+          </label>
+
+
+          <select
+            name="paymentMethod"
+            value={
+              formik.values.paymentMethod
+            }
+            onChange={
+              formik.handleChange
+            }
+          >
+
+            <option value="Cash on Delivery">
+              {t("checkout.cashOnDelivery")}
+            </option>
+
+
+            <option value="Card">
+              {t("checkout.cardPayment")}
+            </option>
+
+          </select>
+
+        </div>
+
+
+        {/* ==========================================
+            ORDER SUMMARY
+            ========================================== */}
+
+        <div className="checkout-summary">
+
+          <h3>
+            {t("checkout.orderSummary")}
+          </h3>
+
+
+          <p>
+            {t("checkout.items")}:{" "}
+            {cart.length}
+          </p>
+
+
+          <p>
+            {t("checkout.total")}: Rs.{" "}
+            {total}
+          </p>
+
+        </div>
+
+
+        {/* ==========================================
+            PLACE ORDER BUTTON
+            ========================================== */}
+
+        <button
+          type="submit"
+          className="place-order-btn"
+        >
+          {t("checkout.placeOrder")}
+        </button>
+
+
+      </form>
+
+    </div>
+
+  );
 
 }
 

@@ -10,6 +10,8 @@ import {
   removeFromCart
 } from "../redux/slices/cartSlice";
 
+import { useTranslation } from "react-i18next";
+
 
 function RestaurantCard({
   restaurant,
@@ -18,6 +20,8 @@ function RestaurantCard({
 }) {
 
   const dispatch = useDispatch();
+
+  const { t } = useTranslation();
 
 
   const cart = useSelector(
@@ -61,8 +65,16 @@ function RestaurantCard({
 
           <Heart
             size={20}
-            fill={isFavorite ? "red" : "none"}
-            color={isFavorite ? "red" : "black"}
+            fill={
+              isFavorite
+                ? "red"
+                : "none"
+            }
+            color={
+              isFavorite
+                ? "red"
+                : "black"
+            }
           />
 
         </button>
@@ -73,7 +85,7 @@ function RestaurantCard({
         {restaurant.ad && (
 
           <span className="ad-label">
-            Ad
+            {t("restaurant.ad")}
           </span>
 
         )}
@@ -99,11 +111,18 @@ function RestaurantCard({
 
 
         <p className="restaurant-meta">
-          From {restaurant.deliveryTime}
+
+          {t("restaurant.from")}{" "}
+          {restaurant.deliveryTime}
+
           {" · "}
+
           Rs. {restaurant.price}
+
           {" · "}
+
           {restaurant.cuisine}
+
         </p>
 
 
@@ -118,7 +137,7 @@ function RestaurantCard({
           {" "}
 
           <span>
-            Free for first order
+            {t("restaurant.freeFirstOrder")}
           </span>
 
         </p>
@@ -130,8 +149,13 @@ function RestaurantCard({
 
 
         <button
-          className={`cart-action-btn ${isInCart ? "remove-cart-btn" : ""
-            }`}
+          className={
+            `cart-action-btn ${
+              isInCart
+                ? "remove-cart-btn"
+                : ""
+            }`
+          }
 
           onClick={(e) => {
 
@@ -142,7 +166,9 @@ function RestaurantCard({
             if (isInCart) {
 
               dispatch(
-                removeFromCart(restaurant.id)
+                removeFromCart(
+                  restaurant.id
+                )
               );
 
             } else {
@@ -157,8 +183,8 @@ function RestaurantCard({
         >
 
           {isInCart
-            ? "Remove from cart"
-            : "Add to cart"}
+            ? t("restaurant.removeFromCart")
+            : t("restaurant.addToCart")}
 
         </button>
 

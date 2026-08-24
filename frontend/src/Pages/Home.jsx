@@ -14,10 +14,17 @@ import useDebounce from "../Hooks/useDebounce";
 
 import { useDispatch, useSelector } from "react-redux";
 
+import { useTranslation } from "react-i18next";
+
 import { fetchRestaurants } from "../redux/slices/restaurantSlice";
+
+import RestaurantSkeleton from "../Components/restaurantSkeleton";
 
 
 function Home() {
+
+  const { t } = useTranslation();
+
 
   // ==========================================
   // REDUX RESTAURANTS
@@ -29,59 +36,89 @@ function Home() {
     restaurants,
     loading,
     error,
-  } = useSelector((state) => state.restaurants);
+  } = useSelector(
+    (state) => state.restaurants
+  );
 
 
- useEffect(() => {
-  if (restaurants.length === 0) {
-    dispatch(fetchRestaurants());
-  }
-}, [dispatch, restaurants.length]);
+  useEffect(() => {
+
+    if (restaurants.length === 0) {
+
+      dispatch(fetchRestaurants());
+
+    }
+
+  }, [
+    dispatch,
+    restaurants.length
+  ]);
 
 
   // ==========================================
   // SEARCH
   // ==========================================
 
- const searchText = useSelector(
+  const searchText = useSelector(
     (state) => state.restaurants.searchText
   );
 
-  const debouncedSearch = useDebounce(searchText, 500);
+  const debouncedSearch =
+    useDebounce(
+      searchText,
+      500
+    );
+
 
   // ==========================================
   // FILTERS
   // ==========================================
 
-  const [filters, setFilters] = useState({
-    sort: "Relevance",
-    rating4Plus: false,
-    cuisines: []
-  });
+  const [filters, setFilters] =
+    useState({
 
+      sort: "Relevance",
 
-  // ==========================================
-  // CUISINE SELECT FROM CUISINE SECTION
-  // ==========================================
+      rating4Plus: false,
 
-  const handleCuisineSelect = (cuisine) => {
+      cuisines: [],
 
-    setFilters((previousFilters) => {
-
-      const alreadySelected =
-        previousFilters.cuisines.includes(cuisine);
-
-      return {
-        ...previousFilters,
-
-        cuisines: alreadySelected
-          ? []
-          : [cuisine]
-      };
+      price: null
 
     });
 
-  };
+
+  // ==========================================
+  // CUISINE SELECT
+  // ==========================================
+
+  const handleCuisineSelect =
+    (cuisine) => {
+
+      setFilters(
+        (previousFilters) => {
+
+          const alreadySelected =
+            previousFilters.cuisines.includes(
+              cuisine
+            );
+
+
+          return {
+
+            ...previousFilters,
+
+            cuisines:
+              alreadySelected
+                ? []
+                : [cuisine]
+
+          };
+
+        }
+      );
+
+    };
 
 
   // ==========================================
@@ -89,112 +126,182 @@ function Home() {
   // ==========================================
 
   const [favorites, setFavorites] =
-    useLocalStorage("favorites", []);
+    useLocalStorage(
+      "favorites",
+      []
+    );
 
 
-  const handleFavorite = (id) => {
+  const handleFavorite =
+    (id) => {
 
-    setFavorites((previousFavorites) => {
+      setFavorites(
+        (previousFavorites) => {
 
-      if (previousFavorites.includes(id)) {
+          if (
+            previousFavorites.includes(id)
+          ) {
 
-        return previousFavorites.filter(
-          (favoriteId) => favoriteId !== id
-        );
+            return previousFavorites.filter(
+              (favoriteId) =>
+                favoriteId !== id
+            );
 
-      }
+          }
 
-      return [
-        ...previousFavorites,
-        id
-      ];
 
-    });
+          return [
+            ...previousFavorites,
+            id
+          ];
 
-  };
+        }
+      );
+
+    };
 
 
   // ==========================================
   // SEARCH + FILTER
   // ==========================================
 
-  let filteredRestaurants = restaurants.filter(
-    (restaurant) => {
+  let filteredRestaurants =
+    restaurants.filter(
+      (restaurant) => {
 
-      const search =
-        debouncedSearch.toLowerCase();
+        const search =
+          debouncedSearch.toLowerCase();
 
-      const restaurantName =
-        String(
-          restaurant.name || ""
-        ).toLowerCase();
 
-      const restaurantCuisine =
-        Array.isArray(restaurant.cuisine)
-          ? restaurant.cuisine
+        const restaurantName =
+          String(
+            restaurant.name || ""
+          ).toLowerCase();
+
+
+        const restaurantCuisine =
+          Array.isArray(
+            restaurant.cuisine
+          )
+
+            ? restaurant.cuisine
               .join(" ")
               .toLowerCase()
-          : String(
+
+            : String(
               restaurant.cuisine || ""
             ).toLowerCase();
 
 
-      // SEARCH
+        // ==========================================
+        // SEARCH
+        // ==========================================
 
-      const matchesSearch =
-        restaurantName.includes(search) ||
-        restaurantCuisine.includes(search);
-
-
-      // RATING
-
-      const matchesRating =
-        !filters.rating4Plus ||
-        parseFloat(restaurant.rating) >= 4;
+        const matchesSearch =
+          restaurantName.includes(search) ||
+          restaurantCuisine.includes(search);
 
 
-      // CUISINE
+        // ==========================================
+        // RATING
+        // ==========================================
 
-      const matchesCuisine =
-        filters.cuisines.length === 0 ||
-        filters.cuisines.some((selectedCuisine) =>
-          Array.isArray(restaurant.cuisine)
-            ? restaurant.cuisine.includes(selectedCuisine)
-            : restaurant.cuisine === selectedCuisine
+        const matchesRating =
+          !filters.rating4Plus ||
+          parseFloat(
+            restaurant.rating
+          ) >= 4;
+
+
+        // ==========================================
+        // CUISINE
+        // ==========================================
+
+        const matchesCuisine =
+          filters.cuisines.length === 0 ||
+          filters.cuisines.some(
+            (selectedCuisine) =>
+
+              Array.isArray(
+                restaurant.cuisine
+              )
+
+                ? restaurant.cuisine.includes(
+                  selectedCuisine
+                )
+
+                : restaurant.cuisine ===
+                  selectedCuisine
+
+          );
+
+
+        // ==========================================
+        // PRICE
+        // ==========================================
+
+        const matchesPrice =
+          !filters.price ||
+          Number(
+            restaurant.price
+          ) <= Number(
+            filters.price
+          );
+
+
+        // ==========================================
+        // FINAL RESULT
+        // ==========================================
+
+        return (
+
+          matchesSearch &&
+
+          matchesRating &&
+
+          matchesCuisine &&
+
+          matchesPrice
+
         );
 
-
-      return (
-        matchesSearch &&
-        matchesRating &&
-        matchesCuisine
-      );
-
-    }
-  );
+      }
+    );
 
 
   // ==========================================
   // SORTING
   // ==========================================
 
-  if (filters.sort === "Fastest") {
+  if (
+    filters.sort === "Fastest"
+  ) {
 
     filteredRestaurants.sort(
       (a, b) =>
-        Number(a.deliveryTime) -
-        Number(b.deliveryTime)
+        Number(
+          a.deliveryTime
+        ) -
+        Number(
+          b.deliveryTime
+        )
     );
 
   }
 
 
-  if (filters.sort === "Top rated") {
+  if (
+    filters.sort === "Top rated"
+  ) {
 
     filteredRestaurants.sort(
       (a, b) =>
-        parseFloat(b.rating) -
-        parseFloat(a.rating)
+        parseFloat(
+          b.rating
+        ) -
+        parseFloat(
+          a.rating
+        )
     );
 
   }
@@ -209,28 +316,37 @@ function Home() {
 
 
   // ==========================================
-  // SCROLL TO RESTAURANTS WHEN SORT CHANGES
+  // SCROLL WHEN SORT CHANGES
   // ==========================================
 
   useEffect(() => {
 
     if (
+
       filters.sort === "Fastest" ||
+
       filters.sort === "Top rated"
+
     ) {
 
       setTimeout(() => {
 
-        restaurantResultsRef.current?.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
+        restaurantResultsRef.current
+          ?.scrollIntoView({
+
+            behavior: "smooth",
+
+            block: "start"
+
+          });
 
       }, 100);
 
     }
 
-  }, [filters.sort]);
+  }, [
+    filters.sort
+  ]);
 
 
   // ==========================================
@@ -238,13 +354,26 @@ function Home() {
   // ==========================================
 
   const isSearching =
-    Boolean(debouncedSearch);
+    Boolean(
+      debouncedSearch
+    );
+
 
   const isSorting =
     filters.sort !== "Relevance";
 
+
+  const isPriceFiltering =
+    filters.price !== null;
+
+
   const showNormalHome =
-    !isSearching && !isSorting;
+
+    !isSearching &&
+
+    !isSorting &&
+
+    !isPriceFiltering;
 
 
   // ==========================================
@@ -253,7 +382,35 @@ function Home() {
 
   if (loading) {
 
-    return <h2>Loading restaurants...</h2>;
+    return (
+
+      <div className="restaurants-loading-page">
+
+        <div className="loading-heading">
+
+          <h2>
+            {t(
+              "home.loadingRestaurants"
+            )}
+          </h2>
+
+
+          <p>
+            {t(
+              "home.loadingRestaurantsDescription"
+            )}
+          </p>
+
+        </div>
+
+
+        <RestaurantSkeleton
+          count={8}
+        />
+
+      </div>
+
+    );
 
   }
 
@@ -264,7 +421,11 @@ function Home() {
 
   if (error) {
 
-    return <h2>{error}</h2>;
+    return (
+      <h2>
+        {error}
+      </h2>
+    );
 
   }
 
@@ -276,7 +437,9 @@ function Home() {
   return (
 
     <>
+
       <main className="main-layout">
+
 
         <Sidebar
           filters={filters}
@@ -289,7 +452,7 @@ function Home() {
 
           {/* =====================================
               NORMAL HOME PAGE
-              ===================================== */}
+          ===================================== */}
 
           {showNormalHome && (
 
@@ -297,12 +460,19 @@ function Home() {
 
               <Banner />
 
+
               <CuisineSection
-                onCuisineSelect={handleCuisineSelect}
+
+                onCuisineSelect={
+                  handleCuisineSelect
+                }
+
                 selectedCuisine={
                   filters.cuisines[0]
                 }
+
               />
+
 
               <PromoSection />
 
@@ -311,84 +481,192 @@ function Home() {
           )}
 
 
+
           {/* =====================================
               SEARCH RESULTS
-              ===================================== */}
+          ===================================== */}
 
           {isSearching && (
 
             <div className="search-results-heading">
 
               <h2>
-                Search results for "{debouncedSearch}"
+
+                {t(
+                  "home.searchResultsFor",
+                  {
+                    search:
+                      debouncedSearch
+                  }
+                )}
+
               </h2>
 
             </div>
 
           )}
+
 
 
           {/* =====================================
-              SORT RESULTS HEADING
-              ===================================== */}
+              SORT RESULTS
+          ===================================== */}
 
-          {isSorting && !isSearching && (
+          {isSorting &&
+            !isSearching && (
 
-            <div className="search-results-heading">
+              <div className="search-results-heading">
 
-              <h2>
+                <h2>
 
-                {filters.sort === "Fastest"
-                  ? "Fastest delivery"
-                  : "Top rated restaurants"}
+                  {filters.sort ===
+                    "Fastest"
 
-              </h2>
+                    ? t(
+                      "home.fastestDelivery"
+                    )
 
-              <p>
-                Showing the best results based on your filter
-              </p>
+                    : t(
+                      "home.topRatedRestaurants"
+                    )}
 
-            </div>
+                </h2>
 
-          )}
+
+                <p>
+
+                  {t(
+                    "home.bestResultsFilter"
+                  )}
+
+                </p>
+
+              </div>
+
+            )}
+
+
+
+          {/* =====================================
+              PRICE RESULTS
+          ===================================== */}
+
+          {isPriceFiltering &&
+
+            !isSearching &&
+
+            !isSorting && (
+
+              <div className="search-results-heading">
+
+                <h2>
+
+                  {t(
+                    "home.restaurantsUnderPrice",
+                    {
+                      price:
+                        filters.price
+                    }
+                  )}
+
+                </h2>
+
+
+                <p>
+
+                  {t(
+                    "home.selectedPriceRange"
+                  )}
+
+                </p>
+
+              </div>
+
+            )}
+
 
 
           {/* =====================================
               MAIN RESTAURANT RESULTS
-              ===================================== */}
+          ===================================== */}
 
           <div
-            ref={restaurantResultsRef}
+
+            ref={
+              restaurantResultsRef
+            }
+
             className="restaurant-results"
+
           >
 
             <RestaurantSection
 
               title={
+
                 isSearching
-                  ? `Restaurants matching "${debouncedSearch}"`
+
+                  ? t(
+                    "home.restaurantsMatching",
+                    {
+                      search:
+                        debouncedSearch
+                    }
+                  )
+
                   : isSorting
-                    ? filters.sort === "Fastest"
-                      ? "Fastest delivery"
-                      : "Top rated restaurants"
-                    : "Most popular for groups"
+
+                    ? filters.sort ===
+                      "Fastest"
+
+                      ? t(
+                        "home.fastestDelivery"
+                      )
+
+                      : t(
+                        "home.topRatedRestaurants"
+                      )
+
+                    : isPriceFiltering
+
+                      ? t(
+                        "home.restaurantsUnderPrice",
+                        {
+                          price:
+                            filters.price
+                        }
+                      )
+
+                      : t(
+                        "home.mostPopular"
+                      )
+
               }
 
-              restaurants={filteredRestaurants}
 
-              onFavorite={handleFavorite}
+              restaurants={
+                filteredRestaurants
+              }
 
-              favorites={favorites}
+
+              onFavorite={
+                handleFavorite
+              }
+
+
+              favorites={
+                favorites
+              }
 
             />
 
           </div>
 
 
+
           {/* =====================================
               RECOMMENDED + FASTEST
-              ONLY NORMAL HOME PAGE
-              ===================================== */}
+          ===================================== */}
 
           {showNormalHome && (
 
@@ -396,37 +674,69 @@ function Home() {
 
               <RestaurantSection
 
-                title="Recommended for you"
-
-                restaurants={
-                  filteredRestaurants.slice(4, 8)
+                title={
+                  t(
+                    "home.recommended"
+                  )
                 }
 
-                onFavorite={handleFavorite}
 
-                favorites={favorites}
+                restaurants={
+                  filteredRestaurants
+                    .slice(4, 8)
+                }
+
+
+                onFavorite={
+                  handleFavorite
+                }
+
+
+                favorites={
+                  favorites
+                }
 
               />
 
 
               <RestaurantSection
 
-                title="Fastest delivery"
-
-                restaurants={
-                  filteredRestaurants
-                    .slice()
-                    .sort(
-                      (a, b) =>
-                        Number(a.deliveryTime) -
-                        Number(b.deliveryTime)
-                    )
-                    .slice(0, 4)
+                title={
+                  t(
+                    "home.fastestDelivery"
+                  )
                 }
 
-                onFavorite={handleFavorite}
 
-                favorites={favorites}
+                restaurants={
+
+                  filteredRestaurants
+
+                    .slice()
+
+                    .sort(
+                      (a, b) =>
+                        Number(
+                          a.deliveryTime
+                        ) -
+                        Number(
+                          b.deliveryTime
+                        )
+                    )
+
+                    .slice(0, 4)
+
+                }
+
+
+                onFavorite={
+                  handleFavorite
+                }
+
+
+                favorites={
+                  favorites
+                }
 
               />
 
@@ -439,12 +749,14 @@ function Home() {
       </main>
 
 
+
       {/* =====================================
           INFO SECTION
-          ===================================== */}
+      ===================================== */}
 
-      {showNormalHome && <InfoSection />}
-
+      {showNormalHome && (
+        <InfoSection />
+      )}
 
     </>
 

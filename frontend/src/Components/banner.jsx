@@ -1,7 +1,7 @@
 import pandaBanner from "../assets/foodpanda-banner-logo.png";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-
+import { useTranslation } from "react-i18next";
 
 function Banner() {
 
@@ -10,6 +10,8 @@ function Banner() {
     (state) => state.auth.user
   );
 
+  // Translation
+  const { t } = useTranslation();
 
   return (
     <section className="delivery-banner">
@@ -21,16 +23,18 @@ function Banner() {
           // LOGGED IN
           <>
             <h1>
-              Welcome, {user.name}! 👋
+              {t("banner.welcome", {
+                name: user.name,
+              })}
               <br />
-              Ready to order?
+              {t("banner.readyToOrder")}
             </h1>
 
             <Link
-              to="restaurants"
+              to="/restaurants"
               className="banner-button"
             >
-              Browse Restaurants
+              {t("banner.browseRestaurants")}
             </Link>
           </>
 
@@ -39,16 +43,16 @@ function Banner() {
           // LOGGED OUT
           <>
             <h1>
-              Sign up for free delivery
+              {t("banner.freeDelivery")}
               <br />
-              on your first order
+              {t("banner.firstOrder")}
             </h1>
 
             <Link
               to="/register"
               className="banner-button"
             >
-              Sign up
+              {t("banner.signUp")}
             </Link>
           </>
 
@@ -69,6 +73,5 @@ function Banner() {
     </section>
   );
 }
-
 
 export default Banner;

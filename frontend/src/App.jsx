@@ -19,10 +19,22 @@ import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import Dashboard from "./Pages/Dashboard";
 import ProtectedRoute from "./Components/ProtectedRoute";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 function App() {
 
   const theme = useSelector((state) => state.theme.theme);
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
+    document.documentElement.lang = i18n.language;
+
+    document.documentElement.dir =
+      i18n.language === "ur"
+        ? "rtl"
+        : "ltr";
+  }, [i18n.language]);
 
   return (
     <BrowserRouter>

@@ -1,78 +1,149 @@
 import foodpandaLogo from "../assets/foodpanda-logo-horizontal.png";
+import { useTranslation } from "react-i18next";
 
 function Footer() {
+
+  const { t } = useTranslation();
+
   return (
+
     <footer className="footer">
 
       <div className="footer-top">
 
-        {/* Brand */}
+
+        {/* ==========================================
+            BRAND
+            ========================================== */}
+
         <div className="footer-brand">
 
           <div className="footer-logo">
+
             <img
               src={foodpandaLogo}
               alt="foodpanda"
             />
+
           </div>
 
           <p>
-            Order food online from your favorite
-            restaurants and enjoy fast delivery.
+            {t("footer.description")}
           </p>
 
         </div>
 
 
-        {/* Company */}
+        {/* ==========================================
+            COMPANY
+            ========================================== */}
+
         <div className="footer-column">
 
-          <h4>Company</h4>
+          <h4>
+            {t("footer.company.title")}
+          </h4>
 
-          <a href="#">About us</a>
-          <a href="#">Careers</a>
-          <a href="#">Terms and conditions</a>
-          <a href="#">Privacy policy</a>
+          <a href="#">
+            {t("footer.company.about")}
+          </a>
+
+          <a href="#">
+            {t("footer.company.careers")}
+          </a>
+
+          <a href="#">
+            {t("footer.company.terms")}
+          </a>
+
+          <a href="#">
+            {t("footer.company.privacy")}
+          </a>
 
         </div>
 
 
-        {/* For customers */}
+        {/* ==========================================
+            FOR CUSTOMERS
+            ========================================== */}
+
         <div className="footer-column">
 
-          <h4>For customers</h4>
+          <h4>
+            {t("footer.customers.title")}
+          </h4>
 
-          <a href="#">Help Center</a>
-          <a href="#">Contact us</a>
-          <a href="#">Refunds</a>
-          <a href="#">Order tracking</a>
+          <a href="#">
+            {t("footer.customers.help")}
+          </a>
+
+          <a href="#">
+            {t("footer.customers.contact")}
+          </a>
+
+          <a href="#">
+            {t("footer.customers.refunds")}
+          </a>
+
+          <a href="#">
+            {t("footer.customers.tracking")}
+          </a>
 
         </div>
 
 
-        {/* For partners */}
+        {/* ==========================================
+            FOR PARTNERS
+            ========================================== */}
+
         <div className="footer-column">
 
-          <h4>For partners</h4>
+          <h4>
+            {t("footer.partners.title")}
+          </h4>
 
-          <a href="#">List your restaurant</a>
-          <a href="#">Become a rider</a>
-          <a href="#">Business solutions</a>
+          <a href="#">
+            {t("footer.partners.restaurant")}
+          </a>
+
+          <a href="#">
+            {t("footer.partners.rider")}
+          </a>
+
+          <a href="#">
+            {t("footer.partners.business")}
+          </a>
 
         </div>
 
 
-        {/* Social */}
+        {/* ==========================================
+            SOCIAL
+            ========================================== */}
+
         <div className="footer-column">
 
-          <h4>Follow us</h4>
+          <h4>
+            {t("footer.social.title")}
+          </h4>
 
           <div className="social-icons">
 
-            <button>f</button>
-            <button>𝕏</button>
-            <button>◎</button>
-            <button>in</button>
+            <button>
+              f
+            </button>
+
+            <button>
+              𝕏
+            </button>
+
+            <button>
+              ◎
+            </button>
+
+            <button>
+              in
+            </button>
 
           </div>
 
@@ -84,6 +155,10 @@ function Footer() {
       <div className="footer-divider"></div>
 
 
+      {/* ==========================================
+          FOOTER BOTTOM
+          ========================================== */}
+
       <div className="footer-bottom">
 
         <div>
@@ -92,9 +167,17 @@ function Footer() {
 
         <div className="footer-bottom-links">
 
-          <span>Privacy</span>
-          <span>Terms</span>
-          <span>Cookies</span>
+          <span>
+            {t("footer.bottom.privacy")}
+          </span>
+
+          <span>
+            {t("footer.bottom.terms")}
+          </span>
+
+          <span>
+            {t("footer.bottom.cookies")}
+          </span>
 
         </div>
 

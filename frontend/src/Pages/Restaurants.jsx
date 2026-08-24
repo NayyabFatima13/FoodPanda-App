@@ -2,24 +2,43 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
+import LoadingSpinner from "../Components/loadingSpinner";
+
 import RestaurantCard from "../Components/restaurantCard";
 import useLocalStorage from "../Hooks/useLocalStorage";
 import useDebounce from "../Hooks/useDebounce";
 
 import { fetchRestaurants } from "../redux/slices/restaurantSlice";
+import { deleteRestaurant } from "../redux/slices/restaurantSlice";
 
-import {
-  deleteRestaurant
-} from "../redux/slices/restaurantSlice";
+import { useTranslation } from "react-i18next";
+
 
 function Restaurants() {
 
+  // ==========================================
+  // TRANSLATION
+  // ==========================================
+
+  const { t } = useTranslation();
+
+
+  // ==========================================
+  // REDUX
+  // ==========================================
+
   const dispatch = useDispatch();
+
+
   const user = useSelector(
     (state) => state.auth.user
   );
 
-  // Get restaurant state from Redux
+
+  // ==========================================
+  // RESTAURANT STATE
+  // ==========================================
+
   const {
     restaurants,
     loading,
@@ -30,26 +49,49 @@ function Restaurants() {
   );
 
 
-  // Fetch restaurants from backend
-  useEffect(() => {
-    if (restaurants.length === 0) {
-      dispatch(fetchRestaurants());
-    }
-  }, [dispatch, restaurants.length]);
+  // ==========================================
+  // FETCH RESTAURANTS
+  // ==========================================
 
-  // Debounce global search text
+  useEffect(() => {
+
+    if (restaurants.length === 0) {
+
+      dispatch(fetchRestaurants());
+
+    }
+
+  }, [
+    dispatch,
+    restaurants.length
+  ]);
+
+
+  // ==========================================
+  // DEBOUNCE SEARCH
+  // ==========================================
+
   const debouncedSearch = useDebounce(
     searchText,
     500
   );
 
 
-  // Favorites
+  // ==========================================
+  // FAVORITES
+  // ==========================================
+
   const [favorites, setFavorites] =
-    useLocalStorage("favorites", []);
+    useLocalStorage(
+      "favorites",
+      []
+    );
 
 
-  // Filter restaurants
+  // ==========================================
+  // FILTER RESTAURANTS
+  // ==========================================
+
   const filteredRestaurants =
     restaurants.filter((restaurant) =>
       restaurant.name
@@ -60,7 +102,10 @@ function Restaurants() {
     );
 
 
-  // Favorite handler
+  // ==========================================
+  // FAVORITE HANDLER
+  // ==========================================
+
   const handleFavorite = (id) => {
 
     setFavorites((previousFavorites) => {
@@ -76,6 +121,7 @@ function Restaurants() {
 
       }
 
+
       return [
         ...previousFavorites,
         id
@@ -85,16 +131,24 @@ function Restaurants() {
 
   };
 
-  // Delete handler
+
+  // ==========================================
+  // DELETE HANDLER
+  // ==========================================
+
   const handleDelete = async (id) => {
 
     const confirmed = window.confirm(
-      "Are you sure you want to delete this restaurant?"
+      t("restaurants.confirmDelete")
     );
 
+
     if (!confirmed) {
+
       return;
+
     }
+
 
     try {
 
@@ -114,25 +168,39 @@ function Restaurants() {
   };
 
 
-  // Loading state
+  // ==========================================
+  // LOADING
+  // ==========================================
+
   if (loading) {
+
     return (
-      <h2>
-        Loading restaurants...
-      </h2>
+      <LoadingSpinner
+        message={t("restaurants.loading")}
+      />
     );
+
   }
 
 
-  // Error state
+  // ==========================================
+  // ERROR
+  // ==========================================
+
   if (error) {
+
     return (
       <h2>
         {error}
       </h2>
     );
+
   }
 
+
+  // ==========================================
+  // RETURN
+  // ==========================================
 
   return (
 
@@ -140,36 +208,59 @@ function Restaurants() {
 
       <div className="restaurants-container">
 
+
+        {/* ==========================================
+            HEADER
+            ========================================== */}
+
         <div className="restaurants-header">
 
           <h1>
-            All Restaurants
+            {t("restaurants.title")}
           </h1>
 
+
           <p>
-            Discover restaurants and food
-            near you
+            {t("restaurants.subtitle")}
           </p>
+
+
+          {/* ADD RESTAURANT */}
 
           <Link
             to="/restaurants/add"
             className="add-restaurant-button"
           >
-            Add Restaurant
+
+            {t("restaurants.addRestaurant")}
+
           </Link>
 
+
+          {/* SEARCH RESULT */}
+
           {debouncedSearch && (
+
             <p>
-              Search results for:
+
+              {t("restaurants.searchResults")}
+
               {" "}
+
               <strong>
                 {debouncedSearch}
               </strong>
+
             </p>
+
           )}
 
         </div>
 
+
+        {/* ==========================================
+            RESTAURANT GRID
+            ========================================== */}
 
         <div className="restaurant-grid">
 
@@ -182,6 +273,9 @@ function Restaurants() {
                   className="restaurant-wrapper"
                   key={restaurant.id}
                 >
+
+
+                  {/* RESTAURANT CARD */}
 
                   <Link
                     to={`/restaurants/${restaurant.id}`}
@@ -200,44 +294,61 @@ function Restaurants() {
 
                   </Link>
 
+
+                  {/* ==========================================
+                      OWNER ACTIONS
+                      ========================================== */}
+
                   {user &&
                     String(restaurant.owner) ===
                     String(user.id) && (
 
                       <div className="restaurant-actions">
 
+
+                        {/* EDIT */}
+
                         <Link
                           to={`/restaurants/edit/${restaurant.id}`}
                           className="edit-restaurant-button"
                         >
-                          Edit
+
+                          {t("restaurants.edit")}
+
                         </Link>
 
+
+                        {/* DELETE */}
 
                         <button
                           type="button"
                           className="delete-restaurant-button"
                           onClick={() =>
-                            handleDelete(restaurant.id)
+                            handleDelete(
+                              restaurant.id
+                            )
                           }
                         >
-                          Delete
+
+                          {t("restaurants.delete")}
+
                         </button>
+
 
                       </div>
 
                     )}
 
-
                 </div>
 
               )
+
             )
 
           ) : (
 
             <h2>
-              No restaurants found.
+              {t("restaurants.noRestaurants")}
             </h2>
 
           )}
@@ -249,6 +360,7 @@ function Restaurants() {
     </div>
 
   );
+
 }
 
 

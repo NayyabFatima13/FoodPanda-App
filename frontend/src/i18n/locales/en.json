@@ -1,0 +1,378 @@
+{
+  "header": {
+    "home": "Home",
+    "restaurants": "Restaurants",
+    "cart": "Cart",
+    "login": "Login",
+    "logout": "Logout",
+    "dashboard": "Dashboard",
+    "search": "Search restaurants"
+  },
+
+  "home": {
+  "loadingRestaurants": "Loading restaurants...",
+  "loadingRestaurantsDescription": "Please wait while we fetch the latest restaurants.",
+
+  "searchResultsFor": "Search results for \"{{search}}\"",
+
+  "fastestDelivery": "Fastest delivery",
+  "topRatedRestaurants": "Top rated restaurants",
+
+  "bestResultsFilter": "Showing the best results based on your filter",
+
+  "restaurantsUnderPrice": "Restaurants under Rs. {{price}}",
+
+  "selectedPriceRange": "Showing restaurants within your selected price range",
+
+  "restaurantsMatching": "Restaurants matching \"{{search}}\"",
+
+  "mostPopular": "Most popular for groups",
+
+  "recommended": "Recommended for you"
+},
+
+  "banner": {
+  "welcome": "Welcome, {{name}}! 👋",
+  "readyToOrder": "Ready to order?",
+  "browseRestaurants": "Browse Restaurants",
+  "freeDelivery": "Sign up for free delivery",
+  "firstOrder": "on your first order",
+  "signUp": "Sign up"
+},
+
+  "cuisine": {
+  "title": "Cuisines for you",
+  "items": {
+    "pizza": "Pizza",
+    "fastFood": "Fast Food",
+    "burgers": "Burgers",
+    "bbq": "BBQ",
+    "desserts": "Desserts",
+    "pakistani": "Pakistani",
+    "shawarma": "Shawarma",
+    "continental": "Continental",
+    "healthy": "Healthy"
+  }
+},
+"promo": {
+  "items": {
+    "upTo": "Up to",
+    "azaadiDeals": "Azaadi deals",
+    "dealFor": "Deal for",
+    "rs269": "Rs. 269"
+  }
+},
+"favorites": {
+  "loading": "Loading favorites...",
+  "error": "Something went wrong!",
+  "title": "My Favorites",
+  "emptyTitle": "No favorite restaurants yet",
+  "emptyDescription": "Go back to the home page and click ❤️ on a restaurant."
+},
+"restaurantDetails": {
+  "loading": "Loading restaurants...",
+  "notFound": "Restaurant not found",
+  "notFoundDescription": "The restaurant you're looking for doesn't exist.",
+  "menu": "Menu",
+  "menuDescription": "Choose your favorite food and add it to your cart."
+},
+
+   "restaurants": {
+    "title": "All Restaurants",
+    "subtitle": "Discover restaurants and food near you",
+    "addRestaurant": "Add Restaurant",
+    "searchResults": "Search results for:",
+    "edit": "Edit",
+    "delete": "Delete",
+    "noRestaurants": "No restaurants found.",
+    "loading": "Loading restaurants...",
+    "confirmDelete": "Are you sure you want to delete this restaurant?"
+  },
+  "restaurantForm": {
+    "addTitle": "Add Restaurant",
+    "editTitle": "Edit Restaurant",
+
+    "restaurantId": "Restaurant ID",
+
+    "name": "Restaurant name",
+    "namePlaceholder": "Enter restaurant name",
+
+    "cuisine": "Cuisine",
+    "cuisinePlaceholder": "e.g. Pakistani",
+
+    "rating": "Rating",
+
+    "deliveryTime": "Delivery time",
+    "deliveryTimePlaceholder": "30-40 min",
+
+    "price": "Price",
+
+    "imageUrl": "Image URL",
+    "imagePlaceholder": "Enter image URL",
+
+    "discount": "Discount",
+    "discountPlaceholder": "20% OFF",
+
+    "description": "Description",
+    "descriptionPlaceholder": "Enter restaurant description",
+
+    "saving": "Saving...",
+    "updateRestaurant": "Update Restaurant",
+    "addRestaurant": "Add Restaurant",
+    "cancel": "Cancel",
+
+    "validation": {
+      "idRequired": "Restaurant ID is required",
+      "idExists": "Restaurant ID already exists",
+
+      "nameRequired": "Restaurant name is required",
+      "nameExists": "Restaurant name already exists",
+
+      "cuisineRequired": "Cuisine is required",
+
+      "ratingMin": "Rating cannot be less than 0",
+      "ratingMax": "Rating cannot be greater than 5",
+      "ratingRequired": "Rating is required",
+
+      "deliveryRequired": "Delivery time is required",
+
+      "priceMin": "Price cannot be negative",
+      "priceRequired": "Price is required",
+
+      "imageRequired": "Image is required",
+
+      "discountRequired": "Discount is required",
+
+      "descriptionRequired": "Description is required"
+    }
+  },
+
+  "info": {
+    "title": "Order food online",
+    "description": "Enjoy delicious food delivered directly to your doorstep."
+  },
+
+  "cart": {
+  "title": "Your Cart",
+  "item": "item",
+  "items": "items",
+
+  "emptyTitle": "Your cart is empty",
+  "emptyDescription": "Looks like you haven't added anything to your cart yet.",
+  "browseRestaurants": "Browse Restaurants",
+
+  "orderSummary": "Order Summary",
+  "subtotal": "Subtotal",
+  "deliveryFee": "Delivery fee",
+  "total": "Total",
+
+  "proceedCheckout": "Proceed to Checkout",
+  "continueShopping": "Continue Shopping",
+
+  "remove": "Remove",
+
+  "increaseQuantity": "Increase quantity",
+  "decreaseQuantity": "Decrease quantity",
+
+  "orderPlaced": "Order placed successfully!"
+},
+"dashboard": {
+  "welcome": "Welcome back",
+  "welcomeDescription": "Manage your orders, favorites and account from your dashboard.",
+
+  "totalOrders": "Total Orders",
+  "activeOrders": "Active Orders",
+  "favorites": "Favorites",
+  "cartItems": "Cart Items",
+
+  "yourCart": "Your Cart",
+  "viewCart": "View Cart",
+
+  "emptyCart": "Your cart is empty",
+  "emptyCartDescription": "Add something delicious to your cart.",
+  "browseRestaurants": "Browse Restaurants",
+
+  "dashboard": "Dashboard",
+  "restaurants": "Restaurants",
+  "cart": "Cart",
+  "addresses": "Addresses",
+  "accountSettings": "Account Settings",
+
+  "recentOrders": "Recent Orders",
+  "orderAgain": "Order Again",
+
+  "delivered": "Delivered",
+  "preparing": "Preparing"
+},
+
+  "checkout": {
+  "title": "Checkout",
+  "fullName": "Full Name",
+  "email": "Email",
+  "phone": "Phone Number",
+  "address": "Delivery Address",
+  "city": "City",
+  "paymentMethod": "Payment Method",
+  "cashOnDelivery": "Cash on Delivery",
+  "cardPayment": "Credit / Debit Card",
+  "orderSummary": "Order Summary",
+  "items": "Items",
+  "total": "Total",
+  "placeOrder": "Place Order",
+  "successTitle": "Order placed successfully!",
+  "successMessage": "Your order has been placed.",
+  "placeholders": {
+    "fullName": "Enter your full name",
+    "email": "Enter your email",
+    "phone": "03XXXXXXXXX",
+    "address": "Enter your complete delivery address",
+    "city": "Enter your city"
+  },
+
+  "validation": {
+    "nameMin": "Name must be at least 3 characters",
+    "nameRequired": "Full name is required",
+    "emailInvalid": "Invalid email address",
+    "emailRequired": "Email is required",
+    "phoneInvalid": "Enter a valid phone number",
+    "phoneRequired": "Phone number is required",
+    "addressMin": "Please enter a complete address",
+    "addressRequired": "Delivery address is required",
+    "cityRequired": "City is required",
+    "paymentRequired": "Please select a payment method"
+  }
+},
+
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "submit": "Submit"
+  },
+  "restaurantCard": {
+  "title": "Popular restaurants",
+  "ad": "Ad",
+  "from": "From",
+  "freeFirstOrder": "Free for first order",
+  "deliveryTime": "Delivery time",
+  "rating": "Rating",
+  "price": "Price",
+  "viewRestaurant": "View Restaurant",
+  "addToCart": "Add to cart",
+  "removeFromCart": "Remove from cart"
+},
+"restaurantSection": {
+  "title": "Popular restaurants",
+  "ad": "Ad",
+  "from": "From",
+  "freeFirstOrder": "Free for first order",
+  "deliveryTime": "Delivery time",
+  "rating": "Rating",
+  "price": "Price",
+  "viewRestaurant": "View Restaurant",
+  "addToCart": "Add to cart",
+  "removeFromCart": "Remove from cart",
+  "noResults": "No restaurants found",
+  "tryFilters": "Try changing your search or filters.",
+  "next": "Next restaurants"
+},
+"sidebar": {
+  "filters": "Filters",
+  "reset": "Reset",
+
+  "sortBy": "Sort by",
+  "relevance": "Relevance",
+  "fastestDelivery": "Fastest delivery",
+  "topRated": "Top rated",
+
+  "quickFilters": "Quick filters",
+  "ratings4Plus": "Ratings 4+",
+
+  "offers": "Offers",
+  "acceptsVouchers": "Accepts vouchers",
+
+  "cuisines": "Cuisines",
+  "searchCuisine": "Search for cuisine",
+  "noCuisine": "No cuisine found",
+  "showMore": "Show more",
+  "showLess": "Show less",
+
+  "price": "Price",
+
+  "cuisineItems": {
+    "american": "American",
+    "bbq": "BBQ",
+    "beverages": "Beverages",
+    "biryani": "Biryani",
+    "broast": "Broast",
+    "burgers": "Burgers",
+    "cakesBakery": "Cakes & Bakery",
+    "chinese": "Chinese",
+    "continental": "Continental",
+    "desserts": "Desserts",
+    "fastFood": "Fast Food",
+    "italian": "Italian"
+  }
+},
+
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "cancel": "Cancel",
+    "save": "Save",
+    "close": "Close"
+  },
+
+  "infoSection": {
+  "orderFoodTitle": "Order food online in Islamabad",
+
+  "orderFoodDescription": "Find your favorite restaurants and order delicious food online in Islamabad. Foodpanda makes it easy to discover restaurants near you and enjoy your favorite meals delivered directly to your door.",
+
+  "foodDeliveryTitle": "Food delivery in Islamabad",
+
+  "foodDeliveryDescription": "Whether you are looking for Pakistani food, burgers, pizza, Chinese cuisine, desserts or something else, you can find a wide variety of restaurants and dishes available for delivery.",
+
+  "discoverTitle": "Discover restaurants near you",
+
+  "discoverDescription": "Explore different cuisines, compare restaurants, discover special offers and choose the food you want to enjoy."
+},
+
+  "footer": {
+  "description": "Order food online from your favorite restaurants and enjoy fast delivery.",
+
+  "company": {
+    "title": "Company",
+    "about": "About us",
+    "careers": "Careers",
+    "terms": "Terms and conditions",
+    "privacy": "Privacy policy"
+  },
+
+  "customers": {
+    "title": "For customers",
+    "help": "Help Center",
+    "contact": "Contact us",
+    "refunds": "Refunds",
+    "tracking": "Order tracking"
+  },
+
+  "partners": {
+    "title": "For partners",
+    "restaurant": "List your restaurant",
+    "rider": "Become a rider",
+    "business": "Business solutions"
+  },
+
+  "social": {
+    "title": "Follow us"
+  },
+
+  "bottom": {
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "cookies": "Cookies"
+  }
+}
+}

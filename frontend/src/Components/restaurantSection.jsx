@@ -1,7 +1,9 @@
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import RestaurantCard from "./restaurantCard";
+
 
 function RestaurantSection({
   title,
@@ -10,14 +12,23 @@ function RestaurantSection({
   favorites
 }) {
 
+  const { t } = useTranslation();
+
+
   return (
+
     <section className="restaurant-section">
 
       <div className="section-heading">
 
-        <h2>{title}</h2>
+        <h2>
+          {title}
+        </h2>
 
-        <button className="restaurant-next">
+        <button
+          className="restaurant-next"
+          aria-label={t("restaurant.next")}
+        >
           <ArrowRight size={20} />
         </button>
 
@@ -28,10 +39,12 @@ function RestaurantSection({
 
         <div className="no-results">
 
-          <h3>No restaurants found</h3>
+          <h3>
+            {t("restaurant.noResults")}
+          </h3>
 
           <p>
-            Try changing your search or filters.
+            {t("restaurant.tryFilters")}
           </p>
 
         </div>
@@ -52,7 +65,9 @@ function RestaurantSection({
                 restaurant={restaurant}
                 onFavorite={onFavorite}
                 isFavorite={
-                  favorites.includes(restaurant.id)
+                  favorites.includes(
+                    restaurant.id
+                  )
                 }
               />
 
@@ -65,6 +80,7 @@ function RestaurantSection({
       )}
 
     </section>
+
   );
 }
 

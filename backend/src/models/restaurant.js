@@ -19,6 +19,7 @@ const restaurantSchema = new mongoose.Schema(
       type: String,
       required: [true, "Restaurant name is required"],
       trim: true,     // This is examples of normalization/sanitization.
+      unique: true,
     },
 
     cuisine: {

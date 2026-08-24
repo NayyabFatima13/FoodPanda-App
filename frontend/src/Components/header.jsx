@@ -1,14 +1,13 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 import { setSearchText } from "../redux/slices/restaurantSlice";
 import { logout } from "../redux/slices/authSlice";
-
 import { toggleTheme } from "../redux/slices/themeSlice";
 
+import DOMPurify from "dompurify";
 
 import {
   Search,
@@ -17,17 +16,16 @@ import {
   MapPin,
   Globe,
   ChevronDown,
-  Bike,
-  Store,
-  ShoppingCart,
-  ArrowRight,
   Menu,
-  X
+  X,
 } from "lucide-react";
 
 import foodpandaLogo from "../assets/foodpanda-logo-horizontal.png";
 
 function Header() {
+  // ==========================================
+  // REDUX STATE
+  // ==========================================
 
   const searchText = useSelector(
     (state) => state.restaurants.searchText
@@ -37,69 +35,188 @@ function Header() {
     (state) => state.auth.user
   );
 
-  const dispatch = useDispatch();
-
-  const handleSearchChange = (e) => {
-    dispatch(setSearchText(e.target.value));
-  };
-
   const theme = useSelector(
     (state) => state.theme.theme
   );
 
+  const cart = useSelector(
+    (state) => state.cart.cart
+  );
+
+  // ==========================================
+  // CART COUNT
+  // ==========================================
+
+  const cartItemCount = cart.reduce(
+    (total, item) =>
+      total + (item.quantity || 1),
+    0
+  );
+
+  // ==========================================
+  // DISPATCH / NAVIGATION
+  // ==========================================
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // ==========================================
+  // TRANSLATION
+  // ==========================================
+
+  const { t, i18n } = useTranslation();
+
+  const [languageOpen, setLanguageOpen] =
+    useState(false);
+
+  const changeLanguage = (language) => {
+  i18n.changeLanguage(language);
+
+  localStorage.setItem(
+    "language",
+    language
+  );
+
+  setLanguageOpen(false);
+};
+
+  // ==========================================
+  // MOBILE MENU
+  // ==========================================
+
+  const [isMenuOpen, setIsMenuOpen] =
+    useState(false);
+
+  // ==========================================
+  // SEARCH
+  // ==========================================
+
+  const handleSearchChange = (e) => {
+    const sanitizedValue =
+      DOMPurify.sanitize(
+        e.target.value,
+        {
+          ALLOWED_TAGS: [],
+          ALLOWED_ATTR: [],
+        }
+      );
+
+    dispatch(
+      setSearchText(sanitizedValue)
+    );
+  };
+
   const handleSearch = () => {
     navigate("/restaurants");
   };
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // ==========================================
+  // LANGUAGE DROPDOWN
+  // ==========================================
+
+  const handleLanguageClick = (e) => {
+    e.stopPropagation();
+
+    setLanguageOpen((previous) => !previous);
+  };
 
   return (
     <header>
 
-      {/* Mobile Header */}
+      {/* ==========================================
+          MOBILE HEADER
+          ========================================== */}
+
       <div className="mobile-header">
 
         <button
           className="hamburger-btn"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          onClick={() =>
+            setIsMenuOpen(!isMenuOpen)
+          }
         >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          {isMenuOpen ? (
+            <X size={24} />
+          ) : (
+            <Menu size={24} />
+          )}
         </button>
 
-        <Link to="/" className="mobile-logo">
+        <Link
+          to="/"
+          className="mobile-logo"
+        >
           <img
             src={foodpandaLogo}
             alt="foodpanda"
           />
         </Link>
 
-        <Link to="/cart" className="mobile-cart">
+        {/* MOBILE CART */}
+
+        <Link
+          to="/cart"
+          className="mobile-cart cart-icon-wrapper"
+        >
           <ShoppingBag size={22} />
+
+          {cartItemCount > 0 && (
+            <span className="cart-badge">
+              {cartItemCount > 99
+                ? "99+"
+                : cartItemCount}
+            </span>
+          )}
         </Link>
 
       </div>
 
+
+      {/* ==========================================
+          MOBILE MENU
+          ========================================== */}
+
       {isMenuOpen && (
+
         <div className="mobile-menu">
+
+          {/* FAVORITES */}
 
           <Link
             to="/favorites"
             className="mobile-menu-item"
-            onClick={() => setIsMenuOpen(false)}
+            onClick={() =>
+              setIsMenuOpen(false)
+            }
           >
             <Heart size={20} />
-            <span>Favorites</span>
+
+            <span>
+              Favorites
+            </span>
           </Link>
+
+
+          {/* CART */}
 
           <Link
             to="/cart"
             className="mobile-menu-item"
-            onClick={() => setIsMenuOpen(false)}
+            onClick={() =>
+              setIsMenuOpen(false)
+            }
           >
             <ShoppingBag size={20} />
-            <span>Cart</span>
+
+            <span>
+              {t("header.cart")}
+            </span>
           </Link>
+
+
+          {/* ==========================================
+              LOGGED IN
+              ========================================== */}
 
           {user ? (
             <>
@@ -107,78 +224,182 @@ function Header() {
                 className="mobile-menu-item"
                 onClick={() => {
                   navigate("/dashboard");
+
                   setIsMenuOpen(false);
                 }}
               >
                 👤
-                <span>Hi, {user.name}</span>
+
+                <span>
+                  Hi, {user.name}
+                </span>
               </button>
 
               <button
                 className="mobile-menu-item"
                 onClick={() => {
                   dispatch(logout());
+
                   navigate("/");
+
                   setIsMenuOpen(false);
                 }}
               >
                 🚪
-                <span>Logout</span>
+
+                <span>
+                  {t("header.logout")}
+                </span>
               </button>
             </>
           ) : (
+
+            /* ==========================================
+                NOT LOGGED IN
+                ========================================== */
+
             <>
               <button
                 className="mobile-menu-item"
                 onClick={() => {
                   navigate("/login");
+
                   setIsMenuOpen(false);
                 }}
               >
                 👤
-                <span>Log in</span>
+
+                <span>
+                  {t("header.login")}
+                </span>
               </button>
 
               <button
                 className="mobile-menu-item"
                 onClick={() => {
                   navigate("/register");
+
                   setIsMenuOpen(false);
                 }}
               >
                 📝
-                <span>Sign up</span>
+
+                <span>
+                  Register
+                </span>
               </button>
             </>
           )}
 
+
+          {/* ==========================================
+              THEME
+              ========================================== */}
+
           <button
             className="mobile-menu-item"
-            onClick={() => dispatch(toggleTheme())}
+            onClick={() =>
+              dispatch(toggleTheme())
+            }
           >
-            {theme === "light" ? "🌙" : "☀️"}
+            {theme === "light"
+              ? "🌙"
+              : "☀️"
+            }
 
             <span>
-              {theme === "light" ? "Dark mode" : "Light mode"}
+              {theme === "light"
+                ? "Dark mode"
+                : "Light mode"
+              }
             </span>
           </button>
+
+
+          {/* ==========================================
+              MOBILE LANGUAGE
+              ========================================== */}
+
+          <div className="language">
+
+            <button
+              className="language-toggle"
+              onClick={handleLanguageClick}
+            >
+              <Globe size={18} />
+
+              <span>
+                {i18n.language === "ur"
+                  ? "اردو"
+                  : "EN"}
+              </span>
+
+              <ChevronDown
+                size={16}
+              />
+            </button>
+
+
+            {languageOpen && (
+
+              <div className="language-dropdown">
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    changeLanguage("en");
+                  }}
+                >
+                  English
+                </button>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    changeLanguage("ur");
+                  }}
+                >
+                  اردو
+                </button>
+
+              </div>
+
+            )}
+
+          </div>
 
         </div>
       )}
 
 
-      {/* Top Header Desktop*/}
+      {/* ==========================================
+          TOP HEADER - DESKTOP
+          ========================================== */}
+
       <div className="top-header">
 
-        {/* Logo */}
-        <Link to="/" className="logo">
+
+        {/* ==========================================
+            LOGO
+            ========================================== */}
+
+        <Link
+          to="/"
+          className="logo"
+        >
           <img
             src={foodpandaLogo}
             alt="foodpanda"
           />
         </Link>
 
-        {/* Location */}
+
+        {/* ==========================================
+            LOCATION
+            ========================================== */}
+
         <div className="location">
 
           <MapPin
@@ -192,6 +413,11 @@ function Header() {
 
         </div>
 
+
+        {/* ==========================================
+            RESTAURANTS
+            ========================================== */}
+
         <NavLink
           to="/restaurants"
           className={({ isActive }) =>
@@ -200,18 +426,28 @@ function Header() {
               : "restaurants-link"
           }
         >
-          Restaurants
+          {t("header.restaurants")}
         </NavLink>
 
-        {/* Right Side */}
+
+        {/* ==========================================
+            RIGHT SIDE
+            ========================================== */}
+
         <div className="header-actions">
 
-          {/* Conditional Rendering of Login and Signup/Register Butthon */}
+
+          {/* ==========================================
+              USER
+              ========================================== */}
+
           {user ? (
             <>
               <button
                 className="user-btn"
-                onClick={() => navigate("/dashboard")}
+                onClick={() =>
+                  navigate("/dashboard")
+                }
               >
                 Hi, {user.name} 👋
               </button>
@@ -219,136 +455,195 @@ function Header() {
               <button
                 className="logout-btn"
                 onClick={() => {
-
                   dispatch(logout());
 
                   navigate("/");
-
                 }}
               >
-                Logout
+                {t("header.logout")}
               </button>
             </>
           ) : (
             <>
               <button
                 className="login-btn"
-                onClick={() => navigate("/login")}
+                onClick={() =>
+                  navigate("/login")
+                }
               >
-                Log in
+                {t("header.login")}
               </button>
 
               <button
                 className="signup-btn"
-                onClick={() => navigate("/register")}
+                onClick={() =>
+                  navigate("/register")
+                }
               >
                 Sign up for free delivery
               </button>
             </>
           )}
 
-          {/* Language */}
+
+          {/* ==========================================
+              LANGUAGE
+              ========================================== */}
 
           <div className="language">
 
-            <Globe size={18} />
+            <button
+              className="language-toggle"
+              onClick={handleLanguageClick}
+            >
+              <Globe size={18} />
 
-            <span>EN</span>
+              <span>
+                {i18n.language === "ur"
+                  ? "اردو"
+                  : "EN"}
+              </span>
 
-            <ChevronDown size={16} />
+              <ChevronDown
+                size={16}
+              />
+            </button>
+
+
+            {languageOpen && (
+
+              <div className="language-dropdown">
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    changeLanguage("en");
+                  }}
+                >
+                  English
+                </button>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    changeLanguage("ur");
+                  }}
+                >
+                  اردو
+                </button>
+
+              </div>
+
+            )}
 
           </div>
 
-          {/* Theme */}
+
+          {/* ==========================================
+              THEME
+              ========================================== */}
+
           <button
             className="theme-btn"
-            onClick={() => dispatch(toggleTheme())}
+            onClick={() =>
+              dispatch(toggleTheme())
+            }
           >
-            {theme === "light" ? "🌙" : "☀️"}
+            {theme === "light"
+              ? "🌙"
+              : "☀️"
+            }
           </button>
 
 
+          {/* ==========================================
+              FAVORITES
+              ========================================== */}
+
           <Link to="/favorites">
+
             <button className="icon-btn">
+
               <Heart size={20} />
+
             </button>
+
           </Link>
 
+
+          {/* ==========================================
+              CART
+              ========================================== */}
+
           <Link to="/cart">
-            <button className="cart-btn">
+
+            <button
+              className="cart-btn cart-icon-wrapper"
+            >
+
               <ShoppingBag size={20} />
+
+              {cartItemCount > 0 && (
+
+                <span className="cart-badge">
+
+                  {cartItemCount > 99
+                    ? "99+"
+                    : cartItemCount
+                  }
+
+                </span>
+
+              )}
+
             </button>
+
           </Link>
 
         </div>
+
       </div>
 
 
-      {/* Bottom Header */}
+      {/* ==========================================
+          BOTTOM HEADER
+          ========================================== */}
+
       <div className="bottom-header">
 
-        <nav className="main-nav">
 
-          <button className="nav-item active">
+        {/* ==========================================
+            SEARCH
+            ========================================== */}
 
-            <Bike size={20} />
-
-            Delivery
-
-          </button>
-
-          <button className="nav-item">
-
-            <ShoppingBag size={20} />
-
-            Pick-up
-
-          </button>
-
-          <button className="nav-item">
-
-            <ShoppingCart size={20} />
-
-            pandamart
-
-          </button>
-
-          <button className="nav-item">
-
-            <Store size={20} />
-
-            Shops
-
-          </button>
-
-        </nav>
-
-
-        {/* Search */}
         <div className="search-box">
+
           <Search />
 
           <input
             type="text"
-            placeholder="Search restaurants"
+            placeholder={t("header.search")}
             value={searchText}
-            onChange={(e) =>
-              dispatch(setSearchText(e.target.value))
-            }
+            onChange={handleSearchChange}
             onKeyDown={(e) => {
+
               if (e.key === "Enter") {
+
                 e.preventDefault();
+
                 handleSearch();
+
               }
+
             }}
           />
 
-          {/* <button onClick={handleSearch}>
-            Search
-          </button> */}
         </div>
 
       </div>
+
     </header>
   );
 }

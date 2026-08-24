@@ -1,43 +1,41 @@
+import { useTranslation } from "react-i18next";
+
 function InfoSection() {
 
+  const { t } = useTranslation();
+
   return (
+
     <section className="info-section">
 
       <h2>
-        Order food online in Islamabad
+        {t("infoSection.orderFoodTitle")}
       </h2>
 
       <p>
-        Find your favorite restaurants and order delicious
-        food online in Islamabad. Foodpanda makes it easy
-        to discover restaurants near you and enjoy your
-        favorite meals delivered directly to your door.
+        {t("info.orderFoodDescription")}
       </p>
 
 
       <h2>
-        Food delivery in Islamabad
+        {t("info.foodDeliveryTitle")}
       </h2>
 
       <p>
-        Whether you are looking for Pakistani food, burgers,
-        pizza, Chinese cuisine, desserts or something else,
-        you can find a wide variety of restaurants and dishes
-        available for delivery.
+        {t("info.foodDeliveryDescription")}
       </p>
 
 
       <h2>
-        Discover restaurants near you
+        {t("info.discoverTitle")}
       </h2>
 
       <p>
-        Explore different cuisines, compare restaurants,
-        discover special offers and choose the food you
-        want to enjoy.
+        {t("info.discoverDescription")}
       </p>
 
     </section>
+
   );
 }
 

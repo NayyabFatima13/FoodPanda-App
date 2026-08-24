@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 import {
   increaseQuantity,
@@ -20,8 +21,12 @@ function Cart() {
 
   const dispatch = useDispatch();
 
+  const { t } = useTranslation();
+
+
   // Controls checkout visibility
-  const [showCheckout, setShowCheckout] = useState(false);
+  const [showCheckout, setShowCheckout] =
+    useState(false);
 
 
   // Subtotal
@@ -33,14 +38,19 @@ function Cart() {
 
 
   // Delivery fee
-  const deliveryFee = cart.length > 0 ? 100 : 0;
+  const deliveryFee =
+    cart.length > 0 ? 100 : 0;
 
 
   // Total
-  const total = subtotal + deliveryFee;
+  const total =
+    subtotal + deliveryFee;
 
 
-  // Empty cart
+  // ==========================================
+  // EMPTY CART
+  // ==========================================
+
   if (cart.length === 0) {
 
     return (
@@ -53,20 +63,22 @@ function Cart() {
             🛒
           </div>
 
+
           <h1>
-            Your cart is empty
+            {t("cart.emptyTitle")}
           </h1>
 
+
           <p>
-            Looks like you haven't added anything
-            to your cart yet.
+            {t("cart.emptyDescription")}
           </p>
+
 
           <Link
             to="/restaurants"
             className="browse-restaurants-btn"
           >
-            Browse Restaurants
+            {t("cart.browseRestaurants")}
           </Link>
 
         </div>
@@ -85,29 +97,41 @@ function Cart() {
       <div className="cart-container">
 
 
-        {/* CART HEADER */}
+        {/* ==========================================
+            CART HEADER
+        ========================================== */}
 
         <div className="cart-header">
 
           <h1>
-            Your Cart 🛒
+            {t("cart.title")} 🛒
           </h1>
 
+
           <p>
-            {cart.length} item
-            {cart.length !== 1 ? "s" : ""}
+            {cart.length}{" "}
+
+            {cart.length === 1
+              ? t("cart.item")
+              : t("cart.items")
+            }
+
           </p>
 
         </div>
 
 
 
-        {/* CART LAYOUT */}
+        {/* ==========================================
+            CART LAYOUT
+        ========================================== */}
 
         <div className="cart-layout">
 
 
-          {/* LEFT SIDE */}
+          {/* ==========================================
+              LEFT SIDE
+          ========================================== */}
 
           <div className="cart-items">
 
@@ -150,6 +174,7 @@ function Cart() {
                     {item.name}
                   </h3>
 
+
                   <p className="cart-item-price">
                     Rs. {item.price}
                   </p>
@@ -160,9 +185,14 @@ function Cart() {
                   <div className="quantity-controls">
 
                     <button
+                      aria-label={t(
+                        "cart.decreaseQuantity"
+                      )}
                       onClick={() =>
                         dispatch(
-                          decreaseQuantity(item.id)
+                          decreaseQuantity(
+                            item.id
+                          )
                         )
                       }
                     >
@@ -176,9 +206,14 @@ function Cart() {
 
 
                     <button
+                      aria-label={t(
+                        "cart.increaseQuantity"
+                      )}
                       onClick={() =>
                         dispatch(
-                          increaseQuantity(item.id)
+                          increaseQuantity(
+                            item.id
+                          )
                         )
                       }
                     >
@@ -197,7 +232,8 @@ function Cart() {
 
                   <strong>
                     Rs.{" "}
-                    {item.price * item.quantity}
+                    {item.price *
+                      item.quantity}
                   </strong>
 
 
@@ -205,11 +241,13 @@ function Cart() {
                     className="remove-item"
                     onClick={() =>
                       dispatch(
-                        removeFromCart(item.id)
+                        removeFromCart(
+                          item.id
+                        )
                       )
                     }
                   >
-                    Remove
+                    {t("cart.remove")}
                   </button>
 
                 </div>
@@ -222,12 +260,14 @@ function Cart() {
 
 
 
-          {/* RIGHT SIDE */}
+          {/* ==========================================
+              RIGHT SIDE
+          ========================================== */}
 
           <div className="cart-summary">
 
             <h2>
-              Order Summary
+              {t("cart.orderSummary")}
             </h2>
 
 
@@ -236,7 +276,7 @@ function Cart() {
             <div className="summary-row">
 
               <span>
-                Subtotal
+                {t("cart.subtotal")}
               </span>
 
               <span>
@@ -251,7 +291,7 @@ function Cart() {
             <div className="summary-row">
 
               <span>
-                Delivery fee
+                {t("cart.deliveryFee")}
               </span>
 
               <span>
@@ -269,7 +309,7 @@ function Cart() {
             <div className="summary-total">
 
               <span>
-                Total
+                {t("cart.total")}
               </span>
 
               <strong>
@@ -283,9 +323,11 @@ function Cart() {
 
             <button
               className="checkout-btn"
-              onClick={() => setShowCheckout(true)}
+              onClick={() =>
+                setShowCheckout(true)
+              }
             >
-              Proceed to Checkout
+              {t("cart.proceedCheckout")}
             </button>
 
 
@@ -295,7 +337,7 @@ function Cart() {
               to="/restaurants"
               className="continue-shopping"
             >
-              ← Continue Shopping
+              ← {t("cart.continueShopping")}
             </Link>
 
           </div>
@@ -304,7 +346,9 @@ function Cart() {
 
 
 
-        {/* CHECKOUT */}
+        {/* ==========================================
+            CHECKOUT
+        ========================================== */}
 
         {showCheckout && (
 
@@ -316,7 +360,6 @@ function Cart() {
 
               onPlaceOrder={(orderData) => {
 
-                // See the complete order in console
                 console.log(
                   "Order placed:",
                   orderData
@@ -324,7 +367,9 @@ function Cart() {
 
 
                 // Clear Redux cart
-                dispatch(clearCart());
+                dispatch(
+                  clearCart()
+                );
 
 
                 // Hide checkout
@@ -333,7 +378,9 @@ function Cart() {
 
                 // Success message
                 alert(
-                  "🎉 Order placed successfully!"
+                  `🎉 ${t(
+                    "cart.orderPlaced"
+                  )}`
                 );
 
               }}

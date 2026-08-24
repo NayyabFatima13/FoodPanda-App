@@ -1,52 +1,51 @@
-import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const cuisines = [
   {
     name: "Pizza",
-    image:
-      "/pictures/pizza.jpg"
+    translationKey: "pizza",
+    image: "/pictures/pizza.jpg"
   },
   {
     name: "Fast Food",
-    image:
-      "/pictures/fastfood.jpg"
+    translationKey: "fastFood",
+    image: "/pictures/fastfood.jpg"
   },
   {
     name: "Burgers",
-    image:
-      "/pictures/burger.jpg"
+    translationKey: "burgers",
+    image: "/pictures/burger.jpg"
   },
   {
     name: "BBQ",
-    image:
-      "/pictures/bbq.jpg"
+    translationKey: "bbq",
+    image: "/pictures/bbq.jpg"
   },
   {
     name: "Desserts",
-    image:
-      "/pictures/desserts.jpg"
+    translationKey: "desserts",
+    image: "/pictures/desserts.jpg"
   },
   {
     name: "Pakistani",
-    image:
-      "/pictures/pakistani.jpg"
+    translationKey: "pakistani",
+    image: "/pictures/pakistani.jpg"
   },
   {
     name: "Shawarma",
-    image:
-      "/pictures/shawarma.jpg"
+    translationKey: "shawarma",
+    image: "/pictures/shawarma.jpg"
   },
-   {
+  {
     name: "Continental",
-    image:
-      "/pictures/continental.jpg"
+    translationKey: "continental",
+    image: "/pictures/continental.jpg"
   },
   {
     name: "Healthy",
-    image:
-      "/pictures/healthy.jpg"
+    translationKey: "healthy",
+    image: "/pictures/healthy.jpg"
   }
-
 ];
 
 
@@ -55,12 +54,14 @@ function CuisineSection({
   selectedCuisine
 }) {
 
+  const { t } = useTranslation();
+
   return (
 
     <section className="cuisine-section">
 
       <h2>
-        Cuisines for you
+        {t("cuisine.title")}
       </h2>
 
 
@@ -84,11 +85,15 @@ function CuisineSection({
 
             <img
               src={cuisine.image}
-              alt={cuisine.name}
+              alt={t(
+                `cuisine.items.${cuisine.translationKey}`
+              )}
             />
 
             <span>
-              {cuisine.name}
+              {t(
+                `cuisine.items.${cuisine.translationKey}`
+              )}
             </span>
 
           </button>

@@ -1,8 +1,10 @@
 import { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import DOMPurify from "dompurify";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import {
   createRestaurant,
@@ -21,6 +23,17 @@ function RestaurantForm() {
   const isEditMode = Boolean(id);
 
 
+  // ==========================================
+  // TRANSLATION
+  // ==========================================
+
+  const { t } = useTranslation();
+
+
+  // ==========================================
+  // REDUX STATE
+  // ==========================================
+
   const restaurants = useSelector(
     (state) => state.restaurants.restaurants
   );
@@ -34,13 +47,19 @@ function RestaurantForm() {
   );
 
 
-  // Find restaurant when editing
+  // ==========================================
+  // FIND RESTAURANT WHEN EDITING
+  // ==========================================
 
   const restaurant = restaurants.find(
     (item) =>
       String(item.id) === String(id)
   );
 
+
+  // ==========================================
+  // FORMIK
+  // ==========================================
 
   const formik = useFormik({
 
@@ -71,44 +90,204 @@ function RestaurantForm() {
     },
 
 
+    // ==========================================
+    // VALIDATION
+    // ==========================================
+
     validationSchema: Yup.object({
 
       id: Yup.number()
-        .required("Restaurant ID is required"),
+        .required(
+          t("restaurantForm.validation.idRequired")
+        )
+        .test(
+          "unique-id",
+          t("restaurantForm.validation.idExists"),
+          function (value) {
+
+            if (!value) {
+              return true;
+            }
+
+            const duplicateRestaurant =
+              restaurants.find(
+                (restaurant) =>
+                  Number(restaurant.id) === Number(value) &&
+                  String(restaurant.id) !== String(id)
+              );
+
+            return !duplicateRestaurant;
+
+          }
+        ),
+
 
       name: Yup.string()
-        .required("Restaurant name is required"),
+        .required(
+          t("restaurantForm.validation.nameRequired")
+        )
+        .test(
+          "unique-name",
+          t("restaurantForm.validation.nameExists"),
+          function (value) {
+
+            if (!value) {
+              return true;
+            }
+
+            const enteredName =
+              value.trim().toLowerCase();
+
+
+            const duplicateRestaurant =
+              restaurants.find(
+                (restaurant) =>
+                  String(restaurant.name)
+                    .trim()
+                    .toLowerCase() === enteredName &&
+                  String(restaurant.id) !== String(id)
+              );
+
+            return !duplicateRestaurant;
+
+          }
+        ),
+
 
       cuisine: Yup.string()
-        .required("Cuisine is required"),
+        .required(
+          t("restaurantForm.validation.cuisineRequired")
+        ),
+
 
       rating: Yup.number()
-        .min(0, "Rating cannot be less than 0")
-        .max(5, "Rating cannot be greater than 5")
-        .required("Rating is required"),
+        .min(
+          0,
+          t("restaurantForm.validation.ratingMin")
+        )
+        .max(
+          5,
+          t("restaurantForm.validation.ratingMax")
+        )
+        .required(
+          t("restaurantForm.validation.ratingRequired")
+        ),
+
 
       deliveryTime: Yup.string()
-        .required("Delivery time is required"),
+        .required(
+          t("restaurantForm.validation.deliveryRequired")
+        ),
+
 
       price: Yup.number()
-        .min(0, "Price cannot be negative")
-        .required("Price is required"),
+        .min(
+          0,
+          t("restaurantForm.validation.priceMin")
+        )
+        .required(
+          t("restaurantForm.validation.priceRequired")
+        ),
+
 
       image: Yup.string()
-        .required("Image is required"),
+        .required(
+          t("restaurantForm.validation.imageRequired")
+        ),
+
 
       discount: Yup.string()
-        .required("Discount is required"),
+        .required(
+          t("restaurantForm.validation.discountRequired")
+        ),
+
 
       description: Yup.string()
-        .required("Description is required"),
+        .required(
+          t("restaurantForm.validation.descriptionRequired")
+        ),
 
     }),
 
 
+    // ==========================================
+    // SUBMIT
+    // ==========================================
+
     onSubmit: async (values) => {
 
       try {
+
+        /*
+         * Sanitize user-controlled text
+         */
+
+        const sanitizedData = {
+
+          name: DOMPurify.sanitize(
+            values.name,
+            {
+              ALLOWED_TAGS: [],
+              ALLOWED_ATTR: []
+            }
+          ).trim(),
+
+
+          cuisine: DOMPurify.sanitize(
+            values.cuisine,
+            {
+              ALLOWED_TAGS: [],
+              ALLOWED_ATTR: []
+            }
+          ).trim(),
+
+
+          deliveryTime: DOMPurify.sanitize(
+            values.deliveryTime,
+            {
+              ALLOWED_TAGS: [],
+              ALLOWED_ATTR: []
+            }
+          ).trim(),
+
+
+          image: DOMPurify.sanitize(
+            values.image,
+            {
+              ALLOWED_TAGS: [],
+              ALLOWED_ATTR: []
+            }
+          ).trim(),
+
+
+          discount: DOMPurify.sanitize(
+            values.discount,
+            {
+              ALLOWED_TAGS: [],
+              ALLOWED_ATTR: []
+            }
+          ).trim(),
+
+
+          description: DOMPurify.sanitize(
+            values.description,
+            {
+              ALLOWED_TAGS: [],
+              ALLOWED_ATTR: []
+            }
+          ).trim(),
+
+
+          rating: Number(values.rating),
+
+          price: Number(values.price),
+
+        };
+
+
+        // ==========================================
+        // UPDATE RESTAURANT
+        // ==========================================
 
         if (isEditMode) {
 
@@ -117,55 +296,26 @@ function RestaurantForm() {
 
               id: id,
 
-              restaurantData: {
-
-                name: values.name,
-
-                cuisine: values.cuisine,
-
-                rating: Number(values.rating),
-
-                deliveryTime:
-                  values.deliveryTime,
-
-                price: Number(values.price),
-
-                image: values.image,
-
-                discount: values.discount,
-
-                description:
-                  values.description,
-
-              },
+              restaurantData: sanitizedData,
 
             })
           ).unwrap();
 
-        } else {
+        }
+
+
+        // ==========================================
+        // CREATE RESTAURANT
+        // ==========================================
+
+        else {
 
           await dispatch(
             createRestaurant({
 
               id: Number(values.id),
 
-              name: values.name,
-
-              cuisine: values.cuisine,
-
-              rating: Number(values.rating),
-
-              deliveryTime:
-                values.deliveryTime,
-
-              price: Number(values.price),
-
-              image: values.image,
-
-              discount: values.discount,
-
-              description:
-                values.description,
+              ...sanitizedData,
 
             })
           ).unwrap();
@@ -189,7 +339,9 @@ function RestaurantForm() {
   });
 
 
-  // If editing but restaurant doesn't exist
+  // ==========================================
+  // REDIRECT IF RESTAURANT DOES NOT EXIST
+  // ==========================================
 
   useEffect(() => {
 
@@ -211,20 +363,33 @@ function RestaurantForm() {
   ]);
 
 
+  // ==========================================
+  // RETURN
+  // ==========================================
+
   return (
 
     <div className="restaurant-form-page">
 
       <div className="restaurant-form-container">
 
+
+        {/* ==========================================
+            TITLE
+            ========================================== */}
+
         <h1>
 
           {isEditMode
-            ? "Edit Restaurant"
-            : "Add Restaurant"}
+            ? t("restaurantForm.editTitle")
+            : t("restaurantForm.addTitle")}
 
         </h1>
 
+
+        {/* ==========================================
+            ERROR
+            ========================================== */}
 
         {error && (
 
@@ -243,17 +408,18 @@ function RestaurantForm() {
         >
 
 
-          {/* RESTAURANT ID */}
+          {/* ==========================================
+              RESTAURANT ID
+              ========================================== */}
 
           {!isEditMode && (
 
             <div className="form-group">
 
               <label htmlFor="id">
-
-                Restaurant ID
-
+                {t("restaurantForm.restaurantId")}
               </label>
+
 
               <input
                 id="id"
@@ -264,13 +430,12 @@ function RestaurantForm() {
                 onBlur={formik.handleBlur}
               />
 
+
               {formik.touched.id &&
                 formik.errors.id && (
 
                   <p className="error-message">
-
                     {formik.errors.id}
-
                   </p>
 
                 )}
@@ -280,33 +445,35 @@ function RestaurantForm() {
           )}
 
 
-          {/* NAME */}
+          {/* ==========================================
+              NAME
+              ========================================== */}
 
           <div className="form-group">
 
             <label htmlFor="name">
-
-              Restaurant name
-
+              {t("restaurantForm.name")}
             </label>
+
 
             <input
               id="name"
               name="name"
               type="text"
-              placeholder="Enter restaurant name"
+              placeholder={t(
+                "restaurantForm.namePlaceholder"
+              )}
               value={formik.values.name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
             />
 
+
             {formik.touched.name &&
               formik.errors.name && (
 
                 <p className="error-message">
-
                   {formik.errors.name}
-
                 </p>
 
               )}
@@ -314,33 +481,35 @@ function RestaurantForm() {
           </div>
 
 
-          {/* CUISINE */}
+          {/* ==========================================
+              CUISINE
+              ========================================== */}
 
           <div className="form-group">
 
             <label htmlFor="cuisine">
-
-              Cuisine
-
+              {t("restaurantForm.cuisine")}
             </label>
+
 
             <input
               id="cuisine"
               name="cuisine"
               type="text"
-              placeholder="e.g. Pakistani"
+              placeholder={t(
+                "restaurantForm.cuisinePlaceholder"
+              )}
               value={formik.values.cuisine}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
             />
 
+
             {formik.touched.cuisine &&
               formik.errors.cuisine && (
 
                 <p className="error-message">
-
                   {formik.errors.cuisine}
-
                 </p>
 
               )}
@@ -348,15 +517,16 @@ function RestaurantForm() {
           </div>
 
 
-          {/* RATING */}
+          {/* ==========================================
+              RATING
+              ========================================== */}
 
           <div className="form-group">
 
             <label htmlFor="rating">
-
-              Rating
-
+              {t("restaurantForm.rating")}
             </label>
+
 
             <input
               id="rating"
@@ -370,13 +540,12 @@ function RestaurantForm() {
               onBlur={formik.handleBlur}
             />
 
+
             {formik.touched.rating &&
               formik.errors.rating && (
 
                 <p className="error-message">
-
                   {formik.errors.rating}
-
                 </p>
 
               )}
@@ -384,38 +553,35 @@ function RestaurantForm() {
           </div>
 
 
-          {/* DELIVERY TIME */}
+          {/* ==========================================
+              DELIVERY TIME
+              ========================================== */}
 
           <div className="form-group">
 
             <label htmlFor="deliveryTime">
-
-              Delivery time
-
+              {t("restaurantForm.deliveryTime")}
             </label>
+
 
             <input
               id="deliveryTime"
               name="deliveryTime"
               type="text"
-              placeholder="30-40 min"
-              value={
-                formik.values.deliveryTime
-              }
+              placeholder={t(
+                "restaurantForm.deliveryTimePlaceholder"
+              )}
+              value={formik.values.deliveryTime}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
             />
+
 
             {formik.touched.deliveryTime &&
               formik.errors.deliveryTime && (
 
                 <p className="error-message">
-
-                  {
-                    formik.errors
-                      .deliveryTime
-                  }
-
+                  {formik.errors.deliveryTime}
                 </p>
 
               )}
@@ -423,15 +589,16 @@ function RestaurantForm() {
           </div>
 
 
-          {/* PRICE */}
+          {/* ==========================================
+              PRICE
+              ========================================== */}
 
           <div className="form-group">
 
             <label htmlFor="price">
-
-              Price
-
+              {t("restaurantForm.price")}
             </label>
+
 
             <input
               id="price"
@@ -443,13 +610,12 @@ function RestaurantForm() {
               onBlur={formik.handleBlur}
             />
 
+
             {formik.touched.price &&
               formik.errors.price && (
 
                 <p className="error-message">
-
                   {formik.errors.price}
-
                 </p>
 
               )}
@@ -457,33 +623,35 @@ function RestaurantForm() {
           </div>
 
 
-          {/* IMAGE */}
+          {/* ==========================================
+              IMAGE URL
+              ========================================== */}
 
           <div className="form-group">
 
             <label htmlFor="image">
-
-              Image URL
-
+              {t("restaurantForm.imageUrl")}
             </label>
+
 
             <input
               id="image"
               name="image"
               type="text"
-              placeholder="Enter image URL"
+              placeholder={t(
+                "restaurantForm.imagePlaceholder"
+              )}
               value={formik.values.image}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
             />
 
+
             {formik.touched.image &&
               formik.errors.image && (
 
                 <p className="error-message">
-
                   {formik.errors.image}
-
                 </p>
 
               )}
@@ -491,33 +659,35 @@ function RestaurantForm() {
           </div>
 
 
-          {/* DISCOUNT */}
+          {/* ==========================================
+              DISCOUNT
+              ========================================== */}
 
           <div className="form-group">
 
             <label htmlFor="discount">
-
-              Discount
-
+              {t("restaurantForm.discount")}
             </label>
+
 
             <input
               id="discount"
               name="discount"
               type="text"
-              placeholder="20% OFF"
+              placeholder={t(
+                "restaurantForm.discountPlaceholder"
+              )}
               value={formik.values.discount}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
             />
 
+
             {formik.touched.discount &&
               formik.errors.discount && (
 
                 <p className="error-message">
-
                   {formik.errors.discount}
-
                 </p>
 
               )}
@@ -525,44 +695,45 @@ function RestaurantForm() {
           </div>
 
 
-          {/* DESCRIPTION */}
+          {/* ==========================================
+              DESCRIPTION
+              ========================================== */}
 
           <div className="form-group">
 
             <label htmlFor="description">
-
-              Description
-
+              {t("restaurantForm.description")}
             </label>
+
 
             <textarea
               id="description"
               name="description"
               rows="4"
-              placeholder="Enter restaurant description"
-              value={
-                formik.values.description
-              }
+              placeholder={t(
+                "restaurantForm.descriptionPlaceholder"
+              )}
+              value={formik.values.description}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
             />
+
 
             {formik.touched.description &&
               formik.errors.description && (
 
                 <p className="error-message">
-
-                  {
-                    formik.errors
-                      .description
-                  }
-
+                  {formik.errors.description}
                 </p>
 
               )}
 
           </div>
 
+
+          {/* ==========================================
+              SUBMIT
+              ========================================== */}
 
           <button
             type="submit"
@@ -571,13 +742,17 @@ function RestaurantForm() {
           >
 
             {loading
-              ? "Saving..."
+              ? t("restaurantForm.saving")
               : isEditMode
-                ? "Update Restaurant"
-                : "Add Restaurant"}
+                ? t("restaurantForm.updateRestaurant")
+                : t("restaurantForm.addRestaurant")}
 
           </button>
 
+
+          {/* ==========================================
+              CANCEL
+              ========================================== */}
 
           <button
             type="button"
@@ -587,9 +762,10 @@ function RestaurantForm() {
             }
           >
 
-            Cancel
+            {t("restaurantForm.cancel")}
 
           </button>
+
 
         </form>
 

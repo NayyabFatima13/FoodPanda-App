@@ -1,6 +1,13 @@
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-import useFetch from "../Hooks/useFetch";
+import { useDispatch, useSelector } from "react-redux";
+
+import { useTranslation } from "react-i18next";
+
+import { fetchRestaurants } from "../redux/slices/restaurantSlice";
+
+import LoadingSpinner from "../Components/loadingSpinner";
 
 import Menu from "../Components/Menu";
 
@@ -9,34 +16,92 @@ function RestaurantDetails() {
 
   const { id } = useParams();
 
+  const dispatch = useDispatch();
+
+  const { t } = useTranslation();
+
+
+  // ==========================================
+  // GET RESTAURANTS FROM REDUX
+  // ==========================================
 
   const {
-    data,
+    restaurants,
     loading,
     error
-  } = useFetch("/restaurants.json");
+  } = useSelector(
+    (state) => state.restaurants
+  );
 
+
+  // ==========================================
+  // FETCH FROM BACKEND
+  // ==========================================
+
+  useEffect(() => {
+
+    if (restaurants.length === 0) {
+
+      dispatch(fetchRestaurants());
+
+    }
+
+  }, [
+    dispatch,
+    restaurants.length
+  ]);
+
+
+  // ==========================================
+  // LOADING
+  // ==========================================
 
   if (loading) {
-    return <h2>Loading restaurant...</h2>;
+
+    return (
+
+      <LoadingSpinner
+        message={t(
+          "restaurantDetails.loading"
+        )}
+      />
+
+    );
+
   }
 
+
+  // ==========================================
+  // ERROR
+  // ==========================================
 
   if (error) {
-    return <h2>Something went wrong!</h2>;
+
+    return (
+
+      <h2>
+        {error}
+      </h2>
+
+    );
+
   }
 
 
-  const restaurants =
-    data?.restaurants || [];
-
+  // ==========================================
+  // FIND RESTAURANT
+  // ==========================================
 
   const restaurant =
     restaurants.find(
       (item) =>
-        item.id === Number(id)
+        String(item.id) === String(id)
     );
 
+
+  // ==========================================
+  // RESTAURANT NOT FOUND
+  // ==========================================
 
   if (!restaurant) {
 
@@ -45,12 +110,16 @@ function RestaurantDetails() {
       <div className="restaurant-not-found">
 
         <h1>
-          Restaurant not found
+          {t(
+            "restaurantDetails.notFound"
+          )}
         </h1>
 
+
         <p>
-          The restaurant you're looking
-          for doesn't exist.
+          {t(
+            "restaurantDetails.notFoundDescription"
+          )}
         </p>
 
       </div>
@@ -60,11 +129,18 @@ function RestaurantDetails() {
   }
 
 
+  // ==========================================
+  // RETURN
+  // ==========================================
+
   return (
 
     <div className="restaurant-details">
 
-      {/* Hero */}
+
+      {/* ======================================
+          HERO
+      ====================================== */}
 
       <div className="restaurant-details-hero">
 
@@ -80,35 +156,65 @@ function RestaurantDetails() {
             {restaurant.name}
           </h1>
 
+
           <p className="restaurant-description">
+
             {restaurant.description}
+
           </p>
 
 
           <div className="restaurant-details-meta">
 
+
+            {/* RATING */}
+
             <span>
-              ⭐ {restaurant.rating}
+
+              ⭐{" "}
+              {restaurant.rating}
+
             </span>
+
+
+
+            {/* CUISINE */}
 
             <span>
               {restaurant.cuisine}
             </span>
 
-            <span>
-              🛵 {restaurant.deliveryTime}
-            </span>
+
+
+            {/* DELIVERY */}
 
             <span>
-               Rs. {restaurant.price}
+
+              🛵{" "}
+              {restaurant.deliveryTime}
+
+            </span>
+
+
+
+            {/* PRICE */}
+
+            <span>
+
+              Rs.{" "}
+              {restaurant.price}
+
             </span>
 
           </div>
 
 
+          {/* DISCOUNT */}
+
           <div className="restaurant-discount">
 
-            🎉 {restaurant.discount}
+            🎉{" "}
+            {restaurant.discount}
 
           </div>
 
@@ -117,17 +223,24 @@ function RestaurantDetails() {
       </div>
 
 
-      {/* Menu */}
+
+      {/* ======================================
+          MENU
+      ====================================== */}
 
       <div className="restaurant-menu-section">
 
         <h2>
-          Menu
+          {t(
+            "restaurantDetails.menu"
+          )}
         </h2>
 
+
         <p>
-          Choose your favorite food
-          and add it to your cart.
+          {t(
+            "restaurantDetails.menuDescription"
+          )}
         </p>
 
 
@@ -143,6 +256,7 @@ function RestaurantDetails() {
     </div>
 
   );
+
 }
 
 

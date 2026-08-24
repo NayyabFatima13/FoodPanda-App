@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 
 import useLocalStorage from "../Hooks/useLocalStorage";
 
+import { useTranslation } from "react-i18next";
+
 import {
     ShoppingBag,
     Heart,
@@ -18,13 +20,19 @@ import {
 
 function Dashboard() {
 
+    const { t } = useTranslation();
+
+
     const user = useSelector(
-    (state) => state.auth.user
-);
+        (state) => state.auth.user
+    );
 
 
     const [favorites] =
-        useLocalStorage("favorites", []);
+        useLocalStorage(
+            "favorites",
+            []
+        );
 
 
     const cart = useSelector(
@@ -38,58 +46,97 @@ function Dashboard() {
         0
     );
 
+
     return (
+
         <>
 
             <main className="dashboard">
 
-                {/* Welcome */}
+
+                {/* ==========================================
+                    WELCOME
+                ========================================== */}
+
                 <section className="dashboard-welcome">
 
                     <div>
+
                         <h1>
-                            Welcome back, {user?.name} 👋
+                            {t("dashboard.welcome")},{" "}
+                            {user?.name} 👋
                         </h1>
 
+
                         <p>
-                            Manage your orders, favorites and account
-                            from your dashboard.
+                            {t(
+                                "dashboard.welcomeDescription"
+                            )}
                         </p>
+
                     </div>
 
                 </section>
 
 
-                {/* Statistics */}
+
+                {/* ==========================================
+                    STATISTICS
+                ========================================== */}
+
                 <section className="dashboard-stats">
 
+
                     {/* Total Orders */}
+
                     <div className="dashboard-card">
 
                         <Package size={28} />
 
                         <div>
-                            <h3>0</h3>
-                            <p>Total Orders</p>
+
+                            <h3>
+                                0
+                            </h3>
+
+                            <p>
+                                {t(
+                                    "dashboard.totalOrders"
+                                )}
+                            </p>
+
                         </div>
 
                     </div>
 
 
+
                     {/* Active Orders */}
+
                     <div className="dashboard-card">
 
                         <Clock size={28} />
 
                         <div>
-                            <h3>0</h3>
-                            <p>Active Orders</p>
+
+                            <h3>
+                                0
+                            </h3>
+
+                            <p>
+                                {t(
+                                    "dashboard.activeOrders"
+                                )}
+                            </p>
+
                         </div>
 
                     </div>
 
 
+
                     {/* Favorites */}
+
                     <Link
                         to="/favorites"
                         className="dashboard-card dashboard-card-link"
@@ -98,14 +145,25 @@ function Dashboard() {
                         <Heart size={28} />
 
                         <div>
-                            <h3>{favorites.length}</h3>
-                            <p>Favorites</p>
+
+                            <h3>
+                                {favorites.length}
+                            </h3>
+
+                            <p>
+                                {t(
+                                    "dashboard.favorites"
+                                )}
+                            </p>
+
                         </div>
 
                     </Link>
 
 
+
                     {/* Cart */}
+
                     <Link
                         to="/cart"
                         className="dashboard-card dashboard-card-link"
@@ -114,26 +172,48 @@ function Dashboard() {
                         <ShoppingBag size={28} />
 
                         <div>
-                            <h3>{cartItemsCount}</h3>
-                            <p>Cart Items</p>
+
+                            <h3>
+                                {cartItemsCount}
+                            </h3>
+
+                            <p>
+                                {t(
+                                    "dashboard.cartItems"
+                                )}
+                            </p>
+
                         </div>
 
                     </Link>
 
                 </section>
 
-                {/* Cart Content */}
+
+
+                {/* ==========================================
+                    CART CONTENT
+                ========================================== */}
+
                 <section className="dashboard-cart">
 
                     <div className="dashboard-section-header">
 
-                        <h2>Your Cart</h2>
+                        <h2>
+                            {t(
+                                "dashboard.yourCart"
+                            )}
+                        </h2>
+
 
                         <Link to="/cart">
-                            View Cart
+                            {t(
+                                "dashboard.viewCart"
+                            )}
                         </Link>
 
                     </div>
+
 
 
                     {cart.length === 0 ? (
@@ -142,54 +222,69 @@ function Dashboard() {
 
                             <ShoppingBag size={35} />
 
-                            <h3>Your cart is empty</h3>
+
+                            <h3>
+                                {t(
+                                    "dashboard.emptyCart"
+                                )}
+                            </h3>
+
 
                             <p>
-                                Add something delicious to your cart.
+                                {t(
+                                    "dashboard.emptyCartDescription"
+                                )}
                             </p>
 
+
                             <Link to="/restaurants">
-                                Browse Restaurants
+                                {t(
+                                    "dashboard.browseRestaurants"
+                                )}
                             </Link>
 
                         </div>
 
-                    ) 
-                    : (
+                    ) : (
 
                         <div className="dashboard-cart-items">
 
-                            {cart.slice(0, 3).map((item) => (
+                            {cart
+                                .slice(0, 3)
+                                .map((item) => (
 
-                                <div
-                                    className="dashboard-cart-item"
-                                    key={item.id}
-                                >
+                                    <div
+                                        className="dashboard-cart-item"
+                                        key={item.id}
+                                    >
 
-                                    <div>
+                                        <div>
 
-                                        <h3>
-                                            {item.name}
-                                        </h3>
-
-                                        <p>
-                                            Rs. {item.price}
-                                        </p>
-
-                                    </div> 
+                                            <h3>
+                                                {item.name}
+                                            </h3>
 
 
-                                    <div className="dashboard-cart-quantity">
+                                            <p>
+                                                Rs.{" "}
+                                                {item.price}
+                                            </p>
 
-                                        <span>
-                                            × {item.quantity}
-                                        </span>
+                                        </div>
 
-                                    </div> 
 
-                                </div>
+                                        <div className="dashboard-cart-quantity">
 
-                            ))}
+                                            <span>
+                                                ×{" "}
+                                                {item.quantity}
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                ))}
 
                         </div>
 
@@ -197,73 +292,138 @@ function Dashboard() {
 
                 </section>
 
-                {/* Dashboard Content */}
+
+
+                {/* ==========================================
+                    DASHBOARD CONTENT
+                ========================================== */}
+
                 <section className="dashboard-content">
 
 
-                    {/* Sidebar */}
+                    {/* ==========================================
+                        SIDEBAR
+                    ========================================== */}
+
                     <aside className="dashboard-sidebar">
+
 
                         <Link
                             to="/dashboard"
                             className="dashboard-menu active"
                         >
+
                             <Package size={20} />
-                            Dashboard
+
+                            {t(
+                                "dashboard.dashboard"
+                            )}
+
                         </Link>
+
+
 
                         <Link
                             to="/restaurants"
                             className="dashboard-menu"
                         >
+
                             <ShoppingBag size={20} />
-                            Restaurants
+
+                            {t(
+                                "dashboard.restaurants"
+                            )}
+
                         </Link>
+
+
 
                         <Link
                             to="/favorites"
                             className="dashboard-menu"
                         >
+
                             <Heart size={20} />
-                            Favorites
+
+                            {t(
+                                "dashboard.favorites"
+                            )}
+
                         </Link>
+
+
 
                         <Link
                             to="/cart"
                             className="dashboard-menu"
                         >
+
                             <ShoppingBag size={20} />
-                            Cart
+
+                            {t(
+                                "dashboard.cart"
+                            )}
+
                         </Link>
 
-                        <button className="dashboard-menu">
-                            <MapPin size={20} />
-                            Addresses
-                        </button>
+
 
                         <button className="dashboard-menu">
+
+                            <MapPin size={20} />
+
+                            {t(
+                                "dashboard.addresses"
+                            )}
+
+                        </button>
+
+
+
+                        <button className="dashboard-menu">
+
                             ⚙️
-                            Account Settings
+
+                            {t(
+                                "dashboard.accountSettings"
+                            )}
+
                         </button>
 
                     </aside>
 
 
-                    {/* Main Dashboard */}
+
+                    {/* ==========================================
+                        MAIN DASHBOARD
+                    ========================================== */}
+
                     <div className="dashboard-main">
+
 
                         <div className="dashboard-section-header">
 
-                            <h2>Recent Orders</h2>
+                            <h2>
+                                {t(
+                                    "dashboard.recentOrders"
+                                )}
+                            </h2>
+
 
                             <Link to="/restaurants">
-                                Order Again
+                                {t(
+                                    "dashboard.orderAgain"
+                                )}
                             </Link>
 
                         </div>
 
 
-                        {/* Order 1 */}
+
+                        {/* ==========================================
+                            ORDER 1
+                        ========================================== */}
+
                         <div className="order-card">
 
                             <div className="order-info">
@@ -272,13 +432,18 @@ function Dashboard() {
                                     🍕
                                 </div>
 
+
                                 <div>
 
-                                    <h3>Pizza Hut</h3>
+                                    <h3>
+                                        Pizza Hut
+                                    </h3>
+
 
                                     <p>
                                         Large Pizza • 2 items
                                     </p>
+
 
                                     <span>
                                         Order #10245
@@ -294,7 +459,9 @@ function Dashboard() {
                                 <CheckCircle size={18} />
 
                                 <span>
-                                    Delivered
+                                    {t(
+                                        "dashboard.delivered"
+                                    )}
                                 </span>
 
                             </div>
@@ -307,7 +474,11 @@ function Dashboard() {
                         </div>
 
 
-                        {/* Order 2 */}
+
+                        {/* ==========================================
+                            ORDER 2
+                        ========================================== */}
+
                         <div className="order-card">
 
                             <div className="order-info">
@@ -316,13 +487,18 @@ function Dashboard() {
                                     🍔
                                 </div>
 
+
                                 <div>
 
-                                    <h3>McDonald's</h3>
+                                    <h3>
+                                        McDonald's
+                                    </h3>
+
 
                                     <p>
                                         Burger • Fries • Drink
                                     </p>
+
 
                                     <span>
                                         Order #10244
@@ -338,7 +514,9 @@ function Dashboard() {
                                 <Clock size={18} />
 
                                 <span>
-                                    Preparing
+                                    {t(
+                                        "dashboard.preparing"
+                                    )}
                                 </span>
 
                             </div>
@@ -355,8 +533,12 @@ function Dashboard() {
                 </section>
 
             </main>
+
         </>
+
     );
+
 }
+
 
 export default Dashboard;

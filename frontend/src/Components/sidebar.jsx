@@ -6,10 +6,24 @@ import {
     ChevronUp
 } from "lucide-react";
 
+import DOMPurify from "dompurify";
+import { useTranslation } from "react-i18next";
+
+
 function Sidebar({ filters, setFilters }) {
 
-    const [showMore, setShowMore] = useState(false);
-    const [cuisineSearch, setCuisineSearch] = useState("");
+    const [showMore, setShowMore] =
+        useState(false);
+
+    const [cuisineSearch, setCuisineSearch] =
+        useState("");
+
+    const { t } = useTranslation();
+
+
+    // ==========================================
+    // CUISINE LIST
+    // ==========================================
 
     const cuisines = [
         "American",
@@ -26,20 +40,53 @@ function Sidebar({ filters, setFilters }) {
         "Italian"
     ];
 
-    // Search cuisines
-    const filteredCuisines = cuisines.filter((cuisine) =>
-        cuisine
-            .toLowerCase()
-            .includes(cuisineSearch.toLowerCase())
-    );
 
-    // Handle cuisine checkbox
+    // ==========================================
+    // SANITIZED CUISINE SEARCH
+    // ==========================================
+
+    const handleCuisineSearchChange = (event) => {
+
+        const sanitizedValue =
+            DOMPurify.sanitize(
+                event.target.value,
+                {
+                    ALLOWED_TAGS: [],
+                    ALLOWED_ATTR: []
+                }
+            );
+
+        setCuisineSearch(sanitizedValue);
+
+    };
+
+
+    // ==========================================
+    // SEARCH CUISINES
+    // ==========================================
+
+    const filteredCuisines =
+        cuisines.filter((cuisine) =>
+            cuisine
+                .toLowerCase()
+                .includes(
+                    cuisineSearch.toLowerCase()
+                )
+        );
+
+
+    // ==========================================
+    // HANDLE CUISINE CHECKBOX
+    // ==========================================
+
     const handleCuisineChange = (cuisine) => {
 
         setFilters((previousFilters) => {
 
             const alreadySelected =
-                previousFilters.cuisines.includes(cuisine);
+                previousFilters.cuisines.includes(
+                    cuisine
+                );
 
             let updatedCuisines;
 
@@ -68,7 +115,11 @@ function Sidebar({ filters, setFilters }) {
 
     };
 
-    // Reset all filters
+
+    // ==========================================
+    // RESET ALL FILTERS
+    // ==========================================
+
     const resetFilters = () => {
 
         setFilters({
@@ -77,43 +128,88 @@ function Sidebar({ filters, setFilters }) {
             cuisines: []
         });
 
-        // Also clear cuisine search
         setCuisineSearch("");
         setShowMore(false);
+
     };
+
+
+    // ==========================================
+    // CUISINE TRANSLATION
+    // ==========================================
+
+    const getCuisineTranslationKey = (
+        cuisine
+    ) => {
+
+        const cuisineKeys = {
+            "American": "american",
+            "BBQ": "bbq",
+            "Beverages": "beverages",
+            "Biryani": "biryani",
+            "Broast": "broast",
+            "Burgers": "burgers",
+            "Cakes & Bakery": "cakesBakery",
+            "Chinese": "chinese",
+            "Continental": "continental",
+            "Desserts": "desserts",
+            "Fast Food": "fastFood",
+            "Italian": "italian"
+        };
+
+        return (
+            cuisineKeys[cuisine] ||
+            cuisine
+        );
+
+    };
+
 
     return (
 
         <aside className="sidebar">
 
-            {/* FILTER HEADING */}
+
+            {/* ======================================
+                FILTER HEADING
+            ====================================== */}
 
             <div className="filter-heading">
 
-                <h3>Filters</h3>
+                <h3>
+                    {t("sidebar.filters")}
+                </h3>
+
 
                 <button
                     className="reset-button"
                     onClick={resetFilters}
                 >
-                    Reset
+                    {t("sidebar.reset")}
                 </button>
 
             </div>
 
 
-            {/* SORT */}
+            {/* ======================================
+                SORT
+            ====================================== */}
 
             <div className="filter-section">
 
-                <h4>Sort by</h4>
+                <h4>
+                    {t("sidebar.sortBy")}
+                </h4>
+
 
                 <label className="radio-option">
 
                     <input
                         type="radio"
                         name="sort"
-                        checked={filters.sort === "Relevance"}
+                        checked={
+                            filters.sort === "Relevance"
+                        }
                         onChange={() =>
                             setFilters({
                                 ...filters,
@@ -122,7 +218,9 @@ function Sidebar({ filters, setFilters }) {
                         }
                     />
 
-                    <span>Relevance</span>
+                    <span>
+                        {t("sidebar.relevance")}
+                    </span>
 
                 </label>
 
@@ -132,7 +230,9 @@ function Sidebar({ filters, setFilters }) {
                     <input
                         type="radio"
                         name="sort"
-                        checked={filters.sort === "Fastest"}
+                        checked={
+                            filters.sort === "Fastest"
+                        }
                         onChange={() =>
                             setFilters({
                                 ...filters,
@@ -141,7 +241,9 @@ function Sidebar({ filters, setFilters }) {
                         }
                     />
 
-                    <span>Fastest delivery</span>
+                    <span>
+                        {t("sidebar.fastestDelivery")}
+                    </span>
 
                 </label>
 
@@ -151,7 +253,9 @@ function Sidebar({ filters, setFilters }) {
                     <input
                         type="radio"
                         name="sort"
-                        checked={filters.sort === "Top rated"}
+                        checked={
+                            filters.sort === "Top rated"
+                        }
                         onChange={() =>
                             setFilters({
                                 ...filters,
@@ -160,61 +264,84 @@ function Sidebar({ filters, setFilters }) {
                         }
                     />
 
-                    <span>Top rated</span>
+                    <span>
+                        {t("sidebar.topRated")}
+                    </span>
 
                 </label>
 
             </div>
 
 
-            {/* QUICK FILTERS */}
+            {/* ======================================
+                QUICK FILTERS
+            ====================================== */}
 
             <div className="filter-section">
 
-                <h4>Quick filters</h4>
+                <h4>
+                    {t("sidebar.quickFilters")}
+                </h4>
+
 
                 <label className="quick-filter-checkbox">
 
                     <input
                         type="checkbox"
-                        checked={filters.rating4Plus}
+                        checked={
+                            filters.rating4Plus
+                        }
                         onChange={(event) =>
                             setFilters({
                                 ...filters,
-                                rating4Plus: event.target.checked
+                                rating4Plus:
+                                    event.target.checked
                             })
                         }
                     />
 
-                    <span>Ratings 4+</span>
+                    <span>
+                        {t("sidebar.ratings4Plus")}
+                    </span>
 
                 </label>
 
             </div>
 
 
-            {/* OFFERS */}
+            {/* ======================================
+                OFFERS
+            ====================================== */}
 
             <div className="filter-section">
 
-                <h4>Offers</h4>
+                <h4>
+                    {t("sidebar.offers")}
+                </h4>
+
 
                 <label className="checkbox-option">
 
                     <input type="checkbox" />
 
-                    <span>Accepts vouchers</span>
+                    <span>
+                        {t("sidebar.acceptsVouchers")}
+                    </span>
 
                 </label>
 
             </div>
 
 
-            {/* CUISINES */}
+            {/* ======================================
+                CUISINES
+            ====================================== */}
 
             <div className="filter-section">
 
-                <h4>Cuisines</h4>
+                <h4>
+                    {t("sidebar.cuisines")}
+                </h4>
 
 
                 {/* CUISINE SEARCH */}
@@ -223,12 +350,17 @@ function Sidebar({ filters, setFilters }) {
 
                     <Search size={18} />
 
+
                     <input
                         type="text"
-                        placeholder="Search for cuisine"
+                        placeholder={
+                            t(
+                                "sidebar.searchCuisine"
+                            )
+                        }
                         value={cuisineSearch}
-                        onChange={(event) =>
-                            setCuisineSearch(event.target.value)
+                        onChange={
+                            handleCuisineSearchChange
                         }
                     />
 
@@ -251,13 +383,26 @@ function Sidebar({ filters, setFilters }) {
 
                         <input
                             type="checkbox"
-                            checked={filters.cuisines.includes(cuisine)}
+                            checked={
+                                filters.cuisines.includes(
+                                    cuisine
+                                )
+                            }
                             onChange={() =>
-                                handleCuisineChange(cuisine)
+                                handleCuisineChange(
+                                    cuisine
+                                )
                             }
                         />
 
-                        <span>{cuisine}</span>
+
+                        <span>
+                            {t(
+                                `sidebar.cuisineItems.${getCuisineTranslationKey(
+                                    cuisine
+                                )}`
+                            )}
+                        </span>
 
                     </label>
 
@@ -270,7 +415,11 @@ function Sidebar({ filters, setFilters }) {
                     filteredCuisines.length === 0 && (
 
                         <p className="no-cuisine-results">
-                            No cuisine found
+
+                            {t(
+                                "sidebar.noCuisine"
+                            )}
+
                         </p>
 
                     )}
@@ -283,18 +432,29 @@ function Sidebar({ filters, setFilters }) {
                     <button
                         className="show-more"
                         onClick={() =>
-                            setShowMore(!showMore)
+                            setShowMore(
+                                !showMore
+                            )
                         }
                     >
 
                         {showMore
-                            ? "Show less"
-                            : "Show more"
+                            ? t("sidebar.showLess")
+                            : t("sidebar.showMore")
                         }
 
+
                         {showMore
-                            ? <ChevronUp size={16} />
-                            : <ChevronDown size={16} />
+                            ? (
+                                <ChevronUp
+                                    size={16}
+                                />
+                            )
+                            : (
+                                <ChevronDown
+                                    size={16}
+                                />
+                            )
                         }
 
                     </button>
@@ -304,23 +464,82 @@ function Sidebar({ filters, setFilters }) {
             </div>
 
 
-            {/* PRICE */}
+            {/* ======================================
+                PRICE
+            ====================================== */}
 
             <div className="filter-section">
 
-                <h4>Price</h4>
+                <h4>
+                    {t("sidebar.price")}
+                </h4>
 
                 <div className="price-buttons">
 
-                    <button>Rs. 1000</button>
 
-                    <button>Rs. 1200</button>
+                    <button
+                        className={
+                            filters.price === 1000
+                                ? "active"
+                                : ""
+                        }
+                        onClick={() =>
+                            setFilters({
+                                ...filters,
+                                price:
+                                    filters.price === 1000
+                                        ? null
+                                        : 1000
+                            })
+                        }
+                    >
+                        Rs. 1000
+                    </button>
 
-                    <button>Rs. 2000</button>
+
+                    <button
+                        className={
+                            filters.price === 1200
+                                ? "active"
+                                : ""
+                        }
+                        onClick={() =>
+                            setFilters({
+                                ...filters,
+                                price:
+                                    filters.price === 1200
+                                        ? null
+                                        : 1200
+                            })
+                        }
+                    >
+                        Rs. 1200
+                    </button>
+
+
+                    <button
+                        className={
+                            filters.price === 2000
+                                ? "active"
+                                : ""
+                        }
+                        onClick={() =>
+                            setFilters({
+                                ...filters,
+                                price:
+                                    filters.price === 2000
+                                        ? null
+                                        : 2000
+                            })
+                        }
+                    >
+                        Rs. 2000
+                    </button>
 
                 </div>
 
             </div>
+
 
         </aside>
 

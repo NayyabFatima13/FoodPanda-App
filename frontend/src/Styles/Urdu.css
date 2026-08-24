@@ -1,0 +1,895 @@
+/* =========================================================
+   URDU / RTL STYLES
+   ========================================================= */
+
+
+/* =========================================================
+   GLOBAL RTL
+   ========================================================= */
+
+[dir="rtl"] {
+  direction: rtl;
+}
+
+
+/* =========================================================
+   BODY
+   ========================================================= */
+
+[dir="rtl"] body {
+  direction: rtl;
+}
+
+
+/* =========================================================
+   HEADER
+   IMPORTANT:
+   Header remains LTR in Urdu.
+   Its layout, logo, search, cart and icons do not reverse.
+   ========================================================= */
+
+[dir="rtl"] .header {
+  direction: ltr;
+  text-align: left;
+}
+
+[dir="rtl"] .header * {
+  direction: ltr;
+}
+
+
+/* Keep header search input normal */
+[dir="rtl"] .header input {
+  direction: ltr;
+  text-align: left;
+}
+
+
+/* =========================================================
+   MAIN LAYOUT
+   ========================================================= */
+
+[dir="rtl"] .main-layout {
+  direction: rtl;
+}
+
+[dir="rtl"] .main-content {
+  direction: rtl;
+  text-align: right;
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+[dir="rtl"] .sidebar {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .filter-heading {
+  direction: rtl;
+}
+
+[dir="rtl"] .filter-section {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .radio-option,
+[dir="rtl"] .checkbox-option,
+[dir="rtl"] .quick-filter-checkbox {
+  direction: rtl;
+  justify-content: flex-start;
+}
+
+[dir="rtl"] .radio-option span,
+[dir="rtl"] .checkbox-option span,
+[dir="rtl"] .quick-filter-checkbox span {
+  text-align: right;
+}
+
+
+/* Cuisine search */
+
+[dir="rtl"] .cuisine-search {
+  direction: rtl;
+}
+
+[dir="rtl"] .cuisine-search input {
+  direction: rtl;
+  text-align: right;
+}
+
+
+/* Price buttons */
+
+[dir="rtl"] .price-buttons {
+  direction: rtl;
+}
+
+
+/* Show more */
+
+[dir="rtl"] .show-more {
+  direction: rtl;
+}
+
+
+/* =========================================================
+   BANNER
+   ========================================================= */
+
+[dir="rtl"] .delivery-banner {
+  direction: rtl;
+}
+
+[dir="rtl"] .banner-content {
+  direction: rtl;
+  text-align: right;
+}
+
+
+/*
+   Keep panda image orientation/layout normal.
+*/
+[dir="rtl"] .banner-image {
+  direction: ltr;
+}
+
+
+/* =========================================================
+   CUISINE SECTION
+   ========================================================= */
+
+[dir="rtl"] .cuisine-section {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .cuisine-row {
+  direction: rtl;
+}
+
+[dir="rtl"] .cuisine-card {
+  direction: rtl;
+}
+
+
+/* =========================================================
+   PROMO SECTION
+   ========================================================= */
+
+[dir="rtl"] .promo-section {
+  direction: rtl;
+}
+
+[dir="rtl"] .promo-card {
+  direction: rtl;
+}
+
+[dir="rtl"] .promo-text {
+  direction: rtl;
+  text-align: right;
+}
+
+
+/*
+   Keep emoji/image orientation normal.
+*/
+[dir="rtl"] .promo-image {
+  direction: ltr;
+}
+
+
+/* =========================================================
+   RESTAURANT SECTION
+   ========================================================= */
+
+[dir="rtl"] .restaurant-section {
+  direction: rtl;
+}
+
+[dir="rtl"] .section-heading {
+  direction: rtl;
+}
+
+[dir="rtl"] .section-heading h2 {
+  text-align: right;
+}
+
+
+/*
+   Arrow should point toward the correct visual direction.
+*/
+[dir="rtl"] .restaurant-next {
+  transform: rotate(180deg);
+}
+
+
+/* =========================================================
+   RESTAURANT ROW
+   ========================================================= */
+
+[dir="rtl"] .restaurant-row {
+  direction: rtl;
+}
+
+
+/* =========================================================
+   RESTAURANT CARD
+   ========================================================= */
+
+[dir="rtl"] .restaurant-card {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .restaurant-info {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .restaurant-title-row {
+  direction: rtl;
+}
+
+[dir="rtl"] .restaurant-title-row h3 {
+  text-align: right;
+}
+
+[dir="rtl"] .restaurant-meta {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .delivery-info {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .discount {
+  direction: rtl;
+}
+
+
+/* Keep restaurant image normal */
+
+[dir="rtl"] .restaurant-image-container {
+  direction: ltr;
+}
+
+
+/* Favorite button stays positioned normally */
+
+[dir="rtl"] .favorite-button {
+  direction: ltr;
+}
+
+
+/* =========================================================
+   SEARCH RESULTS
+   ========================================================= */
+
+[dir="rtl"] .search-results-heading {
+  direction: rtl;
+  text-align: right;
+}
+
+
+/* =========================================================
+   NO RESULTS
+   ========================================================= */
+
+[dir="rtl"] .no-results {
+  direction: rtl;
+  text-align: right;
+}
+
+
+/* =========================================================
+   INFO SECTION
+   ========================================================= */
+
+[dir="rtl"] .info-section {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .info-section h2 {
+  text-align: right;
+}
+
+[dir="rtl"] .info-section p {
+  text-align: right;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+[dir="rtl"] .footer {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .footer-top {
+  direction: rtl;
+}
+
+[dir="rtl"] .footer-brand {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .footer-column {
+  direction: rtl;
+  text-align: right;
+}
+
+
+/*
+   Keep social icons in their normal orientation.
+*/
+[dir="rtl"] .social-icons {
+  direction: ltr;
+}
+
+
+/*
+   Keep footer logo normal.
+*/
+[dir="rtl"] .footer-logo {
+  direction: ltr;
+}
+
+[dir="rtl"] .footer-bottom {
+  direction: rtl;
+}
+
+[dir="rtl"] .footer-bottom-links {
+  direction: rtl;
+}
+
+
+/* =========================================================
+   CART PAGE
+   ========================================================= */
+
+[dir="rtl"] .cart-page {
+  direction: rtl;
+}
+
+[dir="rtl"] .cart-container {
+  direction: rtl;
+}
+
+[dir="rtl"] .cart-header {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .cart-layout {
+  direction: rtl;
+}
+
+
+/* =========================================================
+   CART ITEMS
+   ========================================================= */
+
+[dir="rtl"] .cart-items {
+  direction: rtl;
+}
+
+[dir="rtl"] .cart-item {
+  direction: rtl;
+}
+
+[dir="rtl"] .cart-item-info {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .cart-item-info h3,
+[dir="rtl"] .cart-item-info p {
+  text-align: right;
+}
+
+
+/*
+   Keep quantity buttons in normal LTR order:
+
+   −   1   +
+
+   instead of reversing them.
+*/
+[dir="rtl"] .quantity-controls {
+  direction: ltr;
+}
+
+
+/*
+   Item total can stay on the visual right/left
+   according to your existing layout.
+*/
+[dir="rtl"] .cart-item-right {
+  direction: rtl;
+  text-align: left;
+}
+
+
+/* =========================================================
+   CART SUMMARY
+   ========================================================= */
+
+[dir="rtl"] .cart-summary {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .summary-row {
+  direction: rtl;
+}
+
+[dir="rtl"] .summary-total {
+  direction: rtl;
+}
+
+
+/* =========================================================
+   EMPTY CART
+   ========================================================= */
+
+[dir="rtl"] .empty-cart {
+  direction: rtl;
+}
+
+[dir="rtl"] .empty-cart-content {
+  direction: rtl;
+  text-align: center;
+}
+
+
+/* =========================================================
+   CHECKOUT
+   ========================================================= */
+
+[dir="rtl"] .checkout-section {
+  direction: rtl;
+}
+
+[dir="rtl"] .checkout-container {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .checkout-container h2 {
+  text-align: right;
+}
+
+[dir="rtl"] .checkout-container form {
+  direction: rtl;
+}
+
+[dir="rtl"] .form-group {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .form-group label {
+  text-align: right;
+}
+
+[dir="rtl"] .form-group input,
+[dir="rtl"] .form-group textarea,
+[dir="rtl"] .form-group select {
+  direction: rtl;
+  text-align: right;
+}
+
+
+/*
+   Email, phone and numeric values remain LTR.
+*/
+[dir="rtl"] input[type="email"],
+[dir="rtl"] input[type="tel"],
+[dir="rtl"] input[type="number"] {
+  direction: ltr;
+  text-align: left;
+}
+
+
+/* Checkout summary */
+
+[dir="rtl"] .checkout-summary {
+  direction: rtl;
+  text-align: right;
+}
+
+
+/* Success popup */
+
+[dir="rtl"] .order-success-popup {
+  direction: rtl;
+  text-align: right;
+}
+
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+[dir="rtl"] .dashboard {
+  direction: rtl;
+}
+
+[dir="rtl"] .dashboard-welcome {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .dashboard-stats {
+  direction: rtl;
+}
+
+[dir="rtl"] .dashboard-card {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .dashboard-content {
+  direction: rtl;
+}
+
+
+/* =========================================================
+   DASHBOARD SIDEBAR
+   ========================================================= */
+
+[dir="rtl"] .dashboard-sidebar {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .dashboard-menu {
+  direction: rtl;
+  justify-content: flex-start;
+  text-align: right;
+}
+
+
+/* =========================================================
+   DASHBOARD MAIN
+   ========================================================= */
+
+[dir="rtl"] .dashboard-main {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .dashboard-section-header {
+  direction: rtl;
+}
+
+
+/* =========================================================
+   DASHBOARD CART
+   ========================================================= */
+
+[dir="rtl"] .dashboard-cart {
+  direction: rtl;
+}
+
+[dir="rtl"] .dashboard-cart-item {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .dashboard-cart-quantity {
+  direction: ltr;
+}
+
+
+/* =========================================================
+   ORDERS
+   ========================================================= */
+
+[dir="rtl"] .order-card {
+  direction: rtl;
+}
+
+[dir="rtl"] .order-info {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .order-status {
+  direction: rtl;
+}
+
+[dir="rtl"] .order-status.preparing {
+  direction: rtl;
+}
+
+
+/* Keep order icons normal */
+
+[dir="rtl"] .order-icon {
+  direction: ltr;
+}
+
+
+/* =========================================================
+   FAVORITES
+   ========================================================= */
+
+[dir="rtl"] .favorites-page {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .favorites-page h1 {
+  text-align: right;
+}
+
+[dir="rtl"] .no-favorites {
+  direction: rtl;
+  text-align: center;
+}
+
+
+/* =========================================================
+   RESTAURANTS PAGE
+   ========================================================= */
+
+[dir="rtl"] .restaurants-page {
+  direction: rtl;
+}
+
+[dir="rtl"] .restaurants-container {
+  direction: rtl;
+}
+
+[dir="rtl"] .restaurants-header {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .restaurant-grid {
+  direction: rtl;
+}
+
+
+/* Restaurant actions */
+
+[dir="rtl"] .restaurant-actions {
+  direction: rtl;
+}
+
+
+/* =========================================================
+   RESTAURANT DETAILS
+   ========================================================= */
+
+[dir="rtl"] .restaurant-details {
+  direction: rtl;
+}
+
+[dir="rtl"] .restaurant-details-hero {
+  direction: rtl;
+}
+
+[dir="rtl"] .restaurant-details-info {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .restaurant-description {
+  text-align: right;
+}
+
+[dir="rtl"] .restaurant-details-meta {
+  direction: rtl;
+}
+
+[dir="rtl"] .restaurant-discount {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .restaurant-menu-section {
+  direction: rtl;
+  text-align: right;
+}
+
+
+/*
+   Keep restaurant hero image normal.
+*/
+[dir="rtl"] .restaurant-details-hero img {
+  direction: ltr;
+}
+
+
+/* =========================================================
+   RESTAURANT NOT FOUND
+   ========================================================= */
+
+[dir="rtl"] .restaurant-not-found {
+  direction: rtl;
+  text-align: center;
+}
+
+
+/* =========================================================
+   RESTAURANT FORM
+   ========================================================= */
+
+[dir="rtl"] .restaurant-form-page {
+  direction: rtl;
+}
+
+[dir="rtl"] .restaurant-form-container {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .restaurant-form {
+  direction: rtl;
+}
+
+[dir="rtl"] .restaurant-form .form-group {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .restaurant-form label {
+  text-align: right;
+}
+
+[dir="rtl"] .restaurant-form input,
+[dir="rtl"] .restaurant-form textarea {
+  direction: rtl;
+  text-align: right;
+}
+
+
+/*
+   Restaurant ID, rating and price remain LTR
+   because they are numeric values.
+*/
+[dir="rtl"] .restaurant-form input[type="number"] {
+  direction: ltr;
+  text-align: left;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+[dir="rtl"] button {
+  font-family: inherit;
+}
+
+
+/* =========================================================
+   ERROR MESSAGES
+   ========================================================= */
+
+[dir="rtl"] .error,
+[dir="rtl"] .error-message {
+  direction: rtl;
+  text-align: right;
+}
+
+
+/* =========================================================
+   AUTH ERROR
+   ========================================================= */
+
+[dir="rtl"] .auth-error-box {
+  direction: rtl;
+  text-align: right;
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+[dir="rtl"] .restaurants-loading-page {
+  direction: rtl;
+  text-align: center;
+}
+
+[dir="rtl"] .loading-heading {
+  direction: rtl;
+}
+
+
+/* =========================================================
+   LINKS
+   ========================================================= */
+
+[dir="rtl"] a {
+  direction: rtl;
+}
+
+
+/*
+   Header links are an exception.
+   Keep them LTR.
+*/
+[dir="rtl"] .header a {
+  direction: ltr;
+}
+
+
+/* =========================================================
+   MOBILE RTL
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  /*
+     Header ALWAYS remains LTR
+  */
+
+  [dir="rtl"] .header {
+    direction: ltr;
+  }
+
+  [dir="rtl"] .header * {
+    direction: ltr;
+  }
+
+
+  /*
+     Main content becomes RTL
+  */
+
+  [dir="rtl"] .main-layout {
+    direction: rtl;
+  }
+
+  [dir="rtl"] .main-content {
+    direction: rtl;
+  }
+
+
+  /*
+     Cart
+  */
+
+  [dir="rtl"] .cart-layout {
+    direction: rtl;
+  }
+
+  [dir="rtl"] .cart-item {
+    direction: rtl;
+  }
+
+
+  /*
+     Dashboard
+  */
+
+  [dir="rtl"] .dashboard-content {
+    direction: rtl;
+  }
+
+
+  /*
+     Restaurant cards
+  */
+
+  [dir="rtl"] .restaurant-row,
+  [dir="rtl"] .restaurant-grid {
+    direction: rtl;
+  }
+
+}
