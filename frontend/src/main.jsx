@@ -10,6 +10,7 @@ import "./i18n/i18n";
 
 import "./App.css";
 import "./Styles/Urdu.css";
+import "leaflet/dist/leaflet.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 

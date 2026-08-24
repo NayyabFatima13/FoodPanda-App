@@ -8,6 +8,7 @@ import { logout } from "../redux/slices/authSlice";
 import { toggleTheme } from "../redux/slices/themeSlice";
 
 import DOMPurify from "dompurify";
+import LocationModal from "./locationModal";
 
 import {
   Search,
@@ -70,15 +71,15 @@ function Header() {
     useState(false);
 
   const changeLanguage = (language) => {
-  i18n.changeLanguage(language);
+    i18n.changeLanguage(language);
 
-  localStorage.setItem(
-    "language",
-    language
-  );
+    localStorage.setItem(
+      "language",
+      language
+    );
 
-  setLanguageOpen(false);
-};
+    setLanguageOpen(false);
+  };
 
   // ==========================================
   // MOBILE MENU
@@ -88,7 +89,7 @@ function Header() {
     useState(false);
 
   // ==========================================
-  // SEARCH
+  // SANITIZE SEARCH
   // ==========================================
 
   const handleSearchChange = (e) => {
@@ -109,6 +110,34 @@ function Header() {
   const handleSearch = () => {
     navigate("/restaurants");
   };
+
+  // ==========================================
+  // LOCATION
+  // ==========================================
+
+  const [locationOpen, setLocationOpen] =
+    useState(false);
+
+  const [selectedLocation, setSelectedLocation] =
+    useState(() => {
+
+      const savedLocation =
+        localStorage.getItem(
+          "selectedLocation"
+        );
+
+      if (!savedLocation) {
+        return null;
+      }
+
+      try {
+        return JSON.parse(savedLocation);
+      } catch {
+        return null;
+      }
+
+    });
+
 
   // ==========================================
   // LANGUAGE DROPDOWN
@@ -400,7 +429,12 @@ function Header() {
             LOCATION
             ========================================== */}
 
-        <div className="location">
+        <button
+          className="location"
+          onClick={() =>
+            setLocationOpen(true)
+          }
+        >
 
           <MapPin
             size={20}
@@ -408,10 +442,12 @@ function Header() {
           />
 
           <span>
-            New address Select your address
+            {selectedLocation
+              ? selectedLocation.address
+              : "New address Select your address"}
           </span>
 
-        </div>
+        </button>
 
 
         {/* ==========================================
@@ -643,6 +679,16 @@ function Header() {
         </div>
 
       </div>
+      
+      {locationOpen && (
+        <LocationModal
+          onClose={() => setLocationOpen(false)}
+          onLocationSelect={(location) => {
+            setSelectedLocation(location);
+            setLocationOpen(false);
+          }}
+        />
+      )}
 
     </header>
   );
