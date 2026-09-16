@@ -5,11 +5,10 @@ function InfoSection() {
   const { t } = useTranslation();
 
   return (
-
     <section className="info-section">
 
       <h2>
-        {t("infoSection.orderFoodTitle")}
+        {t("info.orderFoodTitle")}
       </h2>
 
       <p>
@@ -35,7 +34,6 @@ function InfoSection() {
       </p>
 
     </section>
-
   );
 }
 

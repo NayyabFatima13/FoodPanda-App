@@ -148,8 +148,17 @@
   },
 
   "info": {
-    "title": "Order food online",
-    "description": "Enjoy delicious food delivered directly to your doorstep."
+    "orderFoodTitle": "Order food online in Islamabad",
+
+    "orderFoodDescription": "Find your favorite restaurants and order delicious food online in Islamabad. Foodpanda makes it easy to discover restaurants near you and enjoy your favorite meals delivered directly to your door.",
+
+    "foodDeliveryTitle": "Food delivery in Islamabad",
+
+    "foodDeliveryDescription": "Whether you are looking for Pakistani food, burgers, pizza, Chinese cuisine, desserts or something else, you can find a wide variety of restaurants and dishes available for delivery.",
+
+    "discoverTitle": "Discover restaurants near you",
+
+    "discoverDescription": "Explore different cuisines, compare restaurants, discover special offers and choose the food you want to enjoy."
   },
 
   "cart": {
